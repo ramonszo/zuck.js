@@ -1,0 +1,97 @@
+<html>
+    <head>
+        <title>x</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0"/>
+
+        <!-- styles just for demo -->
+        <style>
+            body {font-size: 14px;font-family:sans-serif;padding:0;margin:0;}
+            #stories {padding: 12px;}
+            h1 {font-family: monospace;padding:12px;border-bottom:1px solid #ddd;font-size:24px;height:56px;line-height:56px;margin-bottom: 0;white-space: nowrap;text-overflow: ellipsis;overflow:hidden;}
+        </style>
+        
+        <!-- script styles -->
+        <link rel="stylesheet" href="zuck.css">
+    </head>
+    <body>
+        <h1>~/evan/app_boilerplate</h1>
+        <div id="stories"></div>
+        <script src="zuck.js"></script>
+        <script>
+            var itemsExample = [
+                                    {
+                                        id: "ramon-1",
+                                        type: "photo",
+                                        length: 5,
+                                        src: "https://pbs.twimg.com/media/C75V20SWsAAw5fO.jpg:large",
+                                        preview: "https://pbs.twimg.com/media/C75V20SWsAAw5fO.jpg:small",
+                                        link: false,
+                                        seem: false
+                                    },
+                                    {
+                                        id: "ramon-2",
+                                        type: "photo",
+                                        length: 5,
+                                        src: "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:large",
+                                        preview: "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:small",
+                                        link: "https://twitter.com/ramon82",
+                                        seem: false
+                                    },
+                                    {
+                                        id: "ramon-3",
+                                        type: "photo",
+                                        length: 41,
+                                        src: "https://instagram.fcgh11-1.fna.fbcdn.net/t50.2886-16/17582994_287095581720875_3155815804436480000_n.mp4",
+                                        preview: "https://instagram.fcgh11-1.fna.fbcdn.net/t51.2885-15/s640x640/e15/17493855_297615357325187_6517162248006270976_n.jpg",
+                                        link: "https://twitter.com/ramon82",
+                                        seem: false
+                                    }
+                                ];
+            
+            var stories = new Zuck('stories', {
+                stories: [
+                    {
+                        id: "gorillaz",
+                        photo: "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:small",
+                        name: "Gorillaz",
+                        link: "",
+                        lastUpdated: "2017-04-09 05:08:30",
+                        items: itemsExample
+                    },
+                    {
+                        id: "ladygaga",
+                        photo: "https://pbs.twimg.com/profile_images/836786253139881984/Xr7Ne9_l.jpg",
+                        name: "Lady Gaga",
+                        link: "",
+                        lastUpdated: "2017-04-09 05:08:30",
+                        items: itemsExample
+                    },
+                    {
+                        id: "starboy",
+                        photo: "https://pbs.twimg.com/profile_images/840268292946309124/vsUVZu4c.jpg",
+                        name: "Abel",
+                        link: "",
+                        lastUpdated: "2017-04-09 05:08:30",
+                        items: itemsExample
+                    },
+                    {
+                        id: "qotsa",
+                        photo: "https://lastfm-img2.akamaized.net/i/u/770x0/b3499652975143ad9ffaa4a69cca5037.jpg",
+                        name: "QOTSA",
+                        link: "",
+                        lastUpdated: "2017-04-09 05:08:30",
+                        items: itemsExample
+                    },
+                    {
+                        id: "ramon",
+                        photo: "https://pbs.twimg.com/profile_images/841375266891001858/J9aKq2-0.jpg",
+                        name: "Ramon",
+                        link: "https://ramon.codes",
+                        lastUpdated: "2017-04-09 05:08:30",
+                        items: itemsExample
+                    }
+                ]
+            });
+        </script>
+    </body>
+</html>
