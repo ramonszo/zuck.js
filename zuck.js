@@ -78,13 +78,21 @@ window['ZuckitaDaGalera'] = window['Zuck'] =  function(element, options){
                     var html = '';
                     each(zuck.data[storyId]['items'], function(i, item){
                        html += '<div class="slide-item">'+
-                                    ((item['type']=='video')?'<video src="'+item['src']+'">':'<img src="'+item['src']+'">')+
+                                    ((g(item, 'type')=='video')?'<video src="'+g(item, 'src')+'" '+g(item, 'type')+'>':'<img src="'+g(item, 'src')+'" '+g(item, 'type')+'>')+
                                 '</div>';
                     });
                     
                     console.log('modalshow', modalContent, storyId, zuck.data[storyId]['items'], html);
                     modalContent.innerHTML = '<div class="stories-slides">'+html+'</div>';
                     modalContainer.style.display = 'block';
+                },
+                
+                'nextItem': function(){
+                    
+                },
+                
+                'nextStory': function(){
+                    
                 }
             };
         };
@@ -102,6 +110,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] =  function(element, options){
             
             items.push({
                 'src': a.getAttribute('href'),
+                'type': a.getAttribute('data-type'),
                 'link': a.getAttribute('data-link'),
                 'preview': img.getAttribute('src')
             });
@@ -131,6 +140,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] =  function(element, options){
         story.onclick = function(e){
             e.preventDefault();
             
+            //preload stories items
             //story.className += ' seem';
             modal.show(storyId);
         };
@@ -172,7 +182,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] =  function(element, options){
         li.className = g(data, 'seem')?'seem':'';
         li.setAttribute('data-id', g(data, 'id'));
         
-        li.innerHTML = '<a href="'+g(data, 'src')+'" data-link="'+g(data, 'link')+'">'+
+        li.innerHTML = '<a href="'+g(data, 'src')+'" data-link="'+g(data, 'link')+'" data-type="'+g(data, 'type')+'">'+
                             '<img src="'+g(data, 'preview')+'">'+
                         '</a>';
             

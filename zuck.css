@@ -11,7 +11,7 @@
 /* modal */
 #zuck-modal {
     position: fixed;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0,0,0,0.75);
     top:0;
     right:0;
     left:0;
@@ -21,7 +21,6 @@
 #zuck-modal-content,
 #zuck-modal-content .stories-slides,
 #zuck-modal-content .stories-slides > * {
-    background: #000;
     width: 100vw;
     height: 100vh;
     position: absolute;
