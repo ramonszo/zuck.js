@@ -1,0 +1,48 @@
+.stories.snapgram .story > a,
+.stories.snapgram .story > a:visited {
+    text-decoration: none;
+    text-align: center;
+    color: #333;
+}
+
+.stories.snapgram .story > a > span {
+    border-radius: 50%;
+    display:block;
+    box-sizing:border-box;
+    padding: 2px;
+    background: radial-gradient(ellipse at 70% 70%,#ee583f 8%,#d92d77 42%,#bd3381 58%);
+    font-size: 0;
+    max-height: 90px;
+    height: 20vw;
+    overflow: hidden;
+}
+
+.stories.snapgram .story.seem {
+    opacity: 0.75;
+}
+
+.stories.snapgram .story.seem > a > span {
+    background: #999;
+    color: #999;
+}
+
+.stories.snapgram .story.seem > a {
+    color: #999 !important;
+}
+
+.stories.snapgram .story > a > span > i {
+    display: block;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-sizing: border-box;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+}
+
+.stories.snapgram .story > a > strong {
+    display: inline-block;
+    margin-top: 0.5em;
+    line-height: 1.2em;
+    font-size: 14px;
+}

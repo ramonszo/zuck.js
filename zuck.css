@@ -8,33 +8,29 @@
 .stories .story > .items {display: none;}
 
 
-/* simple skin */
-.stories.skin-simple .story > a,
-.stories.skin-simple .story > a:visited {
-    text-decoration: none;
-    text-align: center;
-    color: #333;
+/* modal */
+#zuck-modal {
+    position: fixed;
+    background: rgba(0,0,0,0.5);
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
 }
 
-.stories.skin-simple .story > a > span {
-    border-radius: 50%;
-    display:block;
-    box-sizing:border-box;
-    padding: 2px;
-    background: radial-gradient(ellipse at 70% 70%,#ee583f 8%,#d92d77 42%,#bd3381 58%);
-    font-size: 0;
+#zuck-modal-content,
+#zuck-modal-content .stories-slides,
+#zuck-modal-content .stories-slides > * {
+    background: #000;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
 }
 
-.stories.skin-simple .story > a > span > img {
-    display: block;
-    border-radius: 50%;
-    border: 3px solid #fff;
-    box-sizing: border-box;
-}
-
-.stories.skin-simple .story > a > strong {
-    display: inline-block;
-    margin-top: 0.5em;
-    line-height: 1.2em;
-    font-size: 14px;
+#zuck-modal-content .slide-item > * {
+    height: 100%;
+    margin: auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }

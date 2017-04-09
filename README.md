@@ -1,9 +1,8 @@
 # zuck.js
 
 ## Put stories EVERYWHERE
-MWHAHAHAHA. Seriously.
+MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of a copy of Facebook Messenger Day of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories. 
 
-This script is a copy of Facebook copy of Facebook Messenger copy of WhatsApp copy of Instagram copy of Snapchat stories feature. 
 You can read stories from any endpoint (json, firebase, etc.) and the script will do the rest.
 
 
@@ -20,7 +19,7 @@ Initialize:
 
 	let stories = new Zuck({
         id: '', //container id or reference
-        skin: 'simple', //container class
+        skin: 'snapgram', //container class
         avatars: true, //show user photo instead of last story item preview
         saveRead: function(storyId, storyItemId, status){
             // function to save user reading story status. if not defined, local storage is used.
@@ -69,10 +68,12 @@ A json example of the stories object:
     }   
     
 ## Alternate call
+In your HTML:
+
     <div id="stories">
-        <div class="story" data-id="{{story.id}}">
+        <div class="story" data-id="{{story.id}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
             <a href="{{story.link}}">
-                <span><img src="{{story.photo}}"><span>
+                <span><i style="background-image:url({{story.photo}});"></i><span>
                 <strong>{{story.name}}</strong>
             </a>
             <ul class="items">
@@ -85,7 +86,7 @@ A json example of the stories object:
         </div>
     </div>
 
-Then:
+Then in your JS:
 
 	let stories = new Zuck({
         id: 'stories'
