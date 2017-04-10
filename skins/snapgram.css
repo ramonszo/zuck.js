@@ -30,7 +30,7 @@
     color: #999 !important;
 }
 
-.stories.snapgram .story > a > span > i {
+.stories.snapgram .story > a > span > .img {
     display: block;
     border-radius: 50%;
     border: 3px solid #fff;
@@ -45,4 +45,5 @@
     margin-top: 0.5em;
     line-height: 1.2em;
     font-size: 14px;
+    font-weight: 300;
 }
