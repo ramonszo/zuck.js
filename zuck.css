@@ -58,7 +58,7 @@
     z-index: 100010;
     color: #fff;
     font-size: 15px;
-    text-shadow: 1px 1px 1px rgba(0,0,0,0.75);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.75), 1px 0px 1px rgba(0,0,0,0.75);
 }
 
 #zuck-modal-content .story-viewer .head .img {
