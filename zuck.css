@@ -9,6 +9,8 @@
 
 
 /* modal */
+@keyframes zuckSlideTime {0%{max-width: 0;}100%{max-width:100%;}}
+
 #zuck-modal {
     position: fixed;
     background: rgba(0,0,0,0.75);
@@ -17,6 +19,7 @@
     left:0;
     bottom:0;
     z-index: 100000;
+    font-size: 14px;
 }
 
 #zuck-modal-content,
@@ -30,6 +33,11 @@
 
 #zuck-modal-content .story-viewer .slides .item {
     background: #000;
+    display: none;
+}
+
+#zuck-modal-content .story-viewer .slides .item.active {
+    display: block;
 }
 
 #zuck-modal-content .story-viewer .slides .item > * {
@@ -50,12 +58,13 @@
     z-index: 100010;
     color: #fff;
     font-size: 15px;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.75);
 }
 
 #zuck-modal-content .story-viewer .head .img {
     background-size: cover;
-    width: 36px;
-    height: 36px;
+    width: 24px;
+    height: 24px;
     display: inline-block;
     margin-right: 12px;
     border-radius: 50%;
@@ -73,4 +82,60 @@
 #zuck-modal-content .story-viewer .head .right .time {
     opacity: 0.75;
     font-weight: bold;
+    font-size:13px;
+}
+
+#zuck-modal-content .slides-pointers {
+    display: table;
+    table-layout:fixed;
+    border-spacing: 1vh;
+    border-collapse: separate;
+    position: absolute;
+    width: 100%;
+    top:0;
+    right:0;
+    left:0;
+    z-index: 100020;
+}
+
+#zuck-modal-content .slides-pointers > * {
+    display: table-row;
+}
+
+#zuck-modal-content .slides-pointers > * > * {
+    display: table-cell;
+    background: rgba(255, 255, 255, 0.65);
+    border-radius: 1vh;
+}
+
+#zuck-modal-content .slides-pointers > * > *.seem {
+    background: #fff;
+}
+
+#zuck-modal-content .slides-pointers > * > * > b {
+    background: #fff;
+    width: auto;
+    max-width: 0;
+    height: 0.4vh;
+    display: block;
+    animation-fill-mode: forwards;
+}
+
+#zuck-modal-content .story-viewer .head,
+#zuck-modal-content .story-viewer .slide-pointers {
+    transition: opacity 0.5s;
+}
+
+#zuck-modal-content .story-viewer.paused .head,
+#zuck-modal-content .story-viewer.paused .slide-pointers {
+    opacity: 0;
+}
+
+#zuck-modal-content .story-viewer.paused .slides-pointers > * > *.active > b,
+#zuck-modal-content .story-viewer.buffering .slides-pointers > * > *.active > b {
+    animation-play-state: paused;
+}
+
+#zuck-modal-content .slides-pointers > * > *.active > b {
+    animation-name: zuckSlideTime;
 }
