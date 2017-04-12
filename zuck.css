@@ -34,6 +34,7 @@
 #zuck-modal-content .story-viewer .slides .item {
     background: #000;
     display: none;
+    overflow: hidden;
 }
 
 #zuck-modal-content .story-viewer .slides .item.active {
@@ -69,6 +70,7 @@
     margin-right: 12px;
     border-radius: 50%;
     vertical-align: middle;
+    box-shadow: inset 1px 1px 1px rgba(0,0,0,0.15);
 }
 
 #zuck-modal-content .story-viewer .head .left {
@@ -88,7 +90,7 @@
 #zuck-modal-content .slides-pointers {
     display: table;
     table-layout:fixed;
-    border-spacing: 1vh;
+    border-spacing: 6px;
     border-collapse: separate;
     position: absolute;
     width: 100%;
@@ -105,7 +107,6 @@
 #zuck-modal-content .slides-pointers > * > * {
     display: table-cell;
     background: rgba(255, 255, 255, 0.65);
-    border-radius: 1vh;
 }
 
 #zuck-modal-content .slides-pointers > * > *.seem {
@@ -116,7 +117,7 @@
     background: #fff;
     width: auto;
     max-width: 0;
-    height: 0.4vh;
+    height: 2px;
     display: block;
     animation-fill-mode: forwards;
 }

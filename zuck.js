@@ -120,6 +120,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
                                         ((g(item, 'type')=='video')?'<video src="'+g(item, 'src')+'" '+g(item, 'type')+'>':'<img src="'+g(item, 'src')+'" '+g(item, 'type')+'>')+
                                     '</div>';
                     });
+
+
                     slides.innerHTML = htmlItems;
                     
                     var html = '<div class="story-viewer" data-story-id="'+storyId+'">'+
@@ -139,7 +141,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
                     
                     var storyViewer = modalContent.firstElementChild;
                     storyViewer.appendChild(slides);
-                    console.log(storyViewer.querySelectorAll('.slides-pointers [data-index] > b'));
+
                     each(storyViewer.querySelectorAll('.slides-pointers [data-index] > b'), function (i, el) {
                         console.log(el);
                         onAnimationEnd(el, function () {
@@ -314,12 +316,15 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
             
             zuck.internalData['currentStoryItem']++;
             if(nextItemElement.getAttribute('data-type')=='video'){
-               var video = nextItemElement.getElementsByTagName('video')[0];
-               if(video.duration){
+                var video = nextItemElement.getElementsByTagName('video')[0];
+                if(video.duration){
                     setVendorVariable(nextPointer.getElementsByTagName('b')[0].style, 'AnimationDuration', video.duration+'s');
-               }
+                }
 
-               video.play();
+                zuck.internalData['videoPlaying'] = true;
+                zuck.internalData['videoElement'] = video;
+
+                video.play();
             }
         } else if(storyViewer){
             zuck.next();
