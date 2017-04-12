@@ -18,7 +18,7 @@ You can read stories from any endpoint (json, firebase, etc.) and the script wil
 Initialize:
 
 	var stories = new Zuck({
-        id: '', //container id or reference
+        id: '', //timeline container id or reference
         skin: 'snapgram', //container class
         avatars: true, //show user photo instead of last story item preview
         saveRead: function(storyId, storyItemId, status){
@@ -74,26 +74,31 @@ A json example of the stories object:
 In your HTML:
 
     <div id="stories">
+    
+        <!-- story -->
         <div class="story" data-id="{{story.id}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
             <a href="{{story.link}}">
                 <span><u style="background-image:url({{story.photo}});"></u><span>
                 <strong>{{story.name}}</strong>
             </a>
             <ul class="items">
+            
+                <!-- story item -->
                 <li data-id="{{story.items.id}}" data-time="{{story.items.time}}" class="{{story.items.seem}}">
                     <a href="{{story.items.src}}" data-type="{{story.items.type}}" data-length="{{story.items.length}}" data-link="{{story.items.link}}">
                         <img src="{{story.items.preview}}">
                     </a>
                 </li>
+                <!--/ story item -->
+                
             </ul>
         </div>
+        <!--/ story -->
+        
     </div>
-
+    
 Then in your JS:
 
-	var stories = new Zuck({
-        id: 'stories'
-    });
-
+	var stories = new Zuck('stories'); 
 
 ## Compatibility

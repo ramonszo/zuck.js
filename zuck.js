@@ -1,9 +1,9 @@
-window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {   
+window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {   
     'use strict';
     
     var d = document, zuck = this;
-    if(typeof element == 'string') {
-        element = d.getElementById(element);
+    if(typeof timeline == 'string') {
+        timeline = d.getElementById(timeline);
     }
     
     var q = function (query) {
@@ -51,7 +51,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
             }
         };
     
-    var id = element.id,
+    var id = timeline.id,
         optionsDefault = {
             'skin': 'snapgram',
             'avatars': true,
@@ -80,7 +80,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
         window['ZuckModal'] = function () {
             var opened = false;
             var modalContainer = g('#zuck-modal');
-            
+
             if(!modalContainer) {
                 modalContainer = d.createElement('div');
                 modalContainer.id = 'zuck-modal';
@@ -93,67 +93,138 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
                 d.body.appendChild(modalContainer);
             }
             
+            var modalContent = q('#zuck-modal-content');
+            var createStoryViewer = function(storyData, currentItem, className){
+                if(!storyData){
+                    return false;   
+                }
+                
+                var htmlItems = '', 
+                    pointerItems = '', 
+                    storyId = g(storyData, 'id'),
+                    slides = d.createElement('div');
+                
+                slides.className = 'slides';
+                each(g(storyData, 'items'), function (i, item) {
+
+                    pointerItems += '<span data-index="'+i+'" class="'+((currentItem===i)?'active':'')+'"><b style="animation-duration: '+g(item, 'length')+'s"></b></span>';
+                    htmlItems += '<div data-type="'+g(item, 'type')+'" data-index="'+i+'" class="item '+((g(item, 'seem')===true)?'seem':'')+
+                                    ' '+((currentItem===i)?'active':'')+'">'+
+                                    ((g(item, 'type')==='video')?'<video src="'+g(item, 'src')+'" '+g(item, 'type')+'>':'<img src="'+g(item, 'src')+'" '+g(item, 'type')+'>')+
+                                '</div>';
+                });
+
+
+                slides.innerHTML = htmlItems;
+
+                var storyViewer = d.createElement('div');
+                storyViewer.className = 'story-viewer '+className+' '+((className!='viewing')?'stopped':'');
+                storyViewer.setAttribute('data-story-id', storyId);
+                
+                var html = '<div class="head">'+
+                                '<div class="left">'+
+                                    '<u class="img" style="background-image:url('+g(storyData, 'photo')+');"></u>'+
+                                    '<div>'+
+                                        '<strong>'+g(storyData, 'name')+'</strong>'+
+                                        '<span class="time">1 min ago</span>'+
+                                    '</div>'+
+                                '</div>'+
+                                '<div class="right">'+
+                                    '<span class="time">1 min ago</span>'+
+                                    '<div class="close">&times;</div>'+
+                                '</div>'+
+                           '</div>'+
+                           '<div class="slides-pointers"><div>'+pointerItems+'</div></div>';
+                storyViewer.innerHTML = html;
+
+                var touchStart = function(e){
+                    e.preventDefault();
+
+                    storyViewer.timer = setTimeout(function(){
+                        storyViewer.classList.add('fingerDown');
+                        if(storyViewer.classList.contains('fingerDown')){
+                            storyViewer.classList.add('paused');
+
+                            var video = zuck.internalData['currentVideoElement'];
+                            if(video){
+                               try {
+                                   video.pause();
+                               } catch (e){
+
+                               }
+                            }
+                        }
+                    }, 200);  
+                };
+
+                var touchEnd = function(e){
+                    e.preventDefault();
+                    
+                    if(storyViewer.timer){
+                        clearInterval(storyViewer.timer);
+                    }
+
+                    if(storyViewer.classList.contains('fingerDown')){
+                        storyViewer.classList.remove('fingerDown');
+                    } else {
+                        zuck.nextItem();    
+                    }
+
+                    storyViewer.classList.remove('paused');
+
+                    var video = zuck.internalData['currentVideoElement'];
+                    if(video){
+                       try {
+                           video.play();
+                       } catch (e){
+
+                       }
+                    }
+                };
+
+                slides.addEventListener('touchstart', touchStart); 
+                slides.addEventListener('touchend', touchEnd); 
+
+                slides.addEventListener('mousedown', touchStart); 
+                slides.addEventListener('mouseup', touchEnd); 
+
+                storyViewer.appendChild(slides);
+                
+                each(storyViewer.querySelectorAll('.slides-pointers [data-index] > b'), function (i, el) {
+                    console.log(el);
+                    onAnimationEnd(el, function () {
+                        zuck.nextItem();
+                    });
+                });
+                
+                modalContent.appendChild(storyViewer);                
+            };
+            
             return {
                 'show': function (storyId, page) {
-                    var modalContent = q('#zuck-modal-content');
-                    var htmlItems = '';
-                    var pointerItems = '';
                     var storyData = zuck.data[storyId];
                     var currentItem = storyData.currentItem || 0;
                     
-                    console.log('story', storyId, currentItem);
                     zuck.internalData['currentStory'] = storyId;
                     zuck.internalData['currentStoryItem'] = currentItem;
                     
-                    //enable back button on mobile to close the modal ;)
                     if(option('backNative')) {
                         location.hash = '#!'+id;
                     }
                     
-                    var slides = d.createElement('div');
-                    slides.className = 'slides';
-                    each(g(storyData, 'items'), function (i, item) {
-                        
-                        pointerItems += '<span data-index="'+i+'" class="'+((currentItem==i)?'active':'')+'"><b style="animation-duration: '+g(item, 'length')+'s"></b></span>';
-                        htmlItems += '<div data-type="'+g(item, 'type')+'" data-index="'+i+'" class="item '+((g(item, 'seem')===true)?'seem':'')+
-                                        ' '+((currentItem==i)?'active':'')+'">'+
-                                        ((g(item, 'type')=='video')?'<video src="'+g(item, 'src')+'" '+g(item, 'type')+'>':'<img src="'+g(item, 'src')+'" '+g(item, 'type')+'>')+
-                                    '</div>';
-                    });
-
-
-                    slides.innerHTML = htmlItems;
+                    if(currentItem > 0){
+                        var previousItemData = getStoryMorningGlory('previous');
+                        createStoryViewer(previousItemData, currentItem, 'previous');
+                    }  
                     
-                    var html = '<div class="story-viewer" data-story-id="'+storyId+'">'+
-                                   '<div class="head">'+
-                                        '<div class="left">'+
-                                            '<u class="img" style="background-image:url('+g(storyData, 'photo')+');"></u>'+
-                                            '<strong>'+g(storyData, 'name')+'</strong>'+
-                                        '</div>'+
-                                        '<div class="right">'+
-                                            '<span class="time">1 min ago</span>'+
-                                        '</div>'+
-                                   '</div>'+
-                                   '<div class="slides-pointers"><div>'+pointerItems+'</div></div>'+
-                               '</div>';
+                    createStoryViewer(storyData, currentItem, 'viewing');
                     
-                    modalContent.innerHTML = html;
-                    
-                    var storyViewer = modalContent.firstElementChild;
-                    storyViewer.appendChild(slides);
-
-                    each(storyViewer.querySelectorAll('.slides-pointers [data-index] > b'), function (i, el) {
-                        console.log(el);
-                        onAnimationEnd(el, function () {
-                            zuck.nextItem();
-                        });
-                    });
+                    if(currentItem<=storyData.items.length){
+                        var nextItemData = getStoryMorningGlory('next');
+                        createStoryViewer(nextItemData, currentItem, 'next');
+                    }
                     
                     modalContainer.style.display = 'block';
-                },
-                
-                'pause': function () {
-                    
                 },
                 
                 'close': function () {
@@ -209,10 +280,25 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
             story.onclick = function (e) {
                 e.preventDefault();
 
-                //preload stories items
-                //story.className += ' seem';
                 modal.show(storyId);
             };
+        },
+        
+        getStoryMorningGlory = function(what) { //my wife told me to stop singing Wonderwall. I SAID MAYBE.
+            var currentStory = zuck.internalData['currentStory']; // _\|/_
+            var whatEl = what+'ElementSibling'; //this was proposital
+            
+            if(currentStory){
+               var foundStory = q('#'+id+' [data-id="'+currentStory+'"]')[whatEl];
+                
+               if(foundStory){
+                    var storyId = foundStory.getAttribute('data-id');
+                   
+                    return zuck.data[storyId] || false;    
+               }
+            }
+            
+            return false;
         };
     
     
@@ -244,9 +330,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
             
             parseStory(story);
             if(append) {
-                element.appendChild(story);
+                timeline.appendChild(story);
             } else {
-                prepend(element, story);                
+                prepend(timeline, story);                
             }
             
             each(items, function (i, item) {
@@ -256,7 +342,11 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
     };
     
     zuck.next = function () {
+        var next = getStoryMorningGlory('next');
         
+        if(false){
+            modal.close();   
+        }
     };
     
     zuck.addItem = function (storyId, data, append) {    
@@ -283,7 +373,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
     zuck.removeItem = function (storyId, itemId) {
         var item = q('#'+id+' > [data-id="'+storyId+'"] [data-id="'+itemId+'"]');
         
-        element.parentNode.removeChild(item);
+        timeline.parentNode.removeChild(item);
     };
     
     zuck.nextItem = function () {        
@@ -300,8 +390,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
         var nextItemElements = storyViewer.querySelectorAll('[data-index="'+nextItem+'"]');        
         var nextPointer = nextItemElements[0];
         var nextItemElement = nextItemElements[1];
-
-        console.log(storyViewer, 'cur: '+currentItem, 'next: '+nextItem, currentItemElements, nextItemElement);
         
         if(storyViewer&&nextPointer&&nextItemElement){
             currentPointer.classList.remove('active');
@@ -321,20 +409,17 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
                     setVendorVariable(nextPointer.getElementsByTagName('b')[0].style, 'AnimationDuration', video.duration+'s');
                 }
 
-                zuck.internalData['videoPlaying'] = true;
-                zuck.internalData['videoElement'] = video;
+                zuck.internalData['currentVideoElement'] = video;
 
                 video.play();
+            } else {
+                zuck.internalData['currentVideoElement'] = false;
             }
         } else if(storyViewer){
             zuck.next();
         }
     };
-    
-    zuck.getData = function () {
-        
-    };
-    
+
     zuck.reload = function (data) {
         
     };
@@ -343,7 +428,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
         console.log('init', option('stories'));
         
         if(q('#'+id+' .story')) {
-            each(element.querySelectorAll('.story'), function (i, story) {
+            each(timeline.querySelectorAll('.story'), function (i, story) {
                 parseStory(story, true);
             });
         }
@@ -352,7 +437,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (element, options) {
             zuck.add(item, true);
         });        
         
-        element.className = (option('skin'))?'stories '+option('skin'):'stories';
+        var avatars = (option('avatars'))?'user-icon':'story-preview';
+        timeline.className = 'stories '+avatars+' '+option('skin');
         
         return zuck;
     };
