@@ -49,6 +49,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
             } else {
                 parent.appendChild(child);
             }
+        },
+        getElIndex = function(el) {
+            for (var i = 1; el = el.previousElementSibling; i++) {
+                return i;                            
+            }
+
+            return 0;
         };
     
     var id = timeline.id,
@@ -94,7 +101,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
             }
             
             var modalContent = q('#zuck-modal-content');
-            var createStoryViewer = function(storyData, currentItem, className){
+            var createStoryViewer = function(storyData, className){
                 if(!storyData){
                     return false;   
                 }
@@ -102,7 +109,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                 var htmlItems = '', 
                     pointerItems = '', 
                     storyId = g(storyData, 'id'),
-                    slides = d.createElement('div');
+                    slides = d.createElement('div'),
+                    currentItem = zuck.internalData['currentStoryItem'];
                 
                 slides.className = 'slides';
                 each(g(storyData, 'items'), function (i, item) {
@@ -139,6 +147,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 
                 var touchStart = function(e){
                     e.preventDefault();
+                    
+                    slides.touchStartX =  e.touches[0].pageX;
+                    slides.slideWidth = q('#zuck-modal .story-viewer').offsetWidth;
+                    slides.index = getElIndex(q('#zuck-modal .story-viewer.viewing'));
+                    slides.previous  = q('#zuck-modal .story-viewer.previous');
+                    slides.viewing = q('#zuck-modal .story-viewer.viewing');
+                    slides.next = q('#zuck-modal .story-viewer.next');
 
                     storyViewer.timer = setTimeout(function(){
                         storyViewer.classList.add('fingerDown');
@@ -180,9 +195,56 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 
                        }
                     }
+                    
+                    if(slides.moveX){
+                        var absMove = Math.abs(slides.index*slides.slideWidth - slides.moveX);
+                        if (absMove > slides.slideWidth/2) {
+                            if (slides.moveX > slides.index*slides.slideWidth && slides.index < 2) {
+                                slides.index++;
+                            } else if (slides.moveX < slides.index*slides.slideWidth && slides.index > 0) {
+                                slides.index--;
+                            }
+                        } 
+                        
+                        var previousIndex = (slides.index * slides.slideWidth);
+                        var viewingIndex = ((slides.index*slides.slideWidth) - slides.slideWidth);
+                        var nextIndex = ((slides.index*slides.slideWidth) - (slides.slideWidth * 2));
+                        
+                        if(slides.previous){
+                            slides.previous.style.transform = 'translate3d(' + (slides.index * slides.slideWidth)  + 'px,0,0)';                       
+                        }
+
+                        slides.viewing.style.transform = 'translate3d(' + ((slides.index*slides.slideWidth) - slides.slideWidth) + 'px,0,0)';
+
+                        if(slides.next){
+                            slides.next.style.transform = 'translate3d(' + ((slides.index*slides.slideWidth) - (slides.slideWidth * 2)) + 'px,0,0)';                       
+                        }
+                        
+                        if(previousIndex==0){
+                           console.log('previous');
+                        } else if (nextIndex==0){
+                           console.log('next');
+                        }
+                    }
                 };
 
+                var touchMove = function(e){
+                    slides.touchMoveX =  e.touches[0].pageX;
+                    slides.moveX = slides.slideWidth + (slides.touchStartX - slides.touchMoveX);
+
+                    if(slides.previous){
+                        slides.previous.style.transform = 'translate3d(' + ((slides.moveX * -1)) + 'px,0,0)';                       
+                    }
+                    
+                    slides.viewing.style.transform = 'translate3d(' + ((slides.moveX * -1) + slides.slideWidth) + 'px,0,0)';
+                    
+                    if(slides.next){
+                        slides.next.style.transform = 'translate3d(' + ((slides.moveX * -1) + (slides.slideWidth * 2)) + 'px,0,0)';                       
+                    }
+                };
+                
                 slides.addEventListener('touchstart', touchStart); 
+                slides.addEventListener('touchmove', touchMove); 
                 slides.addEventListener('touchend', touchEnd); 
 
                 slides.addEventListener('mousedown', touchStart); 
@@ -203,7 +265,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
             return {
                 'show': function (storyId, page) {
                     var storyData = zuck.data[storyId];
-                    var currentItem = storyData.currentItem || 0;
+                    var currentItem = storyData['currentItem'] || 0;
                     
                     zuck.internalData['currentStory'] = storyId;
                     zuck.internalData['currentStoryItem'] = currentItem;
@@ -212,16 +274,16 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                         location.hash = '#!'+id;
                     }
                     
-                    if(currentItem > 0){
-                        var previousItemData = getStoryMorningGlory('previous');
-                        createStoryViewer(previousItemData, currentItem, 'previous');
-                    }  
+                    var previousItemData = getStoryMorningGlory('previous');
+                    if(previousItemData){
+                       createStoryViewer(previousItemData, 'previous');                       
+                    }
                     
-                    createStoryViewer(storyData, currentItem, 'viewing');
+                    createStoryViewer(storyData, 'viewing');
                     
-                    if(currentItem<=storyData.items.length){
-                        var nextItemData = getStoryMorningGlory('next');
-                        createStoryViewer(nextItemData, currentItem, 'next');
+                    var nextItemData = getStoryMorningGlory('next');
+                    if(nextItemData){
+                        createStoryViewer(nextItemData, 'next');
                     }
                     
                     modalContainer.style.display = 'block';
@@ -399,6 +461,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
             
             nextPointer.classList.remove('seem');
             nextPointer.classList.add('active');
+            //nextItemElement.classList.remove('stopped');
             nextItemElement.classList.remove('seem');
             nextItemElement.classList.add('active');
             
