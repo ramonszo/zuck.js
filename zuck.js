@@ -108,26 +108,27 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
             }
             
             var modalContent = q('#zuck-modal-content');
-            var moveSlideItem = function(slides, direction){
+            var moveSlideItem = function(slides){
                 var offset = 2;
-                if(direction===0){
+                if(slides.direction===0){
                    offset = 1;
                 }
 
                 if(slides.previous){
                     slides.previous.classList.add('animated');
-                    slides.previous.style.transform = 'translate3d(' + ((direction===-1)?'0':'-'+(slides.slideWidth*offset))+ 'px,0,0)';                       
+                    slides.previous.style.transform = 'translate3d(' + ((slides.direction===-1)?'0':'-'+(slides.slideWidth*offset))+ 'px,0,0)';                       
                 }
 
-                var prevNext = ((direction===-1)?slides.slideWidth:'-'+slides.slideWidth);
+                var prevNext = ((slides.direction===-1)?slides.slideWidth:'-'+slides.slideWidth);
                 slides.viewing.classList.add('animated');
-                slides.viewing.style.transform = 'translate3d(' + ((direction===0)?'0':prevNext)+'px,0,0)';
+                slides.viewing.style.transform = 'translate3d(' + ((slides.direction===0)?'0':prevNext)+'px,0,0)';
 
                 if(slides.next){
                     slides.next.classList.add('animated');
-                    slides.next.style.transform = 'translate3d(' + ((direction!==1)?(slides.slideWidth*offset):'0')+'px,0,0)';                       
+                    slides.next.style.transform = 'translate3d(' + ((slides.direction!==1)?(slides.slideWidth*offset):'0')+'px,0,0)';                       
                 }
 
+                console.log('slide slides.direction', slides.direction);
                 onTransitionEnd(slides.viewing, function(){
                     if(slides.previous){
                         slides.previous.classList.remove('animated');
@@ -142,15 +143,15 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     var target = '';
                     var useless = '';
                     
-                    if(direction===-1){
+                    if(slides.direction===-1){
                         target = 'previous';
                         useless = 'next';
-                    } else if (direction===1){
+                    } else if (slides.direction===1){
                         target = 'next';
                         useless = 'previous';
                     }
                     
-                    console.log('PORRA DE TARGET', target, useless);
+                    console.log('PORRA DE TARGET', slides.direction, target, useless);
                     
                     if(target!=''&&slides[target]&&useless!='') {
                         var currentStory = slides[target].getAttribute('data-story-id');
@@ -282,28 +283,20 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                        }
                     }
                     
-                    if(slides.moveX){
+                    if(slides.moveX){                        
                         var absMove = Math.abs(slides.index*slides.slideWidth - slides.moveX);
+                        slides.direction = 0;
                         if (absMove > slides.slideWidth/2) {
                             if (slides.moveX > slides.index*slides.slideWidth && slides.index < 2) {
                                 slides.index++;
+                                slides.direction = 1;
                             } else if (slides.moveX < slides.index*slides.slideWidth && slides.index > 0) {
                                 slides.index--;
+                                slides.direction = -1;
                             }
                         } 
-                        
-                        var previousIndex = (slides.index * slides.slideWidth);
-                        var viewingIndex = ((slides.index*slides.slideWidth) - slides.slideWidth);
-                        var nextIndex = ((slides.index*slides.slideWidth) - (slides.slideWidth * 2));
-
-                        var direction = 0;
-                        if(previousIndex==0){
-                            direction = -1;
-                        } else if (nextIndex==0){
-                            direction = 1;
-                        }
                                             
-                        moveSlideItem(slides, direction);
+                        moveSlideItem(slides);
                     }
                 };
 
@@ -311,11 +304,17 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     slides.touchMoveX =  e.touches[0].pageX;
                     slides.moveX = slides.slideWidth + (slides.touchStartX - slides.touchMoveX);
 
+                    var dir = ((slides.moveX + slides.slideWidth) > 0);
+                    
                     if(slides.previous){
                         slides.previous.style.transform = 'translate3d(' + ((slides.moveX * -1)) + 'px,0,0)';                       
                     }
                     
-                    slides.viewing.style.transform = 'translate3d(' + ((slides.moveX * -1) + slides.slideWidth) + 'px,0,0)';
+                    console.log(slides.index, slides.previous, slides.next, dir);
+                    
+                    if( (slides.previous&&slides.index==1&&!dir)||(slides.next&&slides.index==1&&dir)){
+                        slides.viewing.style.transform = 'translate3d(' + ((slides.moveX * -1) + slides.slideWidth) + 'px,0,0)';
+                    }
                     
                     if(slides.next){
                         slides.next.style.transform = 'translate3d(' + ((slides.moveX * -1) + (slides.slideWidth * 2)) + 'px,0,0)';                       
