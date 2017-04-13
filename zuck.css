@@ -32,7 +32,7 @@
 }
 
 #zuck-modal-content .story-viewer.animated {
-    transition: transform 0.3s ease-out;
+    transition: transform 0.25s linear;
 }
 
 #zuck-modal-content .story-viewer .slides .item {
@@ -73,7 +73,7 @@
     margin-right: 12px;
     border-radius: 50%;
     vertical-align: middle;
-    box-shadow: inset 1px 1px 1px rgba(0,0,0,0.15);
+    box-shadow: inset 0px 0px 1px rgba(0,0,0,0.3);
 }
 
 #zuck-modal-content .story-viewer .head .time {
@@ -147,6 +147,7 @@
     height: 2px;
     display: block;
     animation-fill-mode: forwards;
+    animation-play-state: paused;
 }
 
 #zuck-modal-content .story-viewer .head,
@@ -159,10 +160,8 @@
     opacity: 0;
 }
 
-#zuck-modal-content .story-viewer.paused .slides-pointers > * > *.active > b,
-#zuck-modal-content .story-viewer.stopped .slides-pointers > * > *.active > b,
-#zuck-modal-content .story-viewer.buffering .slides-pointers > * > *.active > b {
-    animation-play-state: paused;
+#zuck-modal-content .story-viewer.viewing .slides-pointers > * > *.active > b {
+    animation-play-state: running;
 }
 
 #zuck-modal-content .story-viewer.next {
@@ -179,7 +178,7 @@
 
 @media (max-width: 1024px){
     #zuck-modal-content .story-viewer .head {
-        top: 6px;
+        top: 3px;
     }
     
     #zuck-modal-content .story-viewer .head .img {

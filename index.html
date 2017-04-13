@@ -6,7 +6,7 @@
         <!-- styles just for demo -->
         <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
         <style>
-            body {font-family:'Roboto', sans-serif;font-size:14px;padding:0;margin:0;}
+            body {font-family:'Roboto', sans-serif;font-size:14px;padding:0;margin:0}
             #stories {padding: 12px;}
             h1 {font-family: monospace;padding:12px;border-bottom:1px solid #ddd;font-size:24px;height:56px;line-height:56px;margin-bottom: 0;white-space: nowrap;text-overflow: ellipsis;overflow:hidden;}
         </style>
@@ -31,51 +31,33 @@
                             "seem": seem
                         };
             }
-            
-            var itemsExample = [
-                                    {
-                                        id: "ramon-1",
-                                        type: "photo",
-                                        length: 5,
-                                        src: "https://pbs.twimg.com/media/C75V20SWsAAw5fO.jpg:large",
-                                        preview: "https://pbs.twimg.com/media/C75V20SWsAAw5fO.jpg:small",
-                                        link: false,
-                                        seem: false,
-                                        time: 1231241241
-                                    },
-                                    {
-                                        id: "ramon-2",
-                                        type: "photo",
-                                        length: 5,
-                                        src: "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:large",
-                                        preview: "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:small",
-                                        link: "https://twitter.com/ramon82",
-                                        seem: false,
-                                        time: 1231241241
-                                    },
-                                    {
-                                        id: "ramon-3",
-                                        type: "video",
-                                        length: 0,
-                                        src: "https://instagram.fcgh11-1.fna.fbcdn.net/t50.2886-16/17582994_287095581720875_3155815804436480000_n.mp4",
-                                        preview: "https://instagram.fcgh11-1.fna.fbcdn.net/t51.2885-15/s640x640/e15/17493855_297615357325187_6517162248006270976_n.jpg",
-                                        link: "https://twitter.com/ramon82",
-                                        seem: false,
-                                        time: 1231241241
-                                    }
-                                ];
-            
+
             var stories = new Zuck('stories', {
                 backNative: true,
                 autoFullScreen: true,
                 stories: [
                     {
+                        id: "ramon",
+                        photo: "https://pbs.twimg.com/profile_images/841375266891001858/J9aKq2-0.jpg",
+                        name: "Ramon",
+                        link: "https://ramon.codes",
+                        lastUpdated: "2017-04-09 05:08:30",
+                        items: [
+                            buildItem("ramon-1", "photo", 5, "https://pbs.twimg.com/media/C75V20SWsAAw5fO.jpg:large", "https://pbs.twimg.com/media/C75V20SWsAAw5fO.jpg:small", 'https://ramon.codes', false, 1231241241),
+                            buildItem("ramon-2", "photo", 5, "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:large", "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:small", 'https://twitter.com/ramon82', false, 1231241241),
+                            buildItem("ramon-3", "video", 0, "https://instagram.fcgh11-1.fna.fbcdn.net/t50.2886-16/17582994_287095581720875_3155815804436480000_n.mp4", "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:small", '', false, 1231241241)
+                        ]
+                    },
+                    {
                         id: "gorillaz",
-                        photo: "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:small",
+                        photo: "https://instagram.frao1-1.fna.fbcdn.net/t51.2885-15/e35/17267388_1853065824981433_7313109104879206400_n.jpg",
                         name: "Gorillaz",
                         link: "",
                         lastUpdated: "2017-04-09 05:08:30",
-                        items: itemsExample
+                        items: [
+                            buildItem("gorillaz-1", "video", 0, "https://instagram.frao1-1.fna.fbcdn.net/t50.2886-16/17886251_1128605603951544_572796556789415936_n.mp4", "https://instagram.frao1-1.fna.fbcdn.net/t50.2886-16/17886251_1128605603951544_572796556789415936_n.mp4", '', false, 1231241241),
+                            buildItem("gorillaz-2", "photo", 5, "https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:large","https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:small", '', false, 1231241241),
+                        ]
                     },
                     {
                         id: "ladygaga",
@@ -83,7 +65,10 @@
                         name: "Lady Gaga",
                         link: "",
                         lastUpdated: "2017-04-09 05:08:30",
-                        items: itemsExample
+                        items: [
+                            buildItem("ladygaga-1", "photo", 10, "https://pbs.twimg.com/media/C8mtrEMXcAA9KKM.jpg:large", "https://pbs.twimg.com/media/C8mtrEMXcAA9KKM.jpg:small", '', false, 1231241241),
+                            buildItem("ladygaga-2", "photo", 5, "https://pbs.twimg.com/media/C4t_bxcXAAE3Hwb.jpg:large", "https://pbs.twimg.com/media/C4t_bxcXAAE3Hwb.jpg:small", 'http://ladygaga.com', false, 1231241241),
+                        ]
                     },
                     {
                         id: "starboy",
@@ -91,7 +76,9 @@
                         name: "Abel",
                         link: "",
                         lastUpdated: "2017-04-09 05:08:30",
-                        items: itemsExample
+                        items: [
+                            buildItem("starboy-1", "photo", 10, "https://pbs.twimg.com/media/C6f-dTqVQAAiy1K.jpg:large", "https://pbs.twimg.com/media/C6f-dTqVQAAiy1K.jpg:small", '', false, 1231241241)
+                        ]
                     },
                     {
                         id: "qotsa",
@@ -99,15 +86,9 @@
                         name: "QOTSA",
                         link: "",
                         lastUpdated: "2017-04-09 05:08:30",
-                        items: itemsExample
-                    },
-                    {
-                        id: "ramon",
-                        photo: "https://pbs.twimg.com/profile_images/841375266891001858/J9aKq2-0.jpg",
-                        name: "Ramon",
-                        link: "https://ramon.codes",
-                        lastUpdated: "2017-04-09 05:08:30",
-                        items: itemsExample
+                        items: [
+                            buildItem("qotsa-1", "photo", 10, "https://pbs.twimg.com/media/C8wTxgUVoAALPGA.jpg:large", "https://pbs.twimg.com/media/C8wTxgUVoAALPGA.jpg:small", '', false, 1231241241)
+                        ]
                     }
                 ]
             });
