@@ -43,6 +43,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
         onAnimationEnd = function (el, func) {
             addVendorEvents(el, func, 'AnimationEnd');
         },
+        onTransitionEnd = function (el, func) {
+            if(!el.transitionEndEvent){
+                el.transitionEndEvent = true;
+                
+                addVendorEvents(el, func, 'TransitionEnd');
+            }
+        },
         prepend = function (parent, child) { 
             if(parent.firstChild) {
                 parent.insertBefore(child, parent.firstChild); 
@@ -101,16 +108,97 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
             }
             
             var modalContent = q('#zuck-modal-content');
-            var createStoryViewer = function(storyData, className){
-                if(!storyData){
-                    return false;   
+            var moveSlideItem = function(slides, direction){
+                var offset = 2;
+                if(direction===0){
+                   offset = 1;
                 }
+
+                if(slides.previous){
+                    slides.previous.classList.add('animated');
+                    slides.previous.style.transform = 'translate3d(' + ((direction===-1)?'0':'-'+(slides.slideWidth*offset))+ 'px,0,0)';                       
+                }
+
+                var prevNext = ((direction===-1)?slides.slideWidth:'-'+slides.slideWidth);
+                slides.viewing.classList.add('animated');
+                slides.viewing.style.transform = 'translate3d(' + ((direction===0)?'0':prevNext)+'px,0,0)';
+
+                if(slides.next){
+                    slides.next.classList.add('animated');
+                    slides.next.style.transform = 'translate3d(' + ((direction!==1)?(slides.slideWidth*offset):'0')+'px,0,0)';                       
+                }
+
+                onTransitionEnd(slides.viewing, function(){
+                    if(slides.previous){
+                        slides.previous.classList.remove('animated');
+                    }
+                    
+                    slides.viewing.classList.remove('animated');
+                    
+                    if(slides.next){
+                        slides.next.classList.remove('animated');                       
+                    }
+                    
+                    var target = '';
+                    var useless = '';
+                    
+                    if(direction===-1){
+                        target = 'previous';
+                        useless = 'next';
+                    } else if (direction===1){
+                        target = 'next';
+                        useless = 'previous';
+                    }
+                    
+                    console.log('PORRA DE TARGET', target, useless);
+                    
+                    if(target!=''&&slides[target]&&useless!='') {
+                        var currentStory = slides[target].getAttribute('data-story-id');
+                        zuck.internalData['currentStory'] = currentStory;
+
+                        if(slides[useless]&&slides[useless].parentNode){
+                           slides[useless].parentNode.removeChild(slides[useless]);  
+                        }
+
+                        slides.viewing.classList.add('stopped');
+                        slides.viewing.classList.add(useless);
+                        slides.viewing.classList.remove('viewing');
+
+                        if(slides[target]){
+                           slides[target].classList.remove('stopped');
+                           slides[target].classList.remove(target);
+                           slides[target].classList.add('viewing');
+                        }
+                                                
+                        slides = updateSlidesIndex(slides);
+                    }
+                    
+                    var newStoryData = getStoryMorningGlory(target);
+                    console.log('target', slides[target], currentStory, target, useless, newStoryData);
+                    if(newStoryData){
+                       createStoryViewer(newStoryData, target);                       
+                    }
+                });    
+            };
+            var updateSlidesIndex = function(slides){
+                slides.index = getElIndex(q('#zuck-modal .story-viewer.viewing'));
+                slides.previous  = q('#zuck-modal .story-viewer.previous');
+                slides.viewing = q('#zuck-modal .story-viewer.viewing');
+                slides.next = q('#zuck-modal .story-viewer.next');
                 
+                return slides;
+            };
+            
+            var createStoryViewer = function(storyData, className){
                 var htmlItems = '', 
                     pointerItems = '', 
                     storyId = g(storyData, 'id'),
                     slides = d.createElement('div'),
                     currentItem = zuck.internalData['currentStoryItem'];
+                
+                if(!storyData||q('#zuck-modal .story-viewer[data-story-id="'+storyId+'"]')){
+                    return false;   
+                }
                 
                 slides.className = 'slides';
                 each(g(storyData, 'items'), function (i, item) {
@@ -150,11 +238,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     
                     slides.touchStartX =  e.touches[0].pageX;
                     slides.slideWidth = q('#zuck-modal .story-viewer').offsetWidth;
-                    slides.index = getElIndex(q('#zuck-modal .story-viewer.viewing'));
-                    slides.previous  = q('#zuck-modal .story-viewer.previous');
-                    slides.viewing = q('#zuck-modal .story-viewer.viewing');
-                    slides.next = q('#zuck-modal .story-viewer.next');
-
+                    
+                    slides = updateSlidesIndex(slides);
+                    
                     storyViewer.timer = setTimeout(function(){
                         storyViewer.classList.add('fingerDown');
                         if(storyViewer.classList.contains('fingerDown')){
@@ -209,22 +295,15 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                         var previousIndex = (slides.index * slides.slideWidth);
                         var viewingIndex = ((slides.index*slides.slideWidth) - slides.slideWidth);
                         var nextIndex = ((slides.index*slides.slideWidth) - (slides.slideWidth * 2));
-                        
-                        if(slides.previous){
-                            slides.previous.style.transform = 'translate3d(' + (slides.index * slides.slideWidth)  + 'px,0,0)';                       
-                        }
 
-                        slides.viewing.style.transform = 'translate3d(' + ((slides.index*slides.slideWidth) - slides.slideWidth) + 'px,0,0)';
-
-                        if(slides.next){
-                            slides.next.style.transform = 'translate3d(' + ((slides.index*slides.slideWidth) - (slides.slideWidth * 2)) + 'px,0,0)';                       
-                        }
-                        
+                        var direction = 0;
                         if(previousIndex==0){
-                           console.log('previous');
+                            direction = -1;
                         } else if (nextIndex==0){
-                           console.log('next');
+                            direction = 1;
                         }
+                                            
+                        moveSlideItem(slides, direction);
                     }
                 };
 
@@ -250,16 +329,19 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                 slides.addEventListener('mousedown', touchStart); 
                 slides.addEventListener('mouseup', touchEnd); 
 
-                storyViewer.appendChild(slides);
+                storyViewer.appendChild(slides);                   
                 
                 each(storyViewer.querySelectorAll('.slides-pointers [data-index] > b'), function (i, el) {
-                    console.log(el);
                     onAnimationEnd(el, function () {
                         zuck.nextItem();
                     });
                 });
                 
-                modalContent.appendChild(storyViewer);                
+                if(className=='previous'){
+                    prepend(modalContent, storyViewer);
+                } else {
+                    modalContent.appendChild(storyViewer);                   
+                }                
             };
             
             return {
@@ -316,8 +398,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                 });
             });
 
-            console.log('add data', storyItems, items);
-
             zuck.data[storyId].items = items;
         },
         
@@ -349,7 +429,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
         getStoryMorningGlory = function(what) { //my wife told me to stop singing Wonderwall. I SAID MAYBE.
             var currentStory = zuck.internalData['currentStory']; // _\|/_
             var whatEl = what+'ElementSibling'; //this was proposital
-            
+                        
             if(currentStory){
                var foundStory = q('#'+id+' [data-id="'+currentStory+'"]')[whatEl];
                 
@@ -443,7 +523,10 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
         var currentItem = zuck.internalData['currentStoryItem'];
         
         var storyViewer = q('#zuck-modal .story-viewer[data-story-id="'+currentStory+'"]');
-
+        if(!storyViewer){
+            return false;   
+        }
+        
         var currentItemElements = storyViewer.querySelectorAll('[data-index="'+currentItem+'"]');
         var currentPointer = currentItemElements[0];
         var currentItemElement = currentItemElements[1];

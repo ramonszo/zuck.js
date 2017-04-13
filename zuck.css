@@ -31,6 +31,10 @@
     position: absolute;
 }
 
+#zuck-modal-content .story-viewer.animated {
+    transition: transform 0.3s ease-out;
+}
+
 #zuck-modal-content .story-viewer .slides .item {
     background: rgba(0,0,0,0.2);
     display: none;
