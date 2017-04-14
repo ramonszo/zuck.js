@@ -172,18 +172,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 				if(option('openEffect')){
 					modalContainer.className = 'with-effects';
 				};
-				   
-                onTransitionEnd(modalContainer, function () {
-					if(option('autoFullScreen')&&window.screen.width<=1024){
-						fullScreen(modalContainer); //because effects
-					}
-				});
-                
+
                 d.body.appendChild(modalContainer);
             }
             
             var modalContent = q('#zuck-modal-content');
-            var moveSlideItem = function(slides, unmute){
+            var moveStoryItem = function(slides, unmute){
+				//reset
                 var offset = 2;
                 if(slides.direction===0){
                    offset = 1;
@@ -302,27 +297,36 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                 slides.innerHTML = htmlItems;
 				
                 var video = slides.querySelector('video');
-                if(video){
+				var addMuted = function(video){
+					if(video.muted){
+						storyViewer.classList.add('muted');
+					} else {
+						storyViewer.classList.remove('muted');
+					}
+				};
+				
+				if(video){
                     video.onwaiting = function(){
                         storyViewer.classList.add('paused');
                         storyViewer.classList.add('loading');
                     };
                     
                     video.onplay = video.onplaying = function(){
+                        storyViewer.classList.remove('stopped');
                         storyViewer.classList.remove('paused');
                         storyViewer.classList.remove('loading');
+						
+						addMuted(video);
                     };
                     
                     video.onready = video.onload = video.onplaying = video.oncanplay = function(){
                         storyViewer.classList.remove('loading');
+						
+						addMuted(video);
                     };
                     
                     video.onvolumechange = function(){
-						if(video.muted){
-							storyViewer.classList.add('muted');
-						} else {
-							storyViewer.classList.remove('muted');
-						}
+						addMuted(video);
                     };
                 }
 
@@ -391,10 +395,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 					
                     if(storyViewer.next){
 						if(storyViewer.classList.contains('muted')&&video){
-							video.muted = false;
-							video.volume = 1.0;
-							video.removeAttribute('muted');
-							video.play();
+							unmuteVideoItem(video);
 						} else {
 							clearInterval(storyViewer.next);
 							storyViewer.next = false;
@@ -431,7 +432,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                         } 
 
                         //if(slides.move){
-                            moveSlideItem(slides, e);
+                            moveStoryItem(slides, e);
                         //}
 						
 						storyViewer.classList.remove('longPress');
@@ -549,6 +550,12 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 							setTimeout(function(){
 								modalContainer.classList.add('animated');
 							}, 10);
+							
+							onTransitionEnd(modalContainer, function () {
+								if(option('autoFullScreen')&&window.screen.width<=1024){
+									fullScreen(modalContainer); //because effects
+								}
+							});
 						} else {
 							modalContainer.style.display = 'block';
 						}
@@ -561,7 +568,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 					var callback = function(){
 						var stories = q('#zuck-modal .story-viewer[data-story-id="'+zuck.internalData['currentStory']+'"] .slides');
 						stories.direction = 1;
-						moveSlideItem(stories, unmute);
+						moveStoryItem(stories, unmute);
 
 						if(!q('#zuck-modal .story-viewer.next')){
 							modal.close();
@@ -656,7 +663,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 
         playVideoItem = function(elements, unmute) {
             var itemElement = elements[1], itemPointer = elements[0];
-
+			var viewer = itemPointer.parentNode.parentNode;
+			
             if(!itemElement||!itemPointer){
                 return false;
             }
@@ -678,13 +686,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                 video.addEventListener('loadedmetadata', setDuration);
                 zuck.internalData['currentVideoElement'] = video;
 
-
                 video.play();
 				if(unmute.target){				
-					video.muted = false;
-					video.volume = 1.0;
-					video.removeAttribute('muted');
-					video.play();
+					unmuteVideoItem(video);
 				}
             } else {
                 zuck.internalData['currentVideoElement'] = false;
@@ -700,7 +704,19 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 
                }
             }
-        };
+        },
+		
+		unmuteVideoItem = function(video){
+			video.muted = false;
+			video.volume = 1.0;
+			video.removeAttribute('muted');
+			video.play();
+			
+			if(video.paused){
+				video.muted = true;
+				video.play();
+			}
+		};
 
     
     zuck.data = {};

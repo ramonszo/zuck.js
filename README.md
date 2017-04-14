@@ -144,7 +144,7 @@ Use with autoFullScreen option (disabled by default) to emulate an app on mobile
 ## Todo
 * Time conversion
 * Read/Unread status
-
+* Desktop check
 
 ## License
 GNU GPL v3
