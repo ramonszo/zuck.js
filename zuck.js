@@ -205,7 +205,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     zuck.internalData['currentStoryItem'] = 0;
                 });    
             };
-
             var updateSlidesIndex = function(slides){
                 slides.index = getElIndex(q('#zuck-modal .story-viewer.viewing'));
                 slides.previous  = q('#zuck-modal .story-viewer.previous');
@@ -240,6 +239,22 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 
 
                 slides.innerHTML = htmlItems;
+                var video = slides.querySelector('video');
+                if(video){
+                    video.onwaiting = function(){
+                        storyViewer.classList.add('paused');
+                        storyViewer.classList.add('loading');
+                    };
+                    
+                    video.onprogress = function(){
+                        storyViewer.classList.add('loading');
+                    };
+                    
+                    video.onplay = video.onplaying = function(){
+                        storyViewer.classList.remove('paused');
+                        storyViewer.classList.remove('loading');
+                    };
+                }
 
                 var storyViewer = d.createElement('div');
                 storyViewer.className = 'story-viewer '+className+' '+((className!='viewing')?'stopped':'');
@@ -273,14 +288,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     storyViewer.touchMove = 0;
                     storyViewer.classList.add('paused');
 
-                    var video = zuck.internalData['currentVideoElement'];
-                    if(video){
-                       try {
-                           video.pause();
-                       } catch (e){
-
-                       }
-                    }
+                    pauseVideoItem();
 
                     storyViewer.timer = setTimeout(function(){
                         storyViewer.classList.add('longPress');
@@ -394,6 +402,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     });
                 });
 
+                console.log('qq ta acontecendo', className);
                 if(className=='previous'){
                     storyViewer.style.transform = 'translate3d(-100vw,0,0)';
                     prepend(modalContent, storyViewer);
@@ -416,7 +425,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     zuck.internalData['currentStory'] = storyId;
                     zuck.internalData['currentStoryItem'] = currentItem;
                     
-                    //console.log(zuck.internalData['currentStoryItem']);
+                    console.log(zuck.internalData['currentStory'], zuck.internalData['currentStoryItem']);
 
                     if(option('backNative')) {
                         location.hash = '#!'+id;
@@ -451,6 +460,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                 },
 
                 'close': function () {
+                    if(option('backNative')) {
+                        location.hash = '#!'+id;
+                    }
+                    
+                    console.log('close');
+                    
+                    modalContent.innerHTML = '';
                     modalContainer.style.display = 'none';
                 }
             };
@@ -551,8 +567,19 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
             } else {
                 zuck.internalData['currentVideoElement'] = false;
             }
+        },
+        
+        pauseVideoItem = function(){
+            var video = zuck.internalData['currentVideoElement'];
+            if(video){
+               try {
+                   video.pause();
+               } catch (e){
+
+               }
+            }
         };
-    
+
     
     zuck.data = {};
     zuck.internalData = {};
@@ -644,7 +671,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
         var nextPointer = nextItemElements[0];
         var nextItemElement = nextItemElements[1];
         
-        console.log('storyViewer:', storyViewer, 'currentItem:', currentItem, 'nextItem:', nextItem, 'nextPointer:', nextPointer, 'nextItemElement', nextItemElement);
+        //console.log('storyViewer:', storyViewer, 'currentItem:', currentItem, 'nextItem:', nextItem, 'nextPointer:', nextPointer, 'nextItemElement', nextItemElement);
 
         if(storyViewer&&nextPointer&&nextItemElement){
             currentPointer.classList.remove('active');
@@ -671,9 +698,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
     };
     
     var init = function () {
-        //console.log('init', option('stories'));
+        console.log('init', option('backNative')&&location.hash=='#!'+id);
         
         if(q('#'+id+' .story')) {
+            if(option('backNative')&&location.hash=='#!'+id) {
+                location.hash = '';
+            }
+            
             each(timeline.querySelectorAll('.story'), function (i, story) {
                 parseStory(story, true);
             });
