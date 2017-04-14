@@ -1,6 +1,6 @@
 /* base */
 .stories {white-space: nowrap;overflow:auto;}
-.stories .story {display: inline-block;width:20vw;margin: 0 12px;max-width: 90px;}
+.stories .story {display: inline-block;width:18vw;margin: 0 6px;max-width: 90px;}
 .stories .story:first-child {margin-left: 0;}
 .stories .story:last-child {margin-right: 0;}
 .stories .story > a {display:block;}

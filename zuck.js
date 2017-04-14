@@ -64,15 +64,18 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
 
             return 0;
         },
-        fullScreen = function(elem){
+        fullScreen = function(elem, cancel){
+            var func = (cancel)?'ExitFullScreen':'RequestFullScreen';
+            var elFunc = (cancel)?'exitFullScreen':'requestFullScreen'; //crappy vendor prefixes.
+
             if (elem.requestFullscreen) {
-              elem.requestFullscreen();
+              elem[elFunc]();
             } else if (elem.msRequestFullscreen) {
-              elem.msRequestFullscreen();
+              elem['ms'+func]();
             } else if (elem.mozRequestFullScreen) {
-              elem.mozRequestFullScreen();
+              elem['moz'+func]();
             } else if (elem.webkitRequestFullscreen) {
-              elem.webkitRequestFullscreen();
+              elem['webkit'+func]();
             }
         };
     
@@ -433,7 +436,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     
                     modalContainer.style.display = 'block';
                     if(option('fullScreen')&&window.screen.width<=1024){
-                        fullScreen(modalContainer);
+                        fullScreen(document.body); //because effects
                     }
                 },
                 
@@ -442,7 +445,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     stories.direction = 1;
                     moveSlideItem(stories);
 
-                    if(false){
+                    if(!q('#zuck-modal .story-viewer.next')){
                         modal.close();
                     }
                 },

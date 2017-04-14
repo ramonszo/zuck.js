@@ -13,7 +13,7 @@
     background: radial-gradient(ellipse at 70% 70%,#ee583f 8%,#d92d77 42%,#bd3381 58%);
     font-size: 0;
     max-height: 90px;
-    height: 20vw;
+    height: 18vw;
     overflow: hidden;
 }
 
@@ -44,6 +44,6 @@
     display: inline-block;
     margin-top: 0.5em;
     line-height: 1.2em;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 300;
 }
