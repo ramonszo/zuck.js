@@ -7,11 +7,23 @@ You can read stories from any endpoint (json, firebase, etc.) and the script wil
 
 
 ## Features
+* Library agnostic
 * Custom themes
 * Desktop support (why not?)
 * A simple media viewer, with gestures and events
 * A simple api to manage your "Stories timeline"
-* Lightweight
+* Lightweight (10kb minified - 5kb gzipped)
+
+
+## Limitations
+On mobile browsers, video can't play without a user gesture. So the script try to play audio only when user click to see a next story. 
+When the story is playing automatically, the video is muted, but an alert is displayed to user click to hear audio.
+
+As someone said: Isn't a bug. It's a feature. :)
+
+
+## Compatibility
+IE 10 and other browsers. Not tested on IE9, but if you really want this compatibility, maybe you'll just have to add a classList polyfill.
 
 
 ## How to use
@@ -46,6 +58,7 @@ Add/Remove a story item:
 	stories.addItem(storyId, {item object});
 	stories.removeItem(storyId, itemId);
 
+
 ## Stories structure example
 A json example of the stories object:
 
@@ -69,7 +82,8 @@ A json example of the stories object:
             }
         ]
     }   
-    
+
+
 ## Alternate call
 In your HTML:
 
@@ -101,4 +115,10 @@ Then in your JS:
 
 	var stories = new Zuck('stories'); 
 
-## Compatibility
+
+## Tips
+Use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
+
+
+## License
+GNU GPL v3
