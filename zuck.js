@@ -63,6 +63,17 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
             }
 
             return 0;
+        },
+        fullScreen = function(elem){
+            if (elem.requestFullscreen) {
+              elem.requestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+              elem.msRequestFullscreen();
+            } else if (elem.mozRequestFullScreen) {
+              elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) {
+              elem.webkitRequestFullscreen();
+            }
         };
     
     var id = timeline.id,
@@ -247,6 +258,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                            '<div class="slides-pointers"><div>'+pointerItems+'</div></div>';
                 storyViewer.innerHTML = html;
 
+
+                // touchEvents
                 var touchStart = function(e){
                     e.preventDefault();
                     
@@ -255,44 +268,45 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     
                     slides = updateSlidesIndex(slides);
                     storyViewer.touchMove = 0;
+                    storyViewer.classList.add('paused');
+
+                    var video = zuck.internalData['currentVideoElement'];
+                    if(video){
+                       try {
+                           video.pause();
+                       } catch (e){
+
+                       }
+                    }
+
                     storyViewer.timer = setTimeout(function(){
-                        storyViewer.classList.add('fingerDown');
-                        if(storyViewer.classList.contains('fingerDown')){
-                            storyViewer.classList.add('paused');
+                        storyViewer.classList.add('longPress');
+                    }, 1000);
 
-                            var video = zuck.internalData['currentVideoElement'];
-                            if(video){
-                               try {
-                                   video.pause();
-                               } catch (e){
-
-                               }
-                            }
-                        }
+                    storyViewer.next = setTimeout(function(){
+                        clearInterval(storyViewer.next);
+                        storyViewer.next = false;
                     }, 200);  
+
                 };
 
                 var touchEnd = function(e){
-                    //console.log('touchend');
-
                     e.preventDefault();
                     
                     if(storyViewer.timer){
                         clearInterval(storyViewer.timer);
                     }
 
-                    if(storyViewer.classList.contains('fingerDown')){
-                        storyViewer.classList.remove('fingerDown');
-                    } else {
-                        if(storyViewer.touchMove==0){
-                            zuck.nextItem();
-                        }
+                    if(storyViewer.next){
+                        clearInterval(storyViewer.next);
+                        zuck.nextItem();
                     }
+
+                    storyViewer.classList.remove('longPress');
+                    storyViewer.classList.remove('paused');
 
                     storyViewer.touchMove = 0;
                     slides.touchStartX = 0;
-
-                    storyViewer.classList.remove('paused');
 
                     var video = zuck.internalData['currentVideoElement'];
                     if(video){
@@ -326,7 +340,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     var touchMove = (slides.touchStartX - slides.touchMoveX);
                     var isPrevious = true;
 
-                    if(slides.touchMoveX >= e.touches[0].pageX){
+                    if(slides.touchMoveX > e.touches[0].pageX){
                         isPrevious = false;
                     }
                     
@@ -361,8 +375,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                 slides.addEventListener('touchmove', touchMove); 
                 slides.addEventListener('touchend', touchEnd); 
 
-                slides.addEventListener('mousedown', touchStart); 
-                slides.addEventListener('mouseup', touchEnd); 
+                //slides.addEventListener('mousedown', touchStart);
+                //slides.addEventListener('mouseup', touchEnd);
 
                 storyViewer.appendChild(slides);                   
                 //console.log('[data-index="'+currentItem+'"]');
@@ -376,12 +390,19 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                         zuck.nextItem();
                     });
                 });
-                
+
                 if(className=='previous'){
+                    storyViewer.style.transform = 'translate3d(-100vw,0,0)';
                     prepend(modalContent, storyViewer);
-                } else {
-                    modalContent.appendChild(storyViewer);                   
+
+                    return false;
+                }
+
+                if(className=='next'){
+                    storyViewer.style.transform = 'translate3d(100vw,0,0)';
                 }                
+
+                modalContent.appendChild(storyViewer);
             };
             
             return {
@@ -411,6 +432,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function (timeline, options) {
                     }
                     
                     modalContainer.style.display = 'block';
+                    if(option('fullScreen')&&window.screen.width<=1024){
+                        fullScreen(modalContainer);
+                    }
                 },
                 
                 'next': function(){
