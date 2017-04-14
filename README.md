@@ -19,11 +19,11 @@ You can read stories from any endpoint (json, firebase, etc.) and the script wil
 On mobile browsers, video can't play without a user gesture. So the script try to play audio only when user click to see a next story. 
 When the story is playing automatically, the video is muted, but an alert is displayed to user click to hear audio.
 
-As someone said: Isn't a bug. It's a feature. :)
+Link on stories opens in new window too. This behaviour occurs because most websites blocks to be embeded on iFrames. 
 
 
 ## Compatibility
-IE 10 and other browsers. Not tested on IE9, but if you really want this compatibility, maybe you'll just have to add a classList polyfill.
+IE 10 and other browsers. Not tested on IE9, but if you really want this compatibility, you'll just have to add a classList polyfill.
 
 
 ## How to use
@@ -33,16 +33,35 @@ Initialize:
         id: '', //timeline container id or reference
         skin: 'snapgram', //container class
         avatars: true, //show user photo instead of last story item preview
-        saveRead: function(storyId, storyItemId, status){
-            // function to save user reading story status. if not defined, local storage is used.
-        },
+		openEffect: true, //enable effect when opening story - may decrease performance
         autoFullScreen: false, // enable fullscreen on mobile browsers
         expiresIn: 24, // expiration hours to remove item from story
         backButton: true, // add a back button to close the story viewer
         backNative: false, // uses window history to enable back button on browsers/android
         stories: [ // array of stories
             // See stories structure example
-        ]
+        ],
+		callbacks: { //callback list
+			onViewItem: function (storyId, storyItemId, status) {
+
+			},
+
+			onNextItem: function (nextStoryId, storyItemId){
+				callback();
+			},
+
+			onNext: function(storyId, callback){
+				callback();
+			},
+
+			onOpen: function(storyId, callback){
+				callback();
+			},
+
+			onClose: function(storyId, callback){
+				callback();
+			}
+		}
     });
 
 Add/update a story:
@@ -73,12 +92,14 @@ A json example of the stories object:
             {
                 id: "", //item id
                 type: "", //photo or video
-                length: 5, //photo timeout or video length in seconds - uses 5 seconds timeout for images if not set
+                length: 3, //photo timeout or video length in seconds - uses 3 seconds timeout for images if not set
                 src: "", //photo or video src
                 preview: "", // optional - item thumbnail to show in the story carousel instead of the story defined image
-                link: "", // a link to swipe up
+                link: "", // a link to click on story
+				linkText: "", // link text
                 time: "", // optional - unix timestamp for created story date
-                seem: false // set true if current user was read - if local storage is used, you don't need to care about this.
+                seem: false, // set true if current user was read - if local storage is used, you don't need to care about this.
+				hidden: false // set true to hide the story from timeline but show it while viewing full stories
             }
         ]
     }   
@@ -99,7 +120,7 @@ In your HTML:
             
                 <!-- story item -->
                 <li data-id="{{story.items.id}}" data-time="{{story.items.time}}" class="{{story.items.seem}}">
-                    <a href="{{story.items.src}}" data-type="{{story.items.type}}" data-length="{{story.items.length}}" data-link="{{story.items.link}}">
+                    <a href="{{story.items.src}}" data-type="{{story.items.type}}" data-length="{{story.items.length}}" data-link="{{story.items.link}}" data-link-text="{{story.items.linkText}}">
                         <img src="{{story.items.preview}}">
                     </a>
                 </li>
@@ -118,6 +139,11 @@ Then in your JS:
 
 ## Tips
 Use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
+
+
+## Todo
+* Time conversion
+* Read/Unread status
 
 
 ## License
