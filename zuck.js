@@ -280,7 +280,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 return slides;
             };
 
-            var createStoryViewer = function(storyData, className, forcePlay) {
+            var createStoryViewer = function(storyData, className, forcePlay) {				
                 var htmlItems = '',
                     pointerItems = '',
                     storyId = g(storyData, 'id'),
@@ -362,10 +362,10 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     '</div>' +
                     '<div class="slides-pointers"><div>' + pointerItems + '</div></div>';
                 storyViewer.innerHTML = html;
-				console.log(storyViewer.querySelectorAll('.close')[0].onclick);
-				storyViewer.querySelectorAll('.close')[0].onclick = function(){
+				
+				storyViewer.querySelector('.close').onclick = function(){
 					modal.close();
-				}
+				};
 				
                 // touchEvents
                 var touchStart = function(e) {
