@@ -362,8 +362,11 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     '</div>' +
                     '<div class="slides-pointers"><div>' + pointerItems + '</div></div>';
                 storyViewer.innerHTML = html;
-
-
+				console.log(storyViewer.querySelectorAll('.close')[0].onclick);
+				storyViewer.querySelectorAll('.close')[0].onclick = function(){
+					modal.close();
+				}
+				
                 // touchEvents
                 var touchStart = function(e) {
                     if (e.target.nodeName == 'A') {
