@@ -164,9 +164,5 @@ Then in your JS:
 Use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
 
 
-## Todo
-* Back button
-
-
 ## License
 GNU GPL v3
