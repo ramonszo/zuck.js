@@ -360,7 +360,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     pointerItems += '<span '+commonAttrs+' class="' + ((currentItem === i) ? 'active' : '') + ' '+seemClass+'"><b style="animation-duration:' + ((length === '') ? '3' : length) + 's"></b></span>';
                     htmlItems += '<div data-time="'+g(item, 'time')+'" data-type="' + g(item, 'type') + '"'+commonAttrs+' class="item ' + seemClass +
                         ' ' + ((currentItem === i) ? 'active' : '') + '">' +
-                        ((g(item, 'type') === 'video') ? '<video style="pointer-events: none;" class="media" muted preload="auto" src="' + g(item, 'src') + '" ' + g(item, 'type') + '></video><b class="tip muted">' + option('language', 'unmute') + '</b>' : '<img style="pointer-events: none;" ondragstart="return false" class="media" src="' + g(item, 'src') + '" ' + g(item, 'type') + '>') +
+                        ((g(item, 'type') === 'video') ? '<video class="media" muted preload="auto" src="' + g(item, 'src') + '" ' + g(item, 'type') + '></video><b class="tip muted">' + option('language', 'unmute') + '</b>' : '<img class="media" src="' + g(item, 'src') + '" ' + g(item, 'type') + '>') +
                         ((g(item, 'link')) ? '<a class="tip link" href="'+g(item, 'link')+'" rel="noopener" target="_blank">' + ((linkText == '') ? option('language', 'visitLink') : linkText) + '</a>' : '') +
                         '</div>';
                 });
@@ -505,8 +505,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 						moveStoryItem(slides, e, 'nextTouch');
 						storyViewer.classList.remove('longPress');
 					} else {
-						slides.direction = 0;
-						moveStoryItem(slides, e, 'nextTouch');
+						setVendorVariable(modalContent.style, 'Transform', 'translate3d(0,0,0)');
 					}
                 };
 
@@ -538,8 +537,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 storyViewer.addEventListener('touchmove', touchMove);
                 storyViewer.addEventListener('touchend', touchEnd);
 
-                //slides.addEventListener('mousedown', touchStart);
-                //slides.addEventListener('mouseup', touchEnd);
+                slides.addEventListener('mousedown', touchStart);
+                slides.addEventListener('mouseup', touchEnd);
 
                 storyViewer.appendChild(slides);
 

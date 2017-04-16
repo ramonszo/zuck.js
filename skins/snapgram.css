@@ -3,5 +3,5 @@
 .stories.snapgram .story > a > .img > * {border-radius: 50%; border:3px solid #fff;}
 
 .stories.snapgram .story.seem{opacity:.75}
-.stories.snapgram .story.seem > a > span{background:#999;color:#999}
+.stories.snapgram .story.seem > a > .img {background:#999}
 .stories.snapgram .story.seem > a{color:#999!important}

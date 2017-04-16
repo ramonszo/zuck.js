@@ -3,3 +3,4 @@
 .stories.facesnap .story > a > .img > * {border-radius: 50%; border:3px solid #fff;}
 
 .stories.facesnap .story.seem{opacity:.5}
+.stories.facesnap .story.seem > a > .img {background:#999}

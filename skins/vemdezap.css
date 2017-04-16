@@ -14,5 +14,5 @@
 .stories.list.vemdezap .story > a > .info .time {display: inline-block;color:#999;}
 
 .stories.vemdezap .story.seem > img {opacity:.75}
-.stories.vemdezap .story.seem > a > span{background:#999;color:#999}
+.stories.vemdezap .story.seem > a > .img {background:#999}
 .stories.vemdezap .story.seem > a{color:#999!important}
