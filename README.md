@@ -35,7 +35,6 @@ Initialize:
         avatars: true, //show user photo instead of last story item preview
 		openEffect: true, //enable effect when opening story - may decrease performance
         autoFullScreen: false, // enable fullscreen on mobile browsers
-        expiresIn: 24, // expiration hours to remove item from story
         backButton: true, // add a back button to close the story viewer
         backNative: false, // uses window history to enable back button on browsers/android
         stories: [ // array of stories
