@@ -780,8 +780,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 
                 if (foundStory) {
                     var storyId = foundStory.getAttribute('data-id');
-
-                    return zuck.data[storyId] || false;
+					var data = zuck.data[storyId] || false;
+					
+                    return (g(zuck.data[storyId], 'seem')==true)?false:data;
                 }
             }
 
