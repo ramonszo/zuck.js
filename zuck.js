@@ -434,8 +434,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 // touchEvents
                 var touchStart = function(e) {					
                     if (e.target.nodeName == 'A') {
-						console.log('open link return false');
-                        return false;
+                        return true;
                     } else {
                     	e.preventDefault();					
 					}
@@ -471,8 +470,12 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 };
 
                 var touchEnd = function(e) {
-                    e.preventDefault();
-
+                    if (e.target.nodeName == 'A') {
+                        return true;
+                    } else {
+                    	e.preventDefault();					
+					}
+					
 //					if(e.target!=slides){
 //					   return false;
 //					}
