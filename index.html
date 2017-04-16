@@ -9,7 +9,11 @@
             body {font-family:'Roboto', sans-serif;font-size:14px;padding:0;margin:0}
             #stories {padding: 12px;}
             h1 {font-family: monospace;padding:12px;border-bottom:1px solid #ddd;font-size:24px;height:56px;line-height:56px;margin-bottom: 0;white-space: nowrap;text-overflow: ellipsis;overflow:hidden;}
-        </style>
+        	
+			.disclaimer {line-height: 1.5em;background: #ffffd2;border-radius:3px;margin: 12px 12px;padding:12px 12px 12px 74px;font-size:13px;max-width: 500px;overflow: hidden;}
+			.disclaimer img {float:left;margin-right: 12px;width:50px;position: absolute;margin-left:-62px;}
+			.disclaimer a {color: inherit !important;border:0;}
+		</style>
         
         <!-- script styles -->
         <link rel="stylesheet" href="zuck.css">
@@ -17,7 +21,16 @@
     </head>
     <body>
         <h1>snapgram</h1>
+		
         <div id="stories"></div>
+		
+		<div class="disclaimer">
+			<a href="https://ramon.codes/projects/zuck.js" target="_blank"><img src="icon.png"></a>
+			
+			This a demonstration of <strong><a href="https://ramon.codes/projects/zuck.js" target="_blank">zuck.js</a></strong> javascript library. <br><br>
+			Not associated with Facebook, Instagram, WhatsApp or Snapchat.
+		</div>
+		
         <script src="zuck.js?v=212312311323"></script>
         <script>
             function buildItem(id, type, length, src, preview, link, seem, time){
