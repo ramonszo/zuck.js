@@ -165,6 +165,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             'backNative': false,
             'autoFullScreen': false,
             'openEffect': true,
+			'list': false,
             'callbacks': {
                 'onViewItem': function(storyId, storyItemId, status) {
 
@@ -842,12 +843,10 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 			if(items[0]){
 				preview = items[0]['preview'] || '';
 			}
-			
-			console.log(items, items[0]['preview'], preview, option('avatars'));
-			
+						
             html = '<a href="' + g(data, 'link') + '">' +
-                '<span><u class="img" style="background-image:url(' + ((option('avatars')||!preview||preview=='')?g(data, 'photo'):preview) + ')"></u></span>' +
-                '<strong>' + g(data, 'name') + '</strong>' +
+                '<span class="img"><u style="background-image:url(' + ((option('avatars')||!preview||preview=='')?g(data, 'photo'):preview) + ')"></u></span>' +
+                '<span class="info"><strong>' + g(data, 'name') + '</strong><span class="time">' + timeAgo(g(data, 'lastUpdated')) + '</span></span>' +
                 '</a>' +
                 '<ul class="items"></ul>';
             story.innerHTML = html;
@@ -957,7 +956,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
     };
 
     var init = function() {
-        console.log('init', option('backNative'), option('avatars'));
         if (location.hash == '#!' + id) {
             location.hash = '';
         }
@@ -981,7 +979,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         });
 
         var avatars = (option('avatars')) ? 'user-icon' : 'story-preview';
-        timeline.className = 'stories ' + avatars + ' ' + option('skin');
+        var list = (option('list')) ? 'list' : 'carousel';
+		
+        timeline.className = 'stories ' + avatars + ' '+list+' ' + option('skin');
 
         return zuck;
     };

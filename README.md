@@ -33,6 +33,7 @@ Initialize:
         id: '', //timeline container id or reference
         skin: 'snapgram', //container class
         avatars: true, //show user photo instead of last story item preview
+		list: false,
 		openEffect: true, //enable effect when opening story - may decrease performance
         autoFullScreen: false, // enable fullscreen on mobile browsers
         backButton: true, // add a back button to close the story viewer
@@ -113,8 +114,11 @@ In your HTML:
         <div class="story" data-id="{{story.id}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
             <a href="{{story.link}}">
                 <span><u style="background-image:url({{story.photo}});"></u><span>
-                <strong>{{story.name}}</strong>
-            </a>
+                <span class="info">
+					<strong>{{story.name}}</strong>
+					<span class="time">{{story.lastUpdated}}</span>
+            	</span>
+			</a>
             <ul class="items">
             
                 <!-- story item -->

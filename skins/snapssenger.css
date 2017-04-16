@@ -1,0 +1,9 @@
+.stories.snapssenger .story {max-height: 100px;max-width: 100px;width: 25vw;}
+.stories.snapssenger .story > a {text-decoration:none;text-align: left; color:#fff;position: relative;max-height: 100px;}
+.stories.snapssenger .story > a > .img {height: 18vh;}
+.stories.snapssenger .story > a > .img > * {border-radius: 5px;position: absolute;}
+.stories.snapssenger .story > a > .info {top: auto;height: auto;box-sizing: border-box;position: absolute;left:0;right:0;bottom:0;padding:6px;font-weight: 700;font-size:12px;text-shadow:1px 1px 1px rgba(0,0,0,0.35), 1px 0 1px rgba(0,0,0,0.35);}
+.stories.snapssenger .story > a > .info strong {font-weight: 700;}
+.stories.snapssenger .story > a > .info .time {display: block;font-weight: 100;font-size:11px;}
+
+.stories.snapssenger .story.seem {opacity:5}
