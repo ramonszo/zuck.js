@@ -1,9 +1,13 @@
 # zuck.js
 
+[![Zuck.JS demo](https://j.gifs.com/k5xnrJ.gif)](https://on.ramon82.com/2ojlR5C)
+
 ## Put stories EVERYWHERE
 MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of a copy of Facebook Messenger Day of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories. 
 
 You can read stories from any endpoint (json, firebase, etc.) and the script will do the rest.
+
+Live demo: https://on.ramon82.com/2ojlR5C
 
 
 ## Features

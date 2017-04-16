@@ -1,3 +1,4 @@
+/* zuck.js - https://github.com/ramon82/zuck.js */
 window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
     'use strict';
 
