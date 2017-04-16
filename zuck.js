@@ -109,7 +109,51 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             }
 
             return [curleft, curtop];
-        };
+        },
+		timeAgo = function(date_str) {
+			date_str = Number(date_str);
+			
+			var lang = ['ago', 'from now', 'sec', 'yesterday', 'tomorrow', 'days'];
+			var time_formats = [
+				[60, 'sec', 1], // 60
+				[120, '1min ago', '1min from now'], // 60*2
+				[3600, 'min', 60], // 60*60, 60
+				[7200, '1h ago', '1h from now'], // 60*60*2
+				[86400, 'h', 3600], // 60*60*24, 60*60
+				[172800, 'yesterday', 'tomorrow'], // 60*60*24*2
+				[604800, 'days', 86400]
+			];
+			
+			var time = ('' + date_str).replace(/-/g,"/").replace(/[TZ]/g," ").replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+			if(time.substr(time.length-4,1)==".") {
+				time = time.substr(0,time.length-4);
+			}
+			
+			if(isNaN(new Date(time).getDate())){
+			   time = date_str;
+			}
+
+			var seconds = (new Date - new Date(time)) / 1000;
+			var token = 'ago', list_choice = 1;
+			if (seconds < 0) {
+				seconds = Math.abs(seconds);
+				token = 'from now';
+				list_choice = 2;
+			}
+			
+			var i = 0, format;
+			while (format = time_formats[i++]) {
+				if (seconds < format[0]) {
+					if (typeof format[2] == 'string') {
+						return format[list_choice];
+					} else {
+						return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+					}
+				}
+			}
+			
+			return time;
+		};
 
     var id = timeline.id,
         optionsDefault = {
@@ -185,6 +229,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             var modalContent = q('#zuck-modal-content');
             var moveStoryItem = function(slides, unmute) {
                 //reset
+				console.log('moveStoryItem', JSON.stringify(slides));
+				
                 var offset = 2;
                 if (slides.direction === 0) {
                     offset = 1;
@@ -280,6 +326,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 slides.previous = q('#zuck-modal .story-viewer.previous');
                 slides.viewing = q('#zuck-modal .story-viewer.viewing');
                 slides.next = q('#zuck-modal .story-viewer.next');
+				slides.slideWidth = q('#zuck-modal .story-viewer').offsetWidth;
 
                 return slides;
             };
@@ -290,7 +337,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     storyId = g(storyData, 'id'),
                     slides = d.createElement('div'),
                     currentItem = g(storyData, 'currentItem') || 0,
-                    exists = q('#zuck-modal .story-viewer[data-story-id="' + storyId + '"]');
+                    exists = q('#zuck-modal .story-viewer[data-story-id="' + storyId + '"]'),
+					currentItemTime = '';
 
                 if (exists) {
                     return false;
@@ -298,14 +346,22 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 
                 slides.className = 'slides';
                 each(g(storyData, 'items'), function(i, item) {
-					var seem = g(item, '');
+					if(currentItem > i){
+					   storyData['items'][i]['seem'] = true;
+					   item['seem'] = true;
+					}
+					
                     var length = g(item, 'length');
                     var linkText = g(item, 'linkText');
 					var seemClass = ((g(item, 'seem') === true) ? 'seem' : '');
 					var commonAttrs = 'data-index="' + i + '" data-item-id="'+g(item, 'id')+'"';
 					
+					if(currentItem===i){
+						currentItemTime = timeAgo(g(item, 'time'));   
+					}
+					
                     pointerItems += '<span '+commonAttrs+' class="' + ((currentItem === i) ? 'active' : '') + ' '+seemClass+'"><b style="animation-duration:' + ((length === '') ? '3' : length) + 's"></b></span>';
-                    htmlItems += '<div data-type="' + g(item, 'type') + '"'+commonAttrs+' class="item ' + seemClass +
+                    htmlItems += '<div data-time="'+g(item, 'time')+'" data-type="' + g(item, 'type') + '"'+commonAttrs+' class="item ' + seemClass +
                         ' ' + ((currentItem === i) ? 'active' : '') + '">' +
                         ((g(item, 'type') === 'video') ? '<video class="media" muted preload="auto" src="' + g(item, 'src') + '" ' + g(item, 'type') + '></video><b class="tip muted">' + option('language', 'unmute') + '</b>' : '<img ondragstart="return false" class="media" src="' + g(item, 'src') + '" ' + g(item, 'type') + '>') +
                         ((g(item, 'link')) ? '<a class="tip link" href="'+g(item, 'link')+'" rel="noopener" arget="_blank">' + ((linkText == '') ? option('language', 'visitLink') : linkText) + '</a>' : '') +
@@ -358,11 +414,11 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     '<u class="img" style="background-image:url(' + g(storyData, 'photo') + ');"></u>' +
                     '<div>' +
                     '<strong>' + g(storyData, 'name') + '</strong>' +
-                    '<span class="time">1 min ago</span>' +
+                    '<span class="time">'+currentItemTime+'</span>' +
                     '</div>' +
                     '</div>' +
                     '<div class="right">' +
-                    '<span class="time">1 min ago</span>' +
+                    '<span class="time">'+currentItemTime+'</span>' +
                     '<span class="loading"></span>' +
                     '<div class="close">&times;</div>' +
                     '</div>' +
@@ -406,9 +462,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                         storyViewer.classList.add('longPress');
                     }, 600);
 
-                    storyViewer.next = setTimeout(function() {
-                        clearInterval(storyViewer.next);
-                        storyViewer.next = false;
+                    storyViewer.nextTimer = setTimeout(function() {
+                        clearInterval(storyViewer.nextTimer);
+                        storyViewer.nextTimer = false;
                     }, 250);
 
                 };
@@ -428,12 +484,12 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 					storyViewer.classList.remove('longPress');
                     storyViewer.classList.remove('paused');
 
-                    if (storyViewer.next) {
+                    if (storyViewer.nextTimer) {
                         if (storyViewer.classList.contains('muted') && video) {
                             unmuteVideoItem(video, storyViewer);
                         } else {
-                            clearInterval(storyViewer.next);
-                            storyViewer.next = false;
+                            clearInterval(storyViewer.nextTimer);
+                            storyViewer.nextTimer = false;
                             zuck.nextItem(e);							
                         }
 						
@@ -569,7 +625,14 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                                 if (option('autoFullScreen') && window.screen.width <= 1024) {
                                     fullScreen(modalContainer); //because effects
                                 }
-                            });
+								
+								if(modalContainer.classList.contains('closed')){
+									modalContent.innerHTML = '';
+									modalContainer.style.display = 'none';
+									modalContainer.classList.remove('closed');
+									modalContainer.classList.remove('animated');
+								}
+							});
                         } else {
                             modalContainer.style.display = 'block';
                         }
@@ -579,16 +642,20 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 },
 
                 'next': function(unmute) {
-					console.log('nextModal', zuck.internalData['currentStory']);
+					//console.log('nextModal', zuck.internalData['currentStory']);
 					
                     var callback = function() {
                         var stories = q('#zuck-modal .story-viewer[data-story-id="' + zuck.internalData['currentStory'] + '"] .slides');
+						stories = updateSlidesIndex(stories);
                         stories.direction = 1;
-                        moveStoryItem(stories, unmute);
-
-                        if (!q('#zuck-modal .story-viewer.next')) {
+						stories.index++;
+						
+						//console.log(stories.direction, stories.index);
+                        if (!stories.next) {
                             modal.close();
-                        }
+                        } else {
+                        	moveStoryItem(stories, unmute);
+						}
                     };
 
                     option('callbacks', 'onNext')(zuck.internalData['currentStory'], callback);
@@ -601,10 +668,14 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                         }
 
                         fullScreen(modalContainer, true);
-
-                        modalContent.innerHTML = '';
-                        modalContainer.style.display = 'none';
-                    };
+						
+						if (option('openEffect')) {
+							modalContainer.classList.add('closed');						
+						} else {
+							modalContent.innerHTML = '';
+							modalContainer.style.display = 'none';
+						}
+					};
 
                     option('callbacks', 'onClose')(zuck.internalData['currentStory'], callback);
                 }
@@ -846,7 +917,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         var nextPointer = nextItemElements[0];
         var nextItemElement = nextItemElements[1];
 
-        console.log('storyViewer:', storyViewer, 'currentItem:', currentItem, 'nextItem:', nextItem, 'nextPointer:', nextPointer, 'nextItemElement', nextItemElement);
+        //console.log('storyViewer:', storyViewer, 'currentItem:', currentItem, 'nextItem:', nextItem, 'nextPointer:', nextPointer, 'nextItemElement', nextItemElement);
 
         if (storyViewer && nextPointer && nextItemElement) {
             var nextItemCallback = function() {
@@ -862,14 +933,18 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 				
                 nextItemElement.classList.remove('seem');
                 nextItemElement.classList.add('active');
-
+				
+				each(storyViewer.querySelectorAll('.time'), function(i, el){
+					el.innerText = timeAgo(nextItemElement.getAttribute('data-time'));
+				});
+				
 				zuck.data[currentStory]['currentItemId'] = '';
                 zuck.data[currentStory]['currentItem']++;
 
                 playVideoItem(nextItemElements, event);
             };
 			
-			console.log('NEXT ITEM CALLBACK', zuck.data[currentStory]['currentItem']);
+			//console.log('NEXT ITEM CALLBACK', zuck.data[currentStory]['currentItem']);
 
             option('callbacks', 'onNext')(nextItemElement.getAttribute('data-story-id'), nextItemCallback);
         } else if (storyViewer) {

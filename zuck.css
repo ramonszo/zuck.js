@@ -17,6 +17,7 @@
 
 #zuck-modal.with-effects {transform: scale(0.01);border-radius:50%;transform-origin: top left;transition: 0.25s;position: absolute;top:0;left:0;width:100vw;height:100vh;}
 #zuck-modal.with-effects.animated {transform:scale(1);border-radius: 0; margin-top:0 !important;margin-left:0 !important;}
+#zuck-modal.with-effects.closed {transform:translateY(100%);}
 
 #zuck-modal-content .story-viewer.animated{-webkit-transition:-webkit-transform .25s linear;transition:-webkit-transform .25s linear;transition:transform .25s linear;transition:transform .25s linear, -webkit-transform .25s linear;}
 #zuck-modal-content .story-viewer.paused.longPress .head,#zuck-modal-content .story-viewer.paused.longPress .slides-pointers,#zuck-modal-content .story-viewer.paused.longPress .tip{opacity:0;}
@@ -52,7 +53,7 @@
 #zuck-modal-content .story-viewer .slides .item > .media {height:100%;position:absolute;left:50%;-webkit-transform:translateX(-50%);transform:translateX(-50%);margin:auto;}
 #zuck-modal-content .story-viewer .slides .item.active, #zuck-modal-content .story-viewer .slides .item.active .tip.link {display:block;}
 
-#zuck-modal-content .story-viewer .tip{display: none;border-radius:24px;background:rgba(0,0,0,0.5);font-size:13px;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:1000;color:#fff;text-align:center;text-transform:uppercase;font-weight:700;padding:6px 12px;}
+#zuck-modal-content .story-viewer .tip{text-decoration: none;display: none;border-radius:24px;background:rgba(0,0,0,0.5);font-size:13px;position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:1000;color:#fff;text-align:center;text-transform:uppercase;font-weight:700;padding:6px 12px;}
 
 @media (max-width: 1024px) {
 	#zuck-modal-content .story-viewer .head{top:3px;}

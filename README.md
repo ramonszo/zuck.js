@@ -96,8 +96,8 @@ A json example of the stories object:
                 preview: "", // optional - item thumbnail to show in the story carousel instead of the story defined image
                 link: "", // a link to click on story
 				linkText: "", // link text
-                time: "", // optional - unix timestamp for created story date
-                seem: false, // set true if current user was read - if local storage is used, you don't need to care about this.
+                time: "", // optional a date to display with the story item. unix timestamp are converted to "time ago" format
+                seem: false, // set true if current user was read - if local storage is used, you don't need to care about this
 				hidden: false // set true to hide the story from timeline but show it while viewing full stories
             }
         ]
@@ -141,7 +141,6 @@ Use with autoFullScreen option (disabled by default) to emulate an app on mobile
 
 
 ## Todo
-* Time conversion
 * Read/Unread status
 * Desktop check
 
