@@ -240,6 +240,17 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 			modalContainer.innerHTML = '<div id="zuck-modal-content"></div>';
 			modalContainer.style.display = 'none';
 
+			modalContainer.setAttribute('tabIndex', '1');
+			modalContainer.onkeyup = function(e){
+				var code = e.keyCode;
+				
+				if(code==27) {
+					modal.close();
+				} else if (code==13||code==32){
+					modal.next();
+				}
+			};
+
 			if (option('openEffect')) {
 				modalContainer.classList.add('with-effects');
 			};
@@ -422,11 +433,12 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 			}
 
 			var storyViewer = d.createElement('div');
-			storyViewer.className = 'story-viewer muted ' + className + ' ' + ((!forcePlay) ? 'stopped' : '');
+			storyViewer.className = 'story-viewer muted ' + className + ' ' + ((!forcePlay) ? 'stopped' : '')+ ' '+((option('backButton'))?'with-back-button':'');
 			storyViewer.setAttribute('data-story-id', storyId);
 
 			var html = '<div class="head">' +
 				'<div class="left">' +
+				((option('backButton'))?'<a class="back">&lsaquo;</a>':'') +
 				'<u class="img" style="background-image:url(' + g(storyData, 'photo') + ');"></u>' +
 				'<div>' +
 				'<strong>' + g(storyData, 'name') + '</strong>' +
@@ -436,15 +448,18 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 				'<div class="right">' +
 				'<span class="time">'+currentItemTime+'</span>' +
 				'<span class="loading"></span>' +
-				'<div class="close">&times;</div>' +
+				'<a class="close" tabIndex="2">&times;</a>' +
 				'</div>' +
 				'</div>' +
 				'<div class="slides-pointers"><div>' + pointerItems + '</div></div>';
 			storyViewer.innerHTML = html;
 
-			storyViewer.querySelector('.close').onclick = function(){
-				modal.close();
-			};
+			each(storyViewer.querySelectorAll('.close, .back'), function(i, el){
+				el.onclick = function(e){
+					e.preventDefault();
+					modal.close();
+				};
+			});
 
 			// touchEvents
 			var touchStart = function(e) {					
@@ -613,6 +628,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 						if(modalContainer.classList.contains('fullscreen') && option('autoFullScreen') && window.screen.width <= 1024) {
 							fullScreen(modalContainer); 
 						}	
+						
+						modalContainer.focus();
 					};
 
 					if (option('openEffect')) {
@@ -1001,10 +1018,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         } else if (storyViewer) {
             modal.next(event);
         }
-    };
-
-    zuck.reload = function(data) {
-
     };
 
 	

@@ -165,7 +165,8 @@ Use with autoFullScreen option (disabled by default) to emulate an app on mobile
 
 
 ## Todo
-* Desktop check
+* Back button
+
 
 ## License
 GNU GPL v3
