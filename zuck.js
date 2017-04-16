@@ -160,7 +160,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             'skin': 'snapgram',
             'avatars': true,
             'stories': [],
-            'expiresIn': 24,
             'backButton': true,
             'backNative': false,
             'autoFullScreen': false,
@@ -228,17 +227,12 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             }
 
             var modalContent = q('#zuck-modal-content');
-            var moveStoryItem = function(slides, unmute) {
-                //reset
-				//console.log('moveStoryItem', JSON.stringify(slides));
-				
-                var offset = 2;
-                if (slides.direction === 0) {
-                    offset = 1;
-                }
-
+            var moveStoryItem = function(slides, unmute) {				
                 if ((!slides.previous && slides.direction == -1) || (!slides.next && slides.direction == 1)) {
-                    return false;
+                   	modalContent.classList.add('animated');
+					setVendorVariable(modalContent.style, 'Transform', 'translate3d(0,0,0)');
+					
+					return false;
                 }
 				
 				var target = '';
@@ -483,10 +477,11 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 									slides.direction = -1;
 								}
 							}
-
+							
 							moveStoryItem(slides, e);
 							storyViewer.classList.remove('longPress');
 						}
+
 					}
                 };
 
@@ -510,7 +505,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     slides.moveX = slides.slideWidth + touchMove;
                     slides.moveX = (touchMove >= slides.slideWidth) ? slides.slideWidth : slides.moveX;
 
-                    modalContent.style.transform = 'translate3d(' + ((slides.moveX * -1) + slides.slideWidth) + 'px,0,0)';
+                    setVendorVariable(modalContent.style, 'Transform', 'translate3d(' + ((slides.moveX * -1) + slides.slideWidth) + 'px,0,0)');
                     modalContent.classList.remove('animated');
                 };
 
@@ -565,7 +560,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                             createStoryViewer(nextItemData, 'next');
                         }
 
-						modalContent.style.transform = '';
+						setVendorVariable(modalContent.style, 'Transform', '');
                         if (option('openEffect')) {
                             var storyEl = q('#' + id + ' [data-id="' + storyId + '"] .img');
                             var pos = findPos(storyEl);
