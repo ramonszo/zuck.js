@@ -12,7 +12,7 @@ You can read stories from any endpoint (json, firebase, etc.) and the script wil
 * Desktop support (why not?)
 * A simple media viewer, with gestures and events
 * A simple api to manage your "Stories timeline"
-* Lightweight (10kb minified - 5kb gzipped)
+* Lightweight (13kb minified - 5kb gzipped)
 
 
 ## Limitations

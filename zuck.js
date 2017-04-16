@@ -80,7 +80,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     elem['webkit' + func]();
                 }
             } catch (e) {
-                console.log(e);
+                //console.log(e);
             }
         },
         findPos = function(obj, offsetY, offsetX, stop) {
@@ -230,7 +230,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             var modalContent = q('#zuck-modal-content');
             var moveStoryItem = function(slides, unmute) {
                 //reset
-				console.log('moveStoryItem', JSON.stringify(slides));
+				//console.log('moveStoryItem', JSON.stringify(slides));
 				
                 var offset = 2;
                 if (slides.direction === 0) {
@@ -255,7 +255,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     slides.next.style.transform = 'translate3d(' + ((slides.direction !== 1) ? (slides.slideWidth * offset) : '0') + 'px,0,0)';
                 }
 
-                //console.log('slide slides.direction', slides.direction);
+                ////console.log('slide slides.direction', slides.direction);
                 onTransitionEnd(slides.viewing, function() {
                     if (slides.previous) {
                         slides.previous.classList.remove('animated');
@@ -303,7 +303,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     }
 
                     var newStoryData = getStoryMorningGlory(target);
-                    //console.log('target', slides[target], currentStory, target, useless, newStoryData);
+                    ////console.log('target', slides[target], currentStory, target, useless, newStoryData);
                     if (newStoryData) {
                         createStoryViewer(newStoryData, target);
                     }
@@ -439,13 +439,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     	e.preventDefault();					
 					}
 					
-//					if(e.target!=slides){
-//					   return false;
-//					}
-
-
-                    //console.log(e);
-
 					if(e.touches) {
                     	slides.touchStartX = e.touches[0].pageX;						
 					}
@@ -476,10 +469,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     	e.preventDefault();					
 					}
 					
-//					if(e.target!=slides){
-//					   return false;
-//					}
-					
                     var video = zuck.internalData['currentVideoElement'];
                     if (storyViewer.timer) {
                         clearInterval(storyViewer.timer);
@@ -495,30 +484,28 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                             clearInterval(storyViewer.nextTimer);
                             storyViewer.nextTimer = false;
                             zuck.nextItem(e);							
-                        }
-						
-						return false;
-                    }
+                        }						
+                    } else {
+						storyViewer.touchMove = 0;
+						slides.touchStartX = 0;
 
-                    storyViewer.touchMove = 0;
-                    slides.touchStartX = 0;
+						if (slides.moveX) {
+							var absMove = Math.abs(slides.index * slides.slideWidth - slides.moveX);
+							slides.direction = 0;
+							if (absMove > slides.slideWidth / 2) {
+								if (slides.moveX > slides.index * slides.slideWidth && slides.index < 2) {
+									slides.index++;
+									slides.direction = 1;
+								} else if (slides.moveX < slides.index * slides.slideWidth && slides.index > 0) {
+									slides.index--;
+									slides.direction = -1;
+								}
+							}
 
-                    if (slides.moveX) {
-                        var absMove = Math.abs(slides.index * slides.slideWidth - slides.moveX);
-                        slides.direction = 0;
-                        if (absMove > slides.slideWidth / 2) {
-                            if (slides.moveX > slides.index * slides.slideWidth && slides.index < 2) {
-                                slides.index++;
-                                slides.direction = 1;
-                            } else if (slides.moveX < slides.index * slides.slideWidth && slides.index > 0) {
-                                slides.index--;
-                                slides.direction = -1;
-                            }
-                        }
-
-                        moveStoryItem(slides, e);
-                        storyViewer.classList.remove('longPress');
-                    }
+							moveStoryItem(slides, e);
+							storyViewer.classList.remove('longPress');
+						}
+					}
                 };
 
                 var touchMove = function(e) {
@@ -558,8 +545,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 slides.addEventListener('touchmove', touchMove);
                 slides.addEventListener('touchend', touchEnd);
 
-                slides.addEventListener('mousedown', touchStart);
-                slides.addEventListener('mouseup', touchEnd);
+                //slides.addEventListener('mousedown', touchStart);
+                //slides.addEventListener('mouseup', touchEnd);
 
                 storyViewer.appendChild(slides);
 
@@ -584,8 +571,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     storyViewer.style.transform = 'translate3d(100vw,0,0)';
                 }
 				
-				console.log('appendChild', storyViewer);
-
                 modalContent.appendChild(storyViewer);
             };
 
@@ -613,8 +598,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                         if (nextItemData) {
                             createStoryViewer(nextItemData, 'next');
                         }
-
-						console.log('show', storyData, previousItemData, nextItemData, option('openEffect'));
 
                         if (option('openEffect')) {
                             var storyEl = q('#' + id + ' [data-id="' + storyId + '"] .img');
@@ -649,16 +632,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     option('callbacks', 'onOpen')(storyId, callback);
                 },
 
-                'next': function(unmute) {
-					//console.log('nextModal', zuck.internalData['currentStory']);
-					
+                'next': function(unmute) {					
                     var callback = function() {
                         var stories = q('#zuck-modal .story-viewer[data-story-id="' + zuck.internalData['currentStory'] + '"] .slides');
 						stories = updateSlidesIndex(stories);
                         stories.direction = 1;
 						stories.index++;
 						
-						//console.log(stories.direction, stories.index);
                         if (!stories.next) {
                             modal.close();
                         } else {
@@ -908,7 +888,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         var currentItemId = zuck.data[currentStory]['currentItemId'];
 
         var storyViewer = q('#zuck-modal .story-viewer[data-story-id="' + currentStory + '"]');
-        console.log('nextSlide', currentStory, currentItem);
 
         if (!storyViewer || storyViewer.touchMove == 1) {
             return false;
@@ -922,8 +901,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         var nextItemElements = storyViewer.querySelectorAll('[data-index="' + nextItem + '"]');
         var nextPointer = nextItemElements[0];
         var nextItemElement = nextItemElements[1];
-
-        //console.log('storyViewer:', storyViewer, 'currentItem:', currentItem, 'nextItem:', nextItem, 'nextPointer:', nextPointer, 'nextItemElement', nextItemElement);
 
         if (storyViewer && nextPointer && nextItemElement) {
             var nextItemCallback = function() {
@@ -950,8 +927,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 playVideoItem(nextItemElements, event);
             };
 			
-			//console.log('NEXT ITEM CALLBACK', zuck.data[currentStory]['currentItem']);
-
             option('callbacks', 'onNext')(nextItemElement.getAttribute('data-story-id'), nextItemCallback);
         } else if (storyViewer) {
             modal.next(event);
