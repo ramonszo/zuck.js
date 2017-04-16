@@ -10,6 +10,17 @@ You can read stories from any endpoint (json, firebase, etc.) and the script wil
 Live demo: https://on.ramon82.com/2ojlR5C
 
 
+# Table of contents
+1. [Features](#features)
+2. [Limitations](#limitations)
+    1. [Compatibility](#compatibility)
+3. [How to use](#how-to-use)
+	1. [Stories Structure](#stories-structure)
+	2. [Alternate Call](#alternate-call)
+	3. [Tips](#tips)
+	4. [License](#license)
+
+
 ## Features
 * Library agnostic
 * Custom themes
@@ -26,7 +37,7 @@ When the story is playing automatically, the video is muted, but an alert is dis
 Link on stories opens in new window too. This behaviour occurs because most websites blocks to be embeded on iFrames. 
 
 
-## Compatibility
+### Compatibility
 IE 10 and other browsers. Not tested on IE9, but if you really want this compatibility, you'll just have to add a classList polyfill.
 
 
@@ -101,7 +112,7 @@ Add/Remove a story item:
 	stories.removeItem(storyId, itemId);
 
 
-## Stories structure example
+### Stories structure example
 A json example of the stories object:
 
     {
@@ -129,7 +140,7 @@ A json example of the stories object:
     }   
 
 
-## Alternate call
+### Alternate call
 In your HTML:
 
     <div id="stories">
@@ -164,7 +175,7 @@ Then in your JS:
 	var stories = new Zuck('stories'); 
 
 
-## Tips
+### Tips
 Use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
 
 
