@@ -654,6 +654,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 						zuck.internalData['seemItems'][lastStory] = true;
 						
 						saveLocalData('seemItems', zuck.internalData['seemItems']);
+						updateStorySeemPosition();
 					}
 
 					var stories = q('#zuck-modal .story-viewer[data-story-id="' + lastStory + '"] .slides');
@@ -769,6 +770,15 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 
             return false;
         },
+		updateStorySeemPosition = function(){
+			each(d.querySelectorAll('#' + id + ' .story.seem'), function(i, el){
+				var newData = zuck.data[el.getAttribute('data-id')];
+				var timeline = el.parentNode;
+				
+				timeline.removeChild(el);
+				zuck.add(newData, true);
+			});	
+		},
         playVideoItem = function(elements, unmute) {
             var itemElement = elements[1],
                 itemPointer = elements[0];
@@ -912,6 +922,10 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 		each(items, function(i, item) {
 			zuck.addItem(storyId, item, append);
 		});
+		
+		if(!append){
+			updateStorySeemPosition();
+		}
     };
     zuck.next = function() {
         modal.next();
@@ -1017,6 +1031,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         each(option('stories'), function(i, item) {
             zuck.add(item, true);
         });
+		
+		updateStorySeemPosition();
 
         var avatars = (option('avatars')) ? 'user-icon' : 'story-preview';
         var list = (option('list')) ? 'list' : 'carousel';
