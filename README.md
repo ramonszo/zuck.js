@@ -10,7 +10,7 @@ You can read stories from any endpoint (json, firebase, etc.) and the script wil
 Live demo: https://on.ramon82.com/2ojlR5C
 
 
-# Table of contents
+## Table of contents
 1. [Features](#features)
 2. [Limitations](#limitations)
     1. [Compatibility](#compatibility)
