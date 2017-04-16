@@ -344,7 +344,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 if (exists) {
                     return false;
                 }
-
+				
                 slides.className = 'slides';
                 each(g(storyData, 'items'), function(i, item) {
 					if(currentItem > i){
@@ -365,7 +365,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     htmlItems += '<div data-time="'+g(item, 'time')+'" data-type="' + g(item, 'type') + '"'+commonAttrs+' class="item ' + seemClass +
                         ' ' + ((currentItem === i) ? 'active' : '') + '">' +
                         ((g(item, 'type') === 'video') ? '<video class="media" muted preload="auto" src="' + g(item, 'src') + '" ' + g(item, 'type') + '></video><b class="tip muted">' + option('language', 'unmute') + '</b>' : '<img ondragstart="return false" class="media" src="' + g(item, 'src') + '" ' + g(item, 'type') + '>') +
-                        ((g(item, 'link')) ? '<a class="tip link" href="'+g(item, 'link')+'" rel="noopener" arget="_blank">' + ((linkText == '') ? option('language', 'visitLink') : linkText) + '</a>' : '') +
+                        ((g(item, 'link')) ? '<a class="tip link" href="'+g(item, 'link')+'" rel="noopener" target="_blank">' + ((linkText == '') ? option('language', 'visitLink') : linkText) + '</a>' : '') +
                         '</div>';
                 });
                 slides.innerHTML = htmlItems;
@@ -432,18 +432,18 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 				};
 				
                 // touchEvents
-                var touchStart = function(e) {
-					console.log(e);
-					
+                var touchStart = function(e) {					
                     if (e.target.nodeName == 'A') {
-                        return true;
-                    }
+						console.log('open link return false');
+                        return false;
+                    } else {
+                    	e.preventDefault();					
+					}
 					
 //					if(e.target!=slides){
 //					   return false;
 //					}
 
-                    e.preventDefault();
 
                     //console.log(e);
 
@@ -580,6 +580,8 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 if (className == 'next') {
                     storyViewer.style.transform = 'translate3d(100vw,0,0)';
                 }
+				
+				console.log('appendChild', storyViewer);
 
                 modalContent.appendChild(storyViewer);
             };
@@ -596,7 +598,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                         if (option('backNative')) {
                             location.hash = '#!' + id;
                         }
-
+						
                         var previousItemData = getStoryMorningGlory('previous');
                         if (previousItemData) {
                             createStoryViewer(previousItemData, 'previous');
@@ -609,8 +611,10 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                             createStoryViewer(nextItemData, 'next');
                         }
 
+						console.log('show', storyData, previousItemData, nextItemData, option('openEffect'));
+
                         if (option('openEffect')) {
-                            var storyEl = q('#' + id + ' [data-id="' + storyId + '"]');
+                            var storyEl = q('#' + id + ' [data-id="' + storyId + '"] .img');
                             var pos = findPos(storyEl);
 
                             modalContainer.style.marginLeft = (pos[0] + (storyEl.offsetWidth / 2)) + 'px';
@@ -714,7 +718,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 zuck.data[storyId] = {
                     'id': storyId, //story id
                     'photo': story.getAttribute('data-photo'), //story photo (or user photo)
-                    'name': story.firstElementChild.lastElementChild.innerText,
+                    'name': story.firstElementChild.lastElementChild.firstChild.innerText,
                     'link': story.firstElementChild.getAttribute('href'),
                     'lastUpdated': story.getAttribute('data-last-updated'),
                     'items': []
@@ -981,7 +985,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         var avatars = (option('avatars')) ? 'user-icon' : 'story-preview';
         var list = (option('list')) ? 'list' : 'carousel';
 		
-        timeline.className = 'stories ' + avatars + ' '+list+' ' + option('skin');
+        timeline.className = 'stories ' + avatars + ' '+list+' ' + (option('skin')+'').toLowerCase();
 
         return zuck;
     };

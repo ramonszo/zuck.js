@@ -11,6 +11,17 @@
 .stories.carousel .story > a > .info .time {display: none;}
 .stories.carousel .story > .items {display:none;}
 
+.stories.list{white-space:nowrap;overflow:auto;}
+.stories.list .story{display: block;width: auto;margin: 6px;padding-bottom:6px;}
+    
+.stories.list .story > a {text-align:left;display:block;}
+.stories.list .story > a > .img {height:42px;width:42px;max-width:42px;margin-right: 12px;vertical-align: top;display:inline-block;box-sizing:border-box;font-size:0;overflow:hidden}
+.stories.list .story > a > .img > * {display:block;box-sizing:border-box;height:100%;width:100%;background-size:cover;background-position: center;}
+.stories.list .story > a > .info {display:inline-block;line-height:1.6em;overflow:hidden;text-overflow:ellipsis;vertical-align: top;}
+.stories.list .story > a > .info strong {font-weight:500;display: block}
+.stories.list .story > a > .info .time {display: inline-block;}
+.stories.list .story > .items {display:none;}
+
 @-webkit-keyframes zuckSlideTime {0%{max-width: 0;}100%{max-width:100%;}}
 @keyframes zuckSlideTime {0%{max-width: 0;}100%{max-width:100%;}}
 
