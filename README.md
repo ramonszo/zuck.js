@@ -169,3 +169,4 @@ IE 10 and other browsers. Not tested on IE9, but if you really want this compati
 
 ## License
 GNU GPL v3
+ 
