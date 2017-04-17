@@ -70,22 +70,32 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             return 0;
         },
         fullScreen = function(elem, cancel) {
-            var func = (cancel) ? 'ExitFullScreen' : 'RequestFullScreen';
-            var elFunc = (cancel) ? 'exitFullScreen' : 'requestFullScreen'; //crappy vendor prefixes.
+            var func = 'RequestFullScreen';
+            var elFunc = 'requestFullScreen'; //crappy vendor prefixes.
 
-            try {
-                if (elem[elFunc]) {
-                    elem[elFunc]();
-                } else if (elem['ms' + func]) {
-                    elem['ms' + func]();
-                } else if (elem['mozCancelFullScreen']) {
-                    elem['mozCancelFullScreen']();
-                } else if (elem['webkit' + func]) {
-                    elem['webkit' + func]();
-                }
-            } catch (e) {
-                //console.log(e);
-            }
+			if(cancel){
+				if(document.exitFullscreen) {
+					document.exitFullscreen();
+				} else if(document.mozCancelFullScreen) {
+					document.mozCancelFullScreen();
+				} else if(document.webkitExitFullscreen) {
+					document.webkitExitFullscreen();
+				}
+			} else {
+				try {
+					if (elem[elFunc]) {
+						elem[elFunc]();
+					} else if (elem['ms' + func]) {
+						elem['ms' + func]();
+					} else if (elem['moz' + func]) {
+						elem['moz' + func]();
+					} else if (elem['webkit' + func]) {
+						elem['webkit' + func]();
+					}
+				} catch (e) {
+					console.log(e);
+				}
+			}
         },
 		translate = function(element, to, duration, ease) {					
 			if (element) {
