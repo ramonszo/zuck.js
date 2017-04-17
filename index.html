@@ -114,20 +114,6 @@
 						'autoFullScreen': false                        
 					}
 				};
-
-				document.querySelectorAll('#skin option').forEach(function(el){
-					var what = (skin==el.value)?true:false;
-					if(what){
-						el.setAttribute('selected', what);
-
-						header.innerHTML = skin;
-						header.className = skin;
-					} else {
-						el.removeAttribute('selected');
-					}
-				});
-
-				document.body.style.display = 'block';
 				
 				var stories = new Zuck('stories', {
 					backNative: true,
@@ -193,6 +179,23 @@
 						}
 					]
 				});
+                
+                var el = document.querySelectorAll('#skin option');
+                var total = el.length;
+                for (var i = 0; i < total; i++) {
+					var what = (skin==el[i].value)?true:false;
+                    
+					if(what){
+						el[i].setAttribute('selected', what);
+
+						header.innerHTML = skin;
+						header.className = skin;
+					} else {
+						el[i].removeAttribute('selected');
+					}
+                }
+
+				document.body.style.display = 'block';
 			};
 			
 			initDemo();
