@@ -55,9 +55,9 @@
             Choose your theme: 
             
             <select id="skin" onchange="location.href=location.href.split('#')[0].split('?')[0]+'?skin='+this.options[this.selectedIndex].value;">
-                <option value="Snapgram">Snapgram</option>
+                <option value="Snapgram">Snapgram (with fullscreen)</option>
                 <option value="VemDeZAP">VemDeZAP (timeline)</option>
-                <option value="FaceSnap">FaceSnap (with fullscreen)</option>
+                <option value="FaceSnap">FaceSnap (without fullscreen)</option>
                 <option value="Snapssenger">Snapssenger (with previews)</option>
             </select>
         </div>
@@ -92,23 +92,26 @@
 				var skins = {
 					'Snapgram': {
 						'avatars': true,
-						'list': false
+						'list': false,
+						'autoFullScreen': true                        
 					},
 
 					'VemDeZAP': {
 						'avatars': false,
-						'list': true
+						'list': true,
+						'autoFullScreen': false                        
 					},
 
 					'FaceSnap': {
 						'avatars': true,
 						'list': false,
-						'autoFullScreen': true
+						'autoFullScreen': false
 					},
 
 					'Snapssenger': {
 						'avatars': false,
-						'list': false
+						'list': false,
+						'autoFullScreen': false                        
 					}
 				};
 
