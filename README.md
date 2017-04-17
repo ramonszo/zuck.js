@@ -15,7 +15,7 @@ Live demo: https://on.ramon82.com/2ojlR5C
 * Custom themes
 * Desktop support (why not?)
 * A simple media viewer, with gestures and events
-* A simple api to manage your "Stories timeline"
+* A simple API to manage your "Stories timeline"
 * Lightweight (13kb minified - 5kb gzipped)
 
 
@@ -25,11 +25,11 @@ Initialize:
 	var stories = new Zuck({
         id: '', //timeline container id or reference
         skin: 'snapgram', //container class
-        avatars: true, //show user photo instead of last story item preview
-	list: false, // display a timeline instead of carousel
-	openEffect: true, //enable effect when opening story - may decrease performance
-        autoFullScreen: false, // enable fullscreen on mobile browsers
-        backButton: true, // add a back button to close the story viewer
+        avatars: true, //shows user photo instead of last story item preview
+	list: false, // displays a timeline instead of carousel
+	openEffect: true, //enables effect when opening story - may decrease performance
+        autoFullScreen: false, // enables fullscreen on mobile browsers
+        backButton: true, // adds a back button to close the story viewer
         backNative: false, // uses window history to enable back button on browsers/android
         stories: [ // array of stories
             // See stories structure example
@@ -91,7 +91,7 @@ Add/Remove a story item:
 
 
 ### Stories structure example
-A json example of the stories object:
+A JSON example of the stories object:
 
     {
         id: "", //story id
@@ -157,10 +157,10 @@ Use with autoFullScreen option (disabled by default) to emulate an app on mobile
 
 
 ## Limitations
-On mobile browsers, video can't play without a user gesture. So the script try to play audio only when user click to see a next story. 
-When the story is playing automatically, the video is muted, but an alert is displayed to user click to hear audio.
+On mobile browsers, video can't play without a user gesture. So the script tries to play audio only when the user clicks to see the next story. 
+When the story is playing automatically, the video is muted, but an alert is displayed so the user may click to turn the audio on.
 
-Link on stories opens in new window too. This behaviour occurs because most websites blocks to be embeded on iFrames. 
+Stories links opens in a new window too. This behaviour occurs because most websites are blocked on iframe embedding. 
 
 
 ### Compatibility
