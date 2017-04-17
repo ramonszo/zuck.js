@@ -37,7 +37,7 @@ Initialize:
         
         callbacks:  {
             'onOpen': function(storyId, callback) { // on open story viewer
-              callback();
+                callback();
             },
 
             'onView': function(storyId) { // on view story
@@ -45,15 +45,15 @@ Initialize:
             },
 
             'onEnd': function(storyId, callback) { // on end story
-              callback();
+                callback();
             },
 
             'onClose': function(storyId, callback) { // on close story viewer
-              callback();
+                callback();
             },
 
             'onNextItem': function(storyId, nextStoryId, callback) { // on next item of story
-              callback();
+                callback();
             },
         },
         
@@ -127,24 +127,24 @@ In your HTML:
     
         <!-- story -->
         <div class="story" data-id="{{story.id}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
-        <a href="{{story.link}}">
-            <span><u style="background-image:url({{story.photo}});"></u><span>
-            <span class="info">
-                <strong>{{story.name}}</strong>
-                <span class="time">{{story.lastUpdated}}</span>
-            </span>
-        </a>
-        <ul class="items">
-        
-            <!-- story item -->
-            <li data-id="{{story.items.id}}" data-time="{{story.items.time}}" class="{{story.items.seem}}">
-                <a href="{{story.items.src}}" data-type="{{story.items.type}}" data-length="{{story.items.length}}" data-link="{{story.items.link}}" data-link-text="{{story.items.linkText}}">
-                    <img src="{{story.items.preview}}">
-                </a>
-            </li>
-            <!--/ story item -->
-            
-        </ul>
+            <a href="{{story.link}}">
+                <span><u style="background-image:url({{story.photo}});"></u><span>
+                <span class="info">
+                    <strong>{{story.name}}</strong>
+                    <span class="time">{{story.lastUpdated}}</span>
+                </span>
+            </a>
+            <ul class="items">
+
+                <!-- story item -->
+                <li data-id="{{story.items.id}}" data-time="{{story.items.time}}" class="{{story.items.seem}}">
+                    <a href="{{story.items.src}}" data-type="{{story.items.type}}" data-length="{{story.items.length}}" data-link="{{story.items.link}}" data-link-text="{{story.items.linkText}}">
+                        <img src="{{story.items.preview}}">
+                    </a>
+                </li>
+                <!--/ story item -->
+
+            </ul>
         </div>
         <!--/ story -->
         
