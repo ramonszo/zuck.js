@@ -29,19 +29,20 @@
 @keyframes zuckLoading {0% {-webkit-transform: rotate(0deg);transform: rotate(0deg);}100% {-webkit-transform: rotate(360deg);transform: rotate(360deg);}}
 
 #zuck-modal{outline: 0!important;overflow:hidden;position:fixed;background:rgba(0,0,0,0.75);0;z-index:100000;font-size:14px;font-family:inherit;}
-#zuck-modal-content,#zuck-modal-content .story-viewer,#zuck-modal-content .story-viewer > .slides,#zuck-modal-content .story-viewer > .slides > *{width:100vw;height:100vh;position:absolute;overflow:hidden;}
+#zuck-modal-content, #zuck-modal-content .story-viewer, #zuck-modal-content .story-viewer > .slides, #zuck-modal-content .story-viewer > .slides > *{width:100vw;height:100vh;position: relative;overflow:hidden;}
 #zuck-modal * {user-select:none;outline: 0;}
 
 #zuck-modal.with-effects {transform: scale(0.01);transform-origin: top left;transition: 0.25s;position: absolute;top:0;left:0;width:100vw;height:100vh;}
 #zuck-modal.with-effects.animated {transform:scale(1);border-radius: 0; margin-top:0 !important;margin-left:0 !important;}
 #zuck-modal.with-effects.closed {transform:translateY(100%);}
 
-#zuck-modal-content {width:300vw;margin-left:-100vw;}
-#zuck-modal-content > .previous {left:0;}
-#zuck-modal-content > .viewing {left:100vw;}
-#zuck-modal-content > .next {left:200vw;}
+#zuck-modal .slider {width:300vw;height: 100vh;left:-100vw;position: absolute;}
+#zuck-modal .slider > * {width: 100vw;height: 100vh; position: absolute;}
+#zuck-modal .slider > .previous {left:0;}
+#zuck-modal .slider > .viewing {left:100vw;}
+#zuck-modal .slider > .next {left:200vw;}
+#zuck-modal .slider.animated{-webkit-transition:-webkit-transform .25s linear;transition:-webkit-transform .25s linear;transition:transform .25s linear;transition:transform .25s linear, -webkit-transform .25s linear;}
 
-#zuck-modal-content.animated{-webkit-transition:-webkit-transform .25s linear;transition:-webkit-transform .25s linear;transition:transform .25s linear;transition:transform .25s linear, -webkit-transform .25s linear;}
 #zuck-modal-content .story-viewer.paused.longPress .head,#zuck-modal-content .story-viewer.paused.longPress .slides-pointers,#zuck-modal-content .story-viewer.paused.longPress .tip{opacity:0;}
 #zuck-modal-content .story-viewer.viewing:not(.paused):not(.stopped) .slides-pointers > * > .active > b{-webkit-animation-play-state:running;animation-play-state:running;}
 #zuck-modal-content .story-viewer.next{z-index:10;}

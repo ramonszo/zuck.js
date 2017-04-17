@@ -87,6 +87,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 //console.log(e);
             }
         },
+		translate = function(element, to, duration, ease) {					
+			if (element) {
+				setVendorVariable(element.style, 'TransitionTimingFunction', ease);
+				setVendorVariable(element.style, 'TransitionDuration', duration + 'ms');
+				setVendorVariable(element.style, 'Transform', 'translate3d(' + to + ', 0, 0)');
+			}
+		},
         findPos = function(obj, offsetY, offsetX, stop) {
             var curleft = 0,
                 curtop = 0;
@@ -269,36 +276,40 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 		}
 
 		var modalContent = q('#zuck-modal-content');
-		var moveStoryItem = function(slides, unmute) {				
+		var moveStoryItem = function(direction) {				
 			var target = '';
 			var useless = '';
-			var transform = 'translate3d(0,0,0)';
-
-			if ((!slides.previous && slides.direction == -1) || (!slides.next && slides.direction == 1)) {
-				modalContent.classList.add('animated');
-				setVendorVariable(modalContent.style, 'Transform', transform);
-
+			var transform = '0';
+			var modalSlider = q('#zuck-modal-slider-'+id);
+			
+			var slideItems = {
+				'previous': q('#zuck-modal .story-viewer.previous'),
+				'next': q('#zuck-modal .story-viewer.next'),
+				'viewing': q('#zuck-modal .story-viewer.viewing')
+			};
+			
+			if ((!slideItems['previous'] && !direction) || (!slideItems['next'] && direction)) {
 				return false;
 			}
 
-			if (slides.direction === -1) {
+			if (!direction) {
 				target = 'previous';
 				useless = 'next';
-				transform = 'translate3d(100vw,0,0)';
-			} else if (slides.direction === 1) {
+			} else {
 				target = 'next';
 				useless = 'previous';
-				transform = 'translate3d(-100vw,0,0)';
 			}
+			
+			
+			var transitionTime = 300;
+			transform = findPos(slideItems[target]);
+			transform = transform[0] * -1;
 
-			modalContent.classList.add('animated');
-			setVendorVariable(modalContent.style, 'Transform', transform);
-
+			translate(modalSlider, transform+'px', transitionTime, null);
+			
 			setTimeout(function(){
-				modalContent.classList.remove('animated');
-
-				if (target != '' && slides[target] && useless != '') {
-					var currentStory = slides[target].getAttribute('data-story-id');
+				if (target != '' && slideItems[target] && useless != '') {
+					var currentStory = slideItems[target].getAttribute('data-story-id');
 					zuck.internalData['currentStory'] = currentStory;
 
 					var oldStory = q('#zuck-modal .story-viewer.' + useless);
@@ -306,19 +317,17 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 						oldStory.parentNode.removeChild(oldStory);
 					}
 
-					if (slides.viewing) {
-						slides.viewing.classList.add('stopped');
-						slides.viewing.classList.add(useless);
-						slides.viewing.classList.remove('viewing');
+					if (slideItems['viewing']) {
+						slideItems['viewing'].classList.add('stopped');
+						slideItems['viewing'].classList.add(useless);
+						slideItems['viewing'].classList.remove('viewing');
 					}
 
-					if (slides[target]) {
-						slides[target].classList.remove('stopped');
-						slides[target].classList.remove(target);
-						slides[target].classList.add('viewing');
+					if (slideItems[target]) {
+						slideItems[target].classList.remove('stopped');
+						slideItems[target].classList.remove(target);
+						slideItems[target].classList.add('viewing');
 					}
-
-					slides = updateSlidesIndex(slides);
 				}
 
 				var newStoryData = getStoryMorningGlory(target);
@@ -336,30 +345,18 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 				onAnimationEnd(items[0].firstElementChild, function() {
 					zuck.nextItem(false);
 				});
+			
+				translate(modalSlider, '0px', 0, null);
 
-				playVideoItem([items[0], items[1]], unmute);
-
-				modalContent.style.transform = 'translate3d(0,0,0)';
+				playVideoItem([items[0], items[1]], true);
 
 				option('callbacks', 'onView')(zuck.internalData['currentStory']);
-
-				onTransitionEnd(modalContent, function() {
-					modalContent.classList.remove('animated');
-				});
-			}, 250);
-		};
-
-		var updateSlidesIndex = function(slides) {
-			slides.index = getElIndex(q('#zuck-modal .story-viewer.viewing'));
-			slides.previous = q('#zuck-modal .story-viewer.previous');
-			slides.viewing = q('#zuck-modal .story-viewer.viewing');
-			slides.next = q('#zuck-modal .story-viewer.next');
-			slides.slideWidth = q('#zuck-modal .story-viewer').offsetWidth;
-
-			return slides;
+			}, transitionTime+50);
 		};
 
 		var createStoryViewer = function(storyData, className, forcePlay) {				
+			var modalSlider = q('#zuck-modal-slider-'+id);
+
 			var htmlItems = '',
 				pointerItems = '',
 				storyId = g(storyData, 'id'),
@@ -462,118 +459,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 				};
 			});
 
-			// touchEvents
-			var touchStart = function(e) {					
-				if (e.target.nodeName == 'A') {
-					return true;
-				} else {
-					e.preventDefault();					
-				}
-
-				if(e.touches) {
-					slides.touchStartX = e.touches[0].pageX;						
-				}
-
-				slides.slideWidth = q('#zuck-modal .story-viewer').offsetWidth;
-
-				slides = updateSlidesIndex(slides);
-				storyViewer.touchMove = 0;
-				storyViewer.classList.add('paused');
-
-				pauseVideoItem();
-
-				storyViewer.timer = setTimeout(function() {
-					storyViewer.classList.add('longPress');
-				}, 600);
-
-				storyViewer.nextTimer = setTimeout(function() {
-					clearInterval(storyViewer.nextTimer);
-					storyViewer.nextTimer = false;
-				}, 250);
-
-			};
-
-			var touchEnd = function(e) {
-				if (e.target.nodeName == 'A') {
-					return true;
-				} else {
-					e.preventDefault();					
-				}
-
-				var video = zuck.internalData['currentVideoElement'];
-				if (storyViewer.timer) {
-					clearInterval(storyViewer.timer);
-				}
-
-				storyViewer.classList.remove('longPress');
-				storyViewer.classList.remove('paused');
-
-				if (storyViewer.nextTimer) {
-					clearInterval(storyViewer.nextTimer);
-					storyViewer.nextTimer = false;
-
-					if (storyViewer.classList.contains('muted') && video) {
-						unmuteVideoItem(video, storyViewer);
-					} else {
-						zuck.nextItem(e);	
-
-						return false;
-					}						
-				}
-
-				storyViewer.touchMove = 0;
-				slides.touchStartX = 0;
-
-				if (slides.moveX) {
-					var absMove = Math.abs(slides.index * slides.slideWidth - slides.moveX);
-					slides.direction = 0;
-					if (absMove > slides.slideWidth / 2) {
-						if (slides.moveX > slides.index * slides.slideWidth && slides.index < 2) {
-							slides.index++;
-							slides.direction = 1;
-						} else if (slides.moveX < slides.index * slides.slideWidth && slides.index > 0) {
-							slides.index--;
-							slides.direction = -1;
-						}
-					}
-
-					moveStoryItem(slides, e, 'nextTouch');
-					storyViewer.classList.remove('longPress');
-				} else {
-					setVendorVariable(modalContent.style, 'Transform', 'translate3d(0,0,0)');
-				}
-			};
-
-			var touchMove = function(e) {
-				e.preventDefault();
-
-				if (storyViewer.next) {
-					return false;
-				}
-
-				var touchMove = (slides.touchStartX - slides.touchMoveX);
-				var isPrevious = true;
-
-				if (slides.touchMoveX > e.touches[0].pageX) {
-					isPrevious = false;
-				}
-
-				storyViewer.touchMove = 1;
-
-				slides.touchMoveX = e.touches[0].pageX;
-				slides.moveX = slides.slideWidth + touchMove;
-				slides.moveX = (touchMove >= slides.slideWidth) ? slides.slideWidth : slides.moveX;
-
-				setVendorVariable(modalContent.style, 'Transform', 'translate3d(' + ((slides.moveX * -1) + slides.slideWidth) + 'px,0,0)');
-				modalContent.classList.remove('animated');
-			};
-
-			storyViewer.addEventListener('touchstart', touchStart);
-			storyViewer.addEventListener('touchmove', touchMove);
-			storyViewer.addEventListener('touchend', touchEnd);
-
-			slides.addEventListener('mousedown', touchStart);
-			slides.addEventListener('mouseup', touchEnd);
 
 			storyViewer.appendChild(slides);
 
@@ -588,18 +473,162 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 			});
 
 			if (className == 'previous') {
-				prepend(modalContent, storyViewer);
+				prepend(modalSlider, storyViewer);
 			} else {
-				modalContent.appendChild(storyViewer);					
+				modalSlider.appendChild(storyViewer);					
 			}
-		};
+		},
+			createStoryTouchEvents = function(modalSliderElement){
+				var enableMouseEvents = true;
+				
+				var modalSlider = modalSliderElement;
+				var position = {};
+				var touchOffset, isScrolling, delta, timer, nextTimer;
+								
+				var touchStart = function(event) {		
+					var storyViewer = q('#zuck-modal .viewing');
+
+					if (event.target.nodeName == 'A') {
+						return true;
+					} else {
+						event.preventDefault();					
+					}
+
+					var touches = event.touches ? event.touches[0] : event;
+					var pos = findPos(q('#zuck-modal .story-viewer.viewing'));
+
+					modalContainer.slideWidth = q('#zuck-modal .story-viewer').offsetWidth;
+					position = {
+						x: pos[0],
+						y: pos[1]
+					};
+					
+					var pageX = touches.pageX;
+					var pageY = touches.pageY;
+
+					touchOffset = {
+						x: pageX,
+						y: pageY,
+						time: Date.now()
+					};
+
+					isScrolling = undefined;
+					delta = {};
+
+					if (enableMouseEvents) {
+						modalSlider.addEventListener('mousemove', touchMove);
+						modalSlider.addEventListener('mouseup', touchEnd);
+						modalSlider.addEventListener('mouseleave', touchEnd);
+					}
+					modalSlider.addEventListener('touchmove', touchMove);
+					modalSlider.addEventListener('touchend', touchEnd);
+					
+					storyViewer.classList.add('paused');
+					pauseVideoItem();
+
+					timer = setTimeout(function() {
+						storyViewer.classList.add('longPress');
+					}, 600);
+
+					nextTimer = setTimeout(function() {
+						clearInterval(nextTimer);
+						nextTimer = false;
+					}, 250);
+				};
+				
+				var touchMove = function(event) {
+					var touches = event.touches ? event.touches[0] : event;
+					var pageX = touches.pageX;
+					var pageY = touches.pageY;
+
+					if(touchOffset) {
+						delta = {
+							x: pageX - touchOffset.x,
+							y: pageY - touchOffset.y
+						};
+
+						if (typeof isScrolling === 'undefined') {
+							isScrolling = !!(isScrolling || Math.abs(delta.x) < Math.abs(delta.y));
+						}
+						
+						if (!isScrolling && touchOffset) {
+							event.preventDefault();
+							translate(modalSlider, (position.x + delta.x) + 'px', 0, null);
+						}
+					}
+				};
+				
+				var touchEnd = function(event) {
+					var storyViewer = q('#zuck-modal .viewing');
+
+					if(delta){
+						var slidesLength = d.querySelectorAll('#zuck-modal .story-viewer').length;
+						var duration = touchOffset ? Date.now() - touchOffset.time : undefined;
+						var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > modalContainer.slideWidth / 3;
+						var direction = delta.x < 0;
+
+						var index = (direction)?q('#zuck-modal .story-viewer.next'):q('#zuck-modal .story-viewer.previous');
+						var isOutOfBounds = (direction&&!index) || (!direction&&!index);
+
+						if (!isScrolling) {
+							if (isValid && !isOutOfBounds) {
+								moveStoryItem(direction, true);
+							} else {
+								translate(modalSlider, position.x, 300);
+							}
+						}
+
+						touchOffset = undefined;
+						
+						if (enableMouseEvents) {
+							modalSlider.removeEventListener('mousemove', touchMove);
+							modalSlider.removeEventListener('mouseup', touchEnd);
+							modalSlider.removeEventListener('mouseleave', touchEnd);
+						}
+						modalSlider.removeEventListener('touchmove', touchMove);
+						modalSlider.removeEventListener('touchend', touchEnd);
+					}
+					
+					var video = zuck.internalData['currentVideoElement'];
+					if (timer) {
+						clearInterval(timer);
+					}
+
+					storyViewer.classList.remove('longPress');
+					storyViewer.classList.remove('paused');
+
+					if (nextTimer) {
+						clearInterval(nextTimer);
+						nextTimer = false;
+						
+						if (storyViewer.classList.contains('muted') && video) {
+							unmuteVideoItem(video, storyViewer);
+						} else {
+							zuck.nextItem(event);	
+
+							return false;
+						}						
+					}
+				};
+				
+				modalSlider.addEventListener('touchstart', touchStart);
+				
+				if (enableMouseEvents) {
+					modalSlider.addEventListener('mousedown', touchStart);
+				}
+			};
 
 		return {
 			'show': function(storyId, page) {
 				var callback = function() {
+					modalContent.innerHTML = '<div id="zuck-modal-slider-'+id+'" class="slider"></div>';
+					
 					var storyData = zuck.data[storyId];
-					var currentItem = storyData['currentItem'] || 0;
-
+					var currentItem = storyData['currentItem'] || 0;					
+					var modalSlider = q('#zuck-modal-slider-'+id);
+					
+					createStoryTouchEvents(modalSlider);
+					
 					zuck.internalData['currentStory'] = storyId;	
 					storyData['currentItem'] = currentItem;
 
@@ -618,8 +647,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 					if (nextItemData) {
 						createStoryViewer(nextItemData, 'next');
 					}
-
-					setVendorVariable(modalContent.style, 'Transform', '');
 
 					if (option('autoFullScreen')) {
 						modalContainer.classList.add('fullscreen');
@@ -675,16 +702,11 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 						updateStorySeemPosition();
 					}
 
-					var stories = q('#zuck-modal .story-viewer[data-story-id="' + lastStory + '"] .slides');
-
-					stories = updateSlidesIndex(stories);
-					stories.direction = 1;
-					stories.index++;
-
-					if (!stories.next) {
+					var stories = q('#zuck-modal .story-viewer.next');
+					if (!stories) {
 						modal.close();
 					} else {
-						moveStoryItem(stories, unmute, 'nextModal');
+						moveStoryItem(true);
 					}
 				};
 
@@ -783,7 +805,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     var storyId = foundStory.getAttribute('data-id');
 					var data = zuck.data[storyId] || false;
 					
-                    return (g(zuck.data[storyId], 'seem')==true)?false:data;
+                    return data; //(g(zuck.data[storyId], 'seem')==true)?false:data;
                 }
             }
 
@@ -870,8 +892,6 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 	var saveLocalData = function(key, data){
 			if(option('localStorage')){
 				var keyName = 'zuck-'+id+'-'+key;
-
-				console.log('saveLocalData', data);
 				
 				window.localStorage[keyName] = JSON.stringify(data);
 			}	

@@ -10,17 +10,6 @@ You can read stories from any endpoint (json, firebase, etc.) and the script wil
 Live demo: https://on.ramon82.com/2ojlR5C
 
 
-## Table of contents
-1. [Features](#features)
-2. [Limitations](#limitations)
-    1. [Compatibility](#compatibility)
-3. [How to use](#how-to-use)
-	1. [Stories Structure](#stories-structure)
-	2. [Alternate Call](#alternate-call)
-	3. [Tips](#tips)
-	4. [License](#license)
-
-
 ## Features
 * Library agnostic
 * Custom themes
@@ -28,17 +17,6 @@ Live demo: https://on.ramon82.com/2ojlR5C
 * A simple media viewer, with gestures and events
 * A simple api to manage your "Stories timeline"
 * Lightweight (13kb minified - 5kb gzipped)
-
-
-## Limitations
-On mobile browsers, video can't play without a user gesture. So the script try to play audio only when user click to see a next story. 
-When the story is playing automatically, the video is muted, but an alert is displayed to user click to hear audio.
-
-Link on stories opens in new window too. This behaviour occurs because most websites blocks to be embeded on iFrames. 
-
-
-### Compatibility
-IE 10 and other browsers. Not tested on IE9, but if you really want this compatibility, you'll just have to add a classList polyfill.
 
 
 ## How to use
@@ -177,6 +155,17 @@ Then in your JS:
 
 ### Tips
 Use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
+
+
+## Limitations
+On mobile browsers, video can't play without a user gesture. So the script try to play audio only when user click to see a next story. 
+When the story is playing automatically, the video is muted, but an alert is displayed to user click to hear audio.
+
+Link on stories opens in new window too. This behaviour occurs because most websites blocks to be embeded on iFrames. 
+
+
+### Compatibility
+IE 10 and other browsers. Not tested on IE9, but if you really want this compatibility, you'll just have to add a classList polyfill.
 
 
 ## License
