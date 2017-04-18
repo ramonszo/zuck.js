@@ -22,8 +22,8 @@
 			.disclaimer p {margin: 0;}
 			.disclaimer p + p {margin-top: 1.25em}
 			
-            .skin {text-transform: uppercase;white-space: nowrap;overflow: hidden;font-weight: bold;position: absolute;z-index: 10;left:0;right:0;bottom: 0;background: #fff;font-size:12px;padding:12px;color:#fff;background:#333;}
-			.skin select {max-width: 30%;}
+            .skin {text-transform: uppercase;white-space: nowrap;overflow: hidden;font-weight: bold;position: absolute;z-index: 10;left:0;right:0;bottom: 0;background: #fff;font-size:16px;padding:12px;color:#fff;background:#333;}
+			.skin select {font-size:inherit;text-transform: none; max-width: 30%;}
 			
 			#stories {max-width: 500px;margin:0 auto;}
 		
@@ -55,9 +55,9 @@
             Choose your theme: 
             
             <select id="skin" onchange="location.href=location.href.split('#')[0].split('?')[0]+'?skin='+this.options[this.selectedIndex].value;">
-                <option value="Snapgram">Snapgram (with fullscreen)</option>
+                <option value="Snapgram">Snapgram (without fullscreen)</option>
+                <option value="FaceSnap">FaceSnap (with fullscreen)</option>
                 <option value="VemDeZAP">VemDeZAP (timeline)</option>
-                <option value="FaceSnap">FaceSnap (without fullscreen)</option>
                 <option value="Snapssenger">Snapssenger (with previews)</option>
             </select>
         </div>
@@ -93,7 +93,7 @@
 					'Snapgram': {
 						'avatars': true,
 						'list': false,
-						'autoFullScreen': true                        
+						'autoFullScreen': false                        
 					},
 
 					'VemDeZAP': {
@@ -105,7 +105,7 @@
 					'FaceSnap': {
 						'avatars': true,
 						'list': false,
-						'autoFullScreen': false
+						'autoFullScreen': true
 					},
 
 					'Snapssenger': {

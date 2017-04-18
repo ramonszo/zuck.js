@@ -5,14 +5,14 @@
 ## Add stories EVERYWHERE
 MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of a copy of Facebook Messenger Day of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories. 
 
-You can read stories from any endpoint (json, firebase, etc.) and the script will do the rest.
+You can read stories from any endpoint (JSON, Firebase, etc.) and the script will do the rest.
 
 Live demo: https://on.ramon82.com/2ojlR5C
 
 
 ## Features
 * Library agnostic
-* Custom themes
+* Custom themes [Snapgram](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=VemDeZAP)
 * Desktop support (why not?)
 * A simple media viewer, with gestures and events
 * A simple API to manage your "Stories timeline"
@@ -22,6 +22,7 @@ Live demo: https://on.ramon82.com/2ojlR5C
 Initialize:
 
 ```js
+
     var stories = new Zuck({
         id: '',                // timeline container id or reference
         skin: 'snapgram',      // container class
@@ -81,19 +82,22 @@ Initialize:
 Add/update a story:
 
 ```js
-    stories.update({item object});
+    
+	stories.update({item object});
  ```
 
 Remove a story:
 
 ```js
-    stories.remove(storyId); // story id
+    
+	stories.remove(storyId); // story id
 ```
 
 Add/Remove a story item:
 
 ```js
-    stories.addItem(storyId, {item object});
+    
+	stories.addItem(storyId, {item object});
     stories.removeItem(storyId, itemId);
 ```
 
@@ -102,6 +106,7 @@ Add/Remove a story item:
 A JSON example of the stories object:
 
 ```js
+
     {
         id: "",               // story id
         photo: "",            // story photo (or user photo)
@@ -134,6 +139,7 @@ A JSON example of the stories object:
 In your HTML:
 
 ```HTML
+
     <div id="stories">
     
         <!-- story -->
@@ -165,7 +171,8 @@ In your HTML:
 Then in your JS:
 
 ```js
-    var stories = new Zuck('stories'); 
+
+    var stories = new Zuck({{element id string or element reference}}); 
 ```
 
 
@@ -174,7 +181,7 @@ Use with autoFullScreen option (disabled by default) to emulate an app on mobile
 
 
 ## Limitations
-On mobile browsers, video can't play without a user gesture. So the script tries to play audio only when the user clicks to see the next story. 
+On mobile browsers, video can't play with audio without a user gesture. So the script tries to play audio only when the user clicks to see the next story. 
 When the story is playing automatically, the video is muted, but an alert is displayed so the user may click to turn the audio on.
 
 Stories links opens in a new window too. This behaviour occurs because most websites are blocked on iframe embedding. 
