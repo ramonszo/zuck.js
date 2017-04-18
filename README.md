@@ -188,4 +188,4 @@ Stories links opens in a new window too. This behaviour occurs because most webs
 
 
 ## License
-GNU GPL v3
+MIT

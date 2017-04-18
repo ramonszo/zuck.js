@@ -87,7 +87,7 @@
 	#zuck-modal-content .story-viewer .head .loading {width: 24px;height: 24px;margin: 6px 0;}
 	#zuck-modal-content .story-viewer .head .img{width:30px;height:30px;margin-right:12px;}
 	#zuck-modal-content .story-viewer .head .left{font-size:15px;margin:15px 0;}
-	#zuck-modal-content .story-viewer .head .left > div {line-height:42px;}
+	#zuck-modal-content .story-viewer .head .left > div {line-height:30px;}
 	#zuck-modal-content .story-viewer .head .right .time{display:block;white-space:nowrap;font-size:15px;margin: 15px 0;line-height: 30px}
 	#zuck-modal-content .story-viewer .head .left > .back {display: none; background: transparent;z-index: 20; visibility: visible;margin:-6px 0;position: absolute;height:42px;width:72px;line-height: 36px;text-align: left; vertical-align: top;text-shadow:none;}
 	
