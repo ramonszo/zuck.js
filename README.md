@@ -21,6 +21,7 @@ Live demo: https://on.ramon82.com/2ojlR5C
 ## How to use
 Initialize:
 
+```js
     var stories = new Zuck({
         id: '',                // timeline container id or reference
         skin: 'snapgram',      // container class
@@ -75,24 +76,32 @@ Initialize:
           }
         }
     });
+```
 
 Add/update a story:
 
+```js
     stories.update({item object});
+ ```
 
 Remove a story:
 
+```js
     stories.remove(storyId); // story id
+```
 
 Add/Remove a story item:
 
+```js
     stories.addItem(storyId, {item object});
     stories.removeItem(storyId, itemId);
+```
 
 
 ### Stories structure example
 A JSON example of the stories object:
 
+```js
     {
         id: "",               // story id
         photo: "",            // story photo (or user photo)
@@ -117,12 +126,14 @@ A JSON example of the stories object:
             }
         
         ]
-    }   
+    }
+```
 
 
 ### Alternate call
 In your HTML:
 
+```HTML
     <div id="stories">
     
         <!-- story -->
@@ -149,10 +160,13 @@ In your HTML:
         <!--/ story -->
         
     </div>
+```
     
 Then in your JS:
 
+```js
     var stories = new Zuck('stories'); 
+```
 
 
 ### Tips
