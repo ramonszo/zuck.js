@@ -54,7 +54,7 @@
 #zuck-modal-content .story-viewer .slides-pointers{display:table;table-layout:fixed;border-spacing:6px;border-collapse:separate;position:absolute;width:100vh;top:0;left:calc(50vw - 50vh);right:calc(50vw - 50vh);z-index:100020;}
 #zuck-modal-content .story-viewer .slides-pointers > *{display:table-row;}
 #zuck-modal-content .story-viewer .slides-pointers > * > *{display:table-cell;background:rgba(255,255,255,0.5);border-radius:2px;}
-#zuck-modal-content .story-viewer .slides-pointers > * > .seem{background:#fff;}
+#zuck-modal-content .story-viewer .slides-pointers > * > .seen{background:#fff;}
 #zuck-modal-content .story-viewer .slides-pointers > * > * > b{background:#fff;width:auto;max-width:0;height:2px;display:block;-webkit-animation-fill-mode:forwards;animation-fill-mode:forwards;-webkit-animation-play-state:paused;animation-play-state:paused;border-radius:2px;}
 #zuck-modal-content .story-viewer .slides-pointers > * > .active > b{-webkit-animation-name:zuckSlideTime;animation-name:zuckSlideTime;-webkit-animation-timing-function:linear;animation-timing-function:linear;}
 

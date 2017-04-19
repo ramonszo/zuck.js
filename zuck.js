@@ -382,21 +382,21 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 			slides.className = 'slides';
 			each(g(storyData, 'items'), function(i, item) {
 				if(currentItem > i){
-				   storyData['items'][i]['seem'] = true;
-				   item['seem'] = true;
+				   storyData['items'][i]['seen'] = true;
+				   item['seen'] = true;
 				}
 
 				var length = g(item, 'length');
 				var linkText = g(item, 'linkText');
-				var seemClass = ((g(item, 'seem') === true) ? 'seem' : '');
+				var seenClass = ((g(item, 'seen') === true) ? 'seen' : '');
 				var commonAttrs = 'data-index="' + i + '" data-item-id="'+g(item, 'id')+'"';
 
 				if(currentItem===i){
 					currentItemTime = timeAgo(g(item, 'time'));   
 				}
 
-				pointerItems += '<span '+commonAttrs+' class="' + ((currentItem === i) ? 'active' : '') + ' '+seemClass+'"><b style="animation-duration:' + ((length === '') ? '3' : length) + 's"></b></span>';
-				htmlItems += '<div data-time="'+g(item, 'time')+'" data-type="' + g(item, 'type') + '"'+commonAttrs+' class="item ' + seemClass +
+				pointerItems += '<span '+commonAttrs+' class="' + ((currentItem === i) ? 'active' : '') + ' '+seenClass+'"><b style="animation-duration:' + ((length === '') ? '3' : length) + 's"></b></span>';
+				htmlItems += '<div data-time="'+g(item, 'time')+'" data-type="' + g(item, 'type') + '"'+commonAttrs+' class="item ' + seenClass +
 					' ' + ((currentItem === i) ? 'active' : '') + '">' +
 					((g(item, 'type') === 'video') ? '<video class="media" muted webkit-playsinline playsinline preload="auto" src="' + g(item, 'src') + '" ' + g(item, 'type') + '></video><b class="tip muted">' + option('language', 'unmute') + '</b>' : '<img class="media" src="' + g(item, 'src') + '" ' + g(item, 'type') + '>') +
 					((g(item, 'link')) ? '<a class="tip link" href="'+g(item, 'link')+'" rel="noopener" target="_blank">' + ((linkText == '') ? option('language', 'visitLink') : linkText) + '</a>' : '') +
@@ -703,13 +703,13 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 					var lastStoryTimelineElement = q('#' + id + ' [data-id="' + lastStory + '"]');
 
 					if(lastStoryTimelineElement) {
-						lastStoryTimelineElement.classList.add('seem');
+						lastStoryTimelineElement.classList.add('seen');
 
-						zuck.data[lastStory]['seem'] = true;
-						zuck.internalData['seemItems'][lastStory] = true;
+						zuck.data[lastStory]['seen'] = true;
+						zuck.internalData['seenItems'][lastStory] = true;
 						
-						saveLocalData('seemItems', zuck.internalData['seemItems']);
-						updateStorySeemPosition();
+						saveLocalData('seenItems', zuck.internalData['seenItems']);
+						updateStoryseenPosition();
 					}
 
 					var stories = q('#zuck-modal .story-viewer.next');
@@ -770,16 +770,16 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         },
         parseStory = function(story) {
             var storyId = story.getAttribute('data-id');
-			var seem = false;
+			var seen = false;
 			
-			if(zuck.internalData['seemItems'][storyId]){
-			   seem = true;
+			if(zuck.internalData['seenItems'][storyId]){
+			   seen = true;
 			}
 			
-			if(seem){
-			   story.classList.add('seem');
+			if(seen){
+			   story.classList.add('seen');
 			} else {
-			   story.classList.remove('seem');
+			   story.classList.remove('seen');
 			}
 			
             try {
@@ -789,7 +789,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     'name': story.firstElementChild.lastElementChild.firstChild.innerText,
                     'link': story.firstElementChild.getAttribute('href'),
                     'lastUpdated': story.getAttribute('data-last-updated'),
-					'seem': seem,
+					'seen': seen,
                     'items': []
                 };
             } catch (e) {
@@ -815,14 +815,14 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                     var storyId = foundStory.getAttribute('data-id');
 					var data = zuck.data[storyId] || false;
 					
-                    return data; //(g(zuck.data[storyId], 'seem')==true)?false:data;
+                    return data; //(g(zuck.data[storyId], 'seen')==true)?false:data;
                 }
             }
 
             return false;
         },
-		updateStorySeemPosition = function(){
-			each(d.querySelectorAll('#' + id + ' .story.seem'), function(i, el){
+		updateStoryseenPosition = function(){
+			each(d.querySelectorAll('#' + id + ' .story.seen'), function(i, el){
 				var newData = zuck.data[el.getAttribute('data-id')];
 				var timeline = el.parentNode;
 				
@@ -920,7 +920,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 	/* api */
     zuck.data = {};
     zuck.internalData = {};
-	zuck.internalData['seemItems'] = getLocalData('seemItems') || {};
+	zuck.internalData['seenItems'] = getLocalData('seenItems') || {};
 		
     zuck.add = zuck.update = function(data, append) {
         var storyId = g(data, 'id');
@@ -938,9 +938,9 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 			story = storyEl;
 		}
 		
-		if(data['seem']===false){
-			zuck.internalData['seemItems'][storyId] = false;		   
-			saveLocalData('seemItems', zuck.internalData['seemItems']);
+		if(data['seen']===false){
+			zuck.internalData['seenItems'][storyId] = false;		   
+			saveLocalData('seenItems', zuck.internalData['seenItems']);
 		}
 		
 		story.setAttribute('data-id', storyId);
@@ -973,7 +973,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 		});
 		
 		if(!append){
-			updateStorySeemPosition();
+			updateStoryseenPosition();
 		}
     };
     zuck.next = function() {
@@ -983,7 +983,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         var story = q('#' + id + ' > [data-id="' + storyId + '"]');
         var li = d.createElement('li');
 
-        li.className = g(data, 'seem') ? 'seem' : '';
+        li.className = g(data, 'seen') ? 'seen' : '';
         li.setAttribute('data-id', g(data, 'id'));
 
         li.innerHTML = '<a href="' + g(data, 'src') + '" data-link="' + g(data, 'link') + '" data-time="' + g(data, 'time') + '" data-type="' + g(data, 'type') + '" data-length="' + g(data, 'length') + '">' +
@@ -1025,16 +1025,16 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
         if (storyViewer && nextPointer && nextItemElement) {
             var nextItemCallback = function() {
                 currentPointer.classList.remove('active');
-                currentPointer.classList.add('seem');
+                currentPointer.classList.add('seen');
                 currentItemElement.classList.remove('active');
-                currentItemElement.classList.add('seem');
+                currentItemElement.classList.add('seen');
 
-                nextPointer.classList.remove('seem');
+                nextPointer.classList.remove('seen');
                 nextPointer.classList.add('active');
 				
                 //nextItemElement.classList.remove('stopped');
 				
-                nextItemElement.classList.remove('seem');
+                nextItemElement.classList.remove('seen');
                 nextItemElement.classList.add('active');
 				
 				each(storyViewer.querySelectorAll('.time'), function(i, el){
@@ -1077,7 +1077,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             zuck.add(item, true);
         });
 		
-		updateStorySeemPosition();
+		updateStoryseenPosition();
 
         var avatars = (option('avatars')) ? 'user-icon' : 'story-preview';
         var list = (option('list')) ? 'list' : 'carousel';
