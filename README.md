@@ -12,11 +12,13 @@ Live demo: https://on.ramon82.com/2ojlR5C
 
 ## Features
 * Library agnostic
-* Custom themes [Snapgram](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=VemDeZAP)
+* Custom themes: [Snapgram](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=VemDeZAP)
 * Desktop support (why not?)
 * A simple media viewer, with gestures and events
 * A simple API to manage your "Stories timeline"
 * Lightweight (5kb gzipped - 15kb minified)
+* Now with 3D cube effect!
+
 
 ## How to use
 Initialize:
@@ -29,6 +31,7 @@ var stories = new Zuck({
     avatars: true,         // shows user photo instead of last story item preview
     list: false,           // displays a timeline instead of carousel
     openEffect: true,      // enables effect when opening story - may decrease performance
+    cubeEffect: false,     // enables the 3d cube effect when sliding story - may decrease performance
     autoFullScreen: false, // enables fullscreen on mobile browsers
     backButton: true,      // adds a back button to close the story viewer
     backNative: false,     // uses window history to enable back button on browsers/android
@@ -178,6 +181,21 @@ On mobile browsers, video can't play with audio without a user gesture. So the s
 When the story is playing automatically, the video is muted, but an alert is displayed so the user may click to turn the audio on.
 
 Stories links opens in a new window too. This behaviour occurs because most websites are blocked on iframe embedding. 
+
+
+## Next features
+If anyone is interested in contributing:
+
+* AI
+* More AI
+* Chat bots
+* ULTIMATE BIG COLLECTION OF STICKERS (make sure to update the changelog with every new sticker pack)
+* Anyone missing Snapchat theme?
+* Something so sick that Zuck would copy after - INCEPTION!
+* Anything that would increase the lib weight to bet Ember.js or blow up user storage
+* Hm, did I say already MORE AI?
+
+Sorry I got inspired - It makes me so happy to see people laughing at this, thank you! :)
 
 
 ## License

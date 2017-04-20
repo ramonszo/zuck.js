@@ -7,7 +7,7 @@
 		<link rel="icon" href="ICON.png">
         <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
         <style>
-            body {font-family:'Roboto', sans-serif;font-size:14px;padding:0;margin:0}
+            body {font-family:'Roboto', sans-serif;font-size:14px;padding:0;margin:0;color:#333}
             #stories {padding: 12px;}
 			
             h1 {text-align: center;font-family: monospace;padding:0 12px;border-bottom:1px solid #ddd;font-size:24px;height:56px;line-height:56px;margin-bottom: 0;white-space: nowrap;text-overflow: ellipsis;overflow:hidden;}
@@ -16,14 +16,14 @@
 			h1.VemDeZAP {background: #085E53;color: #fff;}
 			h1.Snapssenger {background: #0084FF;color:#fff;}
 			
-			.disclaimer {line-height: 1.5em;background: #ffffd2;border-radius:3px;margin: 12px 12px 0;padding:12px 12px 12px 74px;font-size:13px;max-width: 500px;overflow: hidden;min-height: 50px;}
+			.disclaimer {display:block;text-decoration: none !important;color:#333;line-height: 1.5em;background: #ffffd2;border-radius:3px;margin: 12px 12px 0;padding:12px 12px 12px 74px;font-size:13px;max-width: 500px;overflow: hidden;min-height: 50px;}
 			.disclaimer img {float:left;margin-right: 12px;width:50px;position: absolute;margin-left:-62px;}
 			.disclaimer a {color: inherit !important;border:0;}
 			.disclaimer p {margin: 0;}
 			.disclaimer p + p {margin-top: 1.25em}
 			
             .skin {text-transform: uppercase;white-space: nowrap;overflow: hidden;font-weight: bold;position: absolute;z-index: 10;left:0;right:0;bottom: 0;background: #fff;font-size:16px;padding:12px;color:#fff;background:#333;}
-			.skin select {font-size:inherit;text-transform: none; max-width: 30%;}
+			.skin select {background: #fff; font-size:inherit;text-transform: none; max-width: 30%;}
 			
 			#stories {max-width: 500px;margin:0 auto;}
 		
@@ -42,12 +42,12 @@
     <body style="display:none">
         <h1 id="header">&nbsp;</h1>
 				
-		<div class="disclaimer">
-			<a href="https://ramon.codes/projects/zuck.js" target="_blank"><img src="ICON.png"></a>
+		<a href="https://ramon.codes/projects/zuck.js" target="_blank" class="disclaimer">
+			<img src="ICON.png">
 			
-			<p>This a demonstration of <strong><a href="https://ramon.codes/projects/zuck.js" target="_blank">zuck.js</a></strong> javascript library.</p>
+			<p>This a demonstration of <strong>zuck.js</strong> javascript library.</p>
 			<p>Not associated with Facebook, Instagram, WhatsApp or Snapchat.</p>
-		</div>
+		</a>
 		
 		<div id="stories"></div>
 
@@ -93,25 +93,29 @@
 					'Snapgram': {
 						'avatars': true,
 						'list': false,
-						'autoFullScreen': false                        
+						'autoFullScreen': false,
+                        'cubeEffect': true
 					},
 
 					'VemDeZAP': {
 						'avatars': false,
 						'list': true,
-						'autoFullScreen': false                        
+						'autoFullScreen': false,
+                        'cubeEffect': false
 					},
 
 					'FaceSnap': {
 						'avatars': true,
 						'list': false,
-						'autoFullScreen': true
+						'autoFullScreen': true,
+                        'cubeEffect': false
 					},
 
 					'Snapssenger': {
 						'avatars': false,
 						'list': false,
-						'autoFullScreen': false                        
+						'autoFullScreen': false,
+                        'cubeEffect': false
 					}
 				};
 				
@@ -121,60 +125,61 @@
 					skin: skin,
 					avatars: skins[skin]['avatars'],
 					list: skins[skin]['list'],
+                    cubeEffect: skins[skin]['cubeEffect'],
 					localStorage: true,
 					stories: [
 						{
 							id: "ramon",
-							photo: "https://pbs.twimg.com/profile_images/841375266891001858/J9aKq2-0.jpg",
+							photo: "https://avatars1.githubusercontent.com/u/2271175?v=3&s=460",
 							name: "Ramon",
 							link: "https://ramon.codes",
-							lastUpdated: 1492303299037,
+							lastUpdated: 1492665454,
 							items: [
-								buildItem("ramon-1", "photo", 3, "https://pbs.twimg.com/media/C75V20SWsAAw5fO.jpg:large", "https://pbs.twimg.com/media/C75V20SWsAAw5fO.jpg:small", '', false, 1492303299037),
-								buildItem("ramon-2", "photo", 3, "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:large", "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:small", 'https://ramon.codes', false, 1492303299037),
-								buildItem("ramon-3", "video", 0, "https://instagram.fcgh11-1.fna.fbcdn.net/t50.2886-16/17582994_287095581720875_3155815804436480000_n.mp4", "https://pbs.twimg.com/media/C7oA3btX0AE9hAx.jpg:small", '', false, 1492303299037)
+								buildItem("ramon-1", "photo", 3, "https://scontent-gru2-2.cdninstagram.com/t51.2885-15/e15/10810091_1527190460857578_541280638_n.jpg", "https://scontent-gru2-2.cdninstagram.com/t51.2885-15/e15/10810091_1527190460857578_541280638_n.jpg", '', false, 1492665454),
+								buildItem("ramon-2", "photo", 3, "https://scontent-gru2-2.cdninstagram.com/t51.2885-15/e15/10597412_455246124639813_1360162248_n.jpg", "https://scontent-gru2-2.cdninstagram.com/t51.2885-15/e15/10597412_455246124639813_1360162248_n.jpg", 'https://ramon.codes', false, 1492665454),
+								buildItem("ramon-3", "video", 0, "https://scontent-gru2-2.cdninstagram.com/t50.2886-16/14965218_193969377722724_482497862983221248_n.mp4", "https://scontent-gru2-2.cdninstagram.com/t51.2885-15/e15/10597412_455246124639813_1360162248_n.jpg", '', false, 1492665454)
 							]
 						},
 						{
 							id: "gorillaz",
-							photo: "https://instagram.frao1-1.fna.fbcdn.net/t51.2885-15/e35/17267388_1853065824981433_7313109104879206400_n.jpg",
+							photo: "https://lh3.googleusercontent.com/xYFz6B9FHMQq7fDOI_MA61gf0sNdzGBbdR7-mZ7i4rEVvE_N-kZEY_A4eP74Imcf8Sq3FYxAgd4eJA=w200",
 							name: "Gorillaz",
 							link: "",
-							lastUpdated: 1492303299037,
+							lastUpdated: 1492665454,
 							items: [
-								buildItem("gorillaz-1", "video", 0, "https://instagram.frao1-1.fna.fbcdn.net/t50.2886-16/17886251_1128605603951544_572796556789415936_n.mp4", "https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:small", '', false, 1492303299037),
-								buildItem("gorillaz-2", "photo", 3, "https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:large","https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:small", '', false, 1492303299037),
+								buildItem("gorillaz-1", "video", 0, "https://instagram.frao1-1.fna.fbcdn.net/t50.2886-16/17886251_1128605603951544_572796556789415936_n.mp4", "https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:small", '', false, 1492665454),
+								buildItem("gorillaz-2", "photo", 3, "https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:large","https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:small", '', false, 1492665454),
 							]
 						},
 						{
 							id: "ladygaga",
-							photo: "https://pbs.twimg.com/profile_images/836786253139881984/Xr7Ne9_l.jpg",
+							photo: "https://lh3.googleusercontent.com/VkANYSL1HOzINPSnzBJRM879b302ShsRwLoKD7mLezgTLvlpHPm_dIVop7mkAQfepze6O5N8rw8l4yM=w200",
 							name: "Lady Gaga",
 							link: "",
-							lastUpdated: 1492303299037,
+							lastUpdated: 1492665454,
 							items: [
-								buildItem("ladygaga-1", "photo", 5, "https://pbs.twimg.com/media/C8mtrEMXcAA9KKM.jpg:large", "https://pbs.twimg.com/media/C8mtrEMXcAA9KKM.jpg:small", '', false, 1492303299037),
-								buildItem("ladygaga-2", "photo", 3, "https://pbs.twimg.com/media/C4t_bxcXAAE3Hwb.jpg:large", "https://pbs.twimg.com/media/C4t_bxcXAAE3Hwb.jpg:small", 'http://ladygaga.com', false, 1492303299037),
+								buildItem("ladygaga-1", "photo", 5, "https://pbs.twimg.com/media/C8mtrEMXcAA9KKM.jpg:large", "https://pbs.twimg.com/media/C8mtrEMXcAA9KKM.jpg:small", '', false, 1492665454),
+								buildItem("ladygaga-2", "photo", 3, "https://pbs.twimg.com/media/C4t_bxcXAAE3Hwb.jpg:large", "https://pbs.twimg.com/media/C4t_bxcXAAE3Hwb.jpg:small", 'http://ladygaga.com', false, 1492665454),
 							]
 						},
 						{
 							id: "starboy",
-							photo: "https://pbs.twimg.com/profile_images/840268292946309124/vsUVZu4c.jpg",
-							name: "Abel",
+							photo: "https://lh3.googleusercontent.com/nMxfllzaAmaCCZJEMiKe2EARjyUNItQ-mdgAq6he-LWXwkIWbiiBIHyC3rGiqDu6fgyVK6NnjcgueA=w200",
+							name: "The Weeknd",
 							link: "",
-							lastUpdated: 1492303299037,
+							lastUpdated: 1492665454,
 							items: [
-								buildItem("starboy-1", "photo", 5, "https://pbs.twimg.com/media/C6f-dTqVQAAiy1K.jpg:large", "https://pbs.twimg.com/media/C6f-dTqVQAAiy1K.jpg:small", '', false, 1492303299037)
+								buildItem("starboy-1", "photo", 5, "https://pbs.twimg.com/media/C6f-dTqVQAAiy1K.jpg:large", "https://pbs.twimg.com/media/C6f-dTqVQAAiy1K.jpg:small", '', false, 1492665454)
 							]
 						},
 						{
 							id: "qotsa",
-							photo: "https://pbs.twimg.com/profile_images/850078094786306048/xQqLxqiu.jpg",
+							photo: "https://lh3.googleusercontent.com/nE4grkY8s88P_1mFFA06mGCNshhqtIz4C4y2dV7AZbm0360zopRKDMCYtUHR0uQR2DAfYMRZdA=s180-p-e100-rwu-v1",
 							name: "QOTSA",
 							link: "",
-							lastUpdated: 1492303299037,
+							lastUpdated: 1492665454,
 							items: [
-								buildItem("qotsa-1", "photo", 10, "https://pbs.twimg.com/media/C8wTxgUVoAALPGA.jpg:large", "https://pbs.twimg.com/media/C8wTxgUVoAALPGA.jpg:small", '', false, 1492303299037)
+								buildItem("qotsa-1", "photo", 10, "https://pbs.twimg.com/media/C8wTxgUVoAALPGA.jpg:large", "https://pbs.twimg.com/media/C8wTxgUVoAALPGA.jpg:small", '', false, 1492665454)
 							]
 						}
 					]
