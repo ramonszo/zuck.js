@@ -1,6 +1,6 @@
 # zuck.js
 
-[![Zuck.JS demo](https://j.gifs.com/k5xnrJ.gif)](https://on.ramon82.com/2ojlR5C)
+[![Zuck.JS demo](https://raw.githubusercontent.com/ramon82/zuck.js/master/preview.gif)](https://on.ramon82.com/2ojlR5C)
 
 ## Add stories EVERYWHERE
 MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of a copy of Facebook Messenger Day of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories. 
