@@ -9,6 +9,9 @@ You can read stories from any endpoint (JSON, Firebase, etc.) and the script wil
 
 Live demo: https://on.ramon82.com/2ojlR5C
 
+[![CDNJS](https://img.shields.io/cdnjs/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square)]
+[![NPM](https://img.shields.io/npm/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square)]
+
 
 ## Features
 * Library agnostic
@@ -181,6 +184,14 @@ On mobile browsers, video can't play with audio without a user gesture. So the s
 When the story is playing automatically, the video is muted, but an alert is displayed so the user may click to turn the audio on.
 
 Stories links opens in a new window too. This behaviour occurs because most websites are blocked on iframe embedding. 
+
+
+## Forks
+Things already created with zuck.js:
+
+* [BuddyPress Stories](https://github.com/mustafauysal/bp-stories)
+
+Send a PR to list yours!
 
 
 ## Next features
