@@ -9,8 +9,7 @@ You can read stories from any endpoint (JSON, Firebase, etc.) and the script wil
 
 Live demo: https://on.ramon82.com/2ojlR5C
 
-[![CDNJS](https://img.shields.io/cdnjs/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square)]
-[![NPM](https://img.shields.io/npm/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square)]
+[![CDNJS](https://img.shields.io/cdnjs/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square&maxAge=3600)](https://cdnjs.com/libraries/zuck.js) [![NPM](https://img.shields.io/npm/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square&maxAge=3600)](https://www.npmjs.com/package/zuck.js)
 
 
 ## Features
