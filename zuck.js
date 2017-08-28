@@ -146,51 +146,48 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
 
             return [curleft, curtop];
         },
-        timeAgo = function(date_str) {
-            date_str = Number(date_str) * 1000;
+        timeAgo = function(time) {
+            time = Number(time);
 
-            var lang = option('language', 'time');
-            var time_formats = [
-                [60, lang['seconds'], 1], // 60
-                [120, '1' + lang['minute'], ''], // 60*2
-                [3600, lang['minutes'], 60], // 60*60, 60
-                [7200, '1' + lang['hour'], ''], // 60*60*2
-                [86400, lang['hours'], 3600], // 60*60*24, 60*60
-                [172800, lang['yesterday'], ''], // 60*60*24*2
-                [604800, lang['days'], 86400]
+            var dateObj = new Date(time);
+            var dateStr = (dateObj).getTime();
+            var seconds = ((new Date()).getTime() - dateStr) / 1000;
+
+            var language = option('language', 'time');
+
+            var formats = [
+                [60, ' '+language['seconds'], 1], // 60
+                [120, '1 ' + language['minute'], ''], // 60*2
+                [3600, ' '+language['minutes'], 60], // 60*60, 60
+                [7200, '1 ' + language['hour'], ''], // 60*60*2
+                [86400, ' '+language['hours'], 3600], // 60*60*24, 60*60
+                [172800, ' '+language['yesterday'], ''], // 60*60*24*2
+                [604800, ' '+language['days'], 86400]
             ];
 
-            var time = ('' + date_str).replace(/-/g, "/").replace(/[TZ]/g, " ").replace(/^\s\s*/, '').replace(/\s\s*$/, '');
-            if (time.substr(time.length - 4, 1) == ".") {
-                time = time.substr(0, time.length - 4);
-            }
-
-            if (isNaN(new Date(time).getDate())) {
-                time = date_str;
-            }
-
-            var seconds = (new Date - new Date(time)) / 1000;
-            var token = lang['ago'],
-                list_choice = 1;
+            var currentFormat = 1;
             if (seconds < 0) {
                 seconds = Math.abs(seconds);
-                token = lang['ago'];
-                list_choice = 2;
+
+                currentFormat = 2;
             }
 
-            var i = 0,
-                format;
-            while (format = time_formats[i++]) {
+            var i = 0, format;
+            while (format = formats[i++]) {
                 if (seconds < format[0]) {
                     if (typeof format[2] == 'string') {
-                        return format[list_choice];
+                        return (format[currentFormat]);
                     } else {
-                        return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+                        return (Math.floor(seconds / format[2]) + format[1]);
                     }
                 }
             }
 
-            return time;
+            var day = dateObj.getDate();
+            var month = dateObj.getMonth();
+            var year = dateObj.getFullYear();
+
+            return day+'/'+(month + 1)+'/'+year;
         };
 
 
@@ -236,15 +233,15 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
                 'visitLink': 'Visit link',
                 'time': {
                     'ago': 'ago',
-                    'hour': 'hour',
-                    'hours': 'hours',
-                    'minute': 'minute',
-                    'minutes': 'minutes',
+                    'hour': 'hour ago',
+                    'hours': 'hours ago',
+                    'minute': 'minute ago',
+                    'minutes': 'minutes ago',
                     'fromnow': 'from now',
-                    'seconds': 'seconds',
+                    'seconds': 'seconds ago',
                     'yesterday': 'yesterday',
                     'tomorrow': 'tomorrow',
-                    'days': 'days'
+                    'days': 'days ago'
                 }
             }
         },
