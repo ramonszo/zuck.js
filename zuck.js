@@ -147,7 +147,7 @@ window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
             return [curleft, curtop];
         },
         timeAgo = function(time) {
-            time = Number(time);
+            time = Number(time) * 1000;
 
             var dateObj = new Date(time);
             var dateStr = (dateObj).getTime();
