@@ -19,7 +19,8 @@ Live demo: https://on.ramon82.com/2ojlR5C
 * A simple media viewer, with gestures and events
 * A simple API to manage your "Stories timeline"
 * Lightweight (5kb gzipped - 15kb minified)
-* Now with 3D cube effect!
+* 3D cube effect!
+* Item navigation based on where user touched
 
 
 ## How to use
@@ -37,6 +38,7 @@ var stories = new Zuck({
     autoFullScreen: false, // enables fullscreen on mobile browsers
     backButton: true,      // adds a back button to close the story viewer
     backNative: false,     // uses window history to enable back button on browsers/android
+    previousTap: true,     // use 1/3 of the screen to navigate to previous item when tap the story
 
     stories: [             // array of stories
         // see stories structure example
@@ -59,7 +61,7 @@ var stories = new Zuck({
             callback();
         },
 
-        'onNextItem': function(storyId, nextStoryId, callback) { // on next item of story
+        'onNavigateItem': function(storyId, nextStoryId, callback) { // on navigate item of story
             callback();
         },
     },
@@ -154,7 +156,7 @@ In your HTML:
         
             <!-- story item -->
             <li data-id="{{story.items.id}}" data-time="{{story.items.time}}" class="{{story.items.seen}}">
-                <a href="{{story.items.src}}" data-type="{{story.items.type}}" data-length="{{story.items.length}}" data-link="{{story.items.link}}" data-link-text="{{story.items.linkText}}">
+                <a href="{{story.items.src}}" data-type="{{story.items.type}}" data-length="{{story.items.length}}" data-link="{{story.items.link}}" data-linkText="{{story.items.linkText}}">
                     <img src="{{story.items.preview}}">
                 </a>
             </li>

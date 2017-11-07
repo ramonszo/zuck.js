@@ -1,3 +1,9 @@
+/*
+    zuck.js
+    https://github.com/ramon82/zuck.js
+    MIT License
+*/
+
 .stories.carousel{white-space:nowrap;overflow:auto;-webkit-overflow-scrolling:touch;overflow-scrolling:touch;}
 .stories.carousel::-webkit-scrollbar { width: 0px;background: transparent;}
 .stories.carousel .story{display:inline-block;width:18vw;max-width:90px;margin:0 6px;}
