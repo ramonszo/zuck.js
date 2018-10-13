@@ -62,22 +62,8 @@
             </select>
         </div>
 		
-        <script src="zuck.js"></script>
+        <script src="zuck.min.js"></script>
         <script>
-            function buildItem(id, type, length, src, preview, link, linkText, seen, time){
-                return {
-                            "id": id,
-                            "type": type,
-                            "length": length,
-                            "src": src,
-                            "preview": preview,
-                            "link": link,
-                            "linkText": linkText,
-                            "seen": seen,
-							"time": time
-                        };
-            }
-
 			var initDemo = function(){
 				var header = document.getElementById("header");
 				var skin = location.href.split('skin=')[1];
@@ -142,61 +128,61 @@
 					stories: [
 						{
 							id: "ramon",
-							photo: "https://avatars1.githubusercontent.com/u/2271175?v=3&s=460",
+							photo: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/1.jpg",
 							name: "Ramon",
 							link: "https://ramon.codes",
 							lastUpdated: timestamp(),
 							items: [
-								buildItem("ramon-1", "photo", 3, "https://instagram.fcpq1-1.fna.fbcdn.net/vp/58d0a550c53088cdb35b35df264b08dd/5B71DD99/t51.2885-15/s750x750/sh0.08/e35/30087632_1840683112891500_5841478972252094464_n.jpg", "https://instagram.fcpq1-1.fna.fbcdn.net/vp/58d0a550c53088cdb35b35df264b08dd/5B71DD99/t51.2885-15/s750x750/sh0.08/e35/30087632_1840683112891500_5841478972252094464_n.jpg", '', false, false, timestamp()),
-								buildItem("ramon-2", "video", 0, "https://instagram.fcpq1-1.fna.fbcdn.net/vp/9eeb88fc715827f48548e13c29bbf5f2/5ADB46A4/t50.2886-16/30746685_2117671735183416_1093170958966980608_n.mp4", "https://instagram.fcpq1-1.fna.fbcdn.net/vp/84bf84eed18f43cbd25314c4fc785c65/5ADB83C2/t51.2885-15/s1080x1080/e15/fr/30602505_193116778164680_1241426731739381760_n.jpg", '', false,  false, timestamp()),
-								buildItem("ramon-3", "photo", 3, "https://ramon.codes/ICON.png", "https://ramon.codes/ICON.png", 'https://ramon.codes', 'Visit my Portfolio', false, timestamp())
+								Zuck.buildItem("ramon-1", "photo", 3, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/1.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/1.jpg", '', false, false, timestamp()),
+								Zuck.buildItem("ramon-2", "video", 0, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/2.mp4", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/2.jpg", '', false,  false, timestamp()),
+								Zuck.buildItem("ramon-3", "photo", 3, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/3.png", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/3.png", 'https://ramon.codes', 'Visit my Portfolio', false, timestamp())
 							]
 						},
 						{
 							id: "gorillaz",
-							photo: "https://lh3.googleusercontent.com/xYFz6B9FHMQq7fDOI_MA61gf0sNdzGBbdR7-mZ7i4rEVvE_N-kZEY_A4eP74Imcf8Sq3FYxAgd4eJA=w200",
+							photo: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/2.jpg",
 							name: "Gorillaz",
 							link: "",
 							lastUpdated: timestamp(),
 							items: [
-								buildItem("gorillaz-1", "video", 0, "https://instagram.frao1-1.fna.fbcdn.net/t50.2886-16/17886251_1128605603951544_572796556789415936_n.mp4", "https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:small", '', false, false, timestamp()),
-								buildItem("gorillaz-2", "photo", 3, "https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:large","https://pbs.twimg.com/media/C8VgMQ8WAAE5i9M.jpg:small", '', false, false, timestamp()),
+								Zuck.buildItem("gorillaz-1", "video", 0, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/4.mp4", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/4.jpg", '', false, false, timestamp()),
+								Zuck.buildItem("gorillaz-2", "photo", 3, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/5.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/5.jpg", '', false, false, timestamp()),
 							]
 						},
 						{
 							id: "ladygaga",
-							photo: "https://lh3.googleusercontent.com/VkANYSL1HOzINPSnzBJRM879b302ShsRwLoKD7mLezgTLvlpHPm_dIVop7mkAQfepze6O5N8rw8l4yM=w200",
+							photo: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/3.jpg",
 							name: "Lady Gaga",
 							link: "",
 							lastUpdated: timestamp(),
 							items: [
-								buildItem("ladygaga-1", "photo", 5, "https://pbs.twimg.com/media/C8mtrEMXcAA9KKM.jpg:large", "https://pbs.twimg.com/media/C8mtrEMXcAA9KKM.jpg:small", '', false, false, timestamp()),
-								buildItem("ladygaga-2", "photo", 3, "https://pbs.twimg.com/media/C4t_bxcXAAE3Hwb.jpg:large", "https://pbs.twimg.com/media/C4t_bxcXAAE3Hwb.jpg:small", 'http://ladygaga.com', false, false, timestamp()),
+								Zuck.buildItem("ladygaga-1", "photo", 5, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/6.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/6.jpg", '', false, false, timestamp()),
+								Zuck.buildItem("ladygaga-2", "photo", 3, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/7.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/7.jpg", 'http://ladygaga.com', false, false, timestamp()),
 							]
 						},
 						{
 							id: "starboy",
-							photo: "https://lh3.googleusercontent.com/nMxfllzaAmaCCZJEMiKe2EARjyUNItQ-mdgAq6he-LWXwkIWbiiBIHyC3rGiqDu6fgyVK6NnjcgueA=w200",
+							photo: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/4.jpg",
 							name: "The Weeknd",
 							link: "",
 							lastUpdated: timestamp(),
 							items: [
-								buildItem("starboy-1", "photo", 5, "https://pbs.twimg.com/media/C6f-dTqVQAAiy1K.jpg:large", "https://pbs.twimg.com/media/C6f-dTqVQAAiy1K.jpg:small", '', false, false, timestamp())
+								Zuck.buildItem("starboy-1", "photo", 5, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/8.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/8.jpg", '', false, false, timestamp())
 							]
 						},
 						{
-							id: "qotsa",
-							photo: "https://lh3.googleusercontent.com/nE4grkY8s88P_1mFFA06mGCNshhqtIz4C4y2dV7AZbm0360zopRKDMCYtUHR0uQR2DAfYMRZdA=s180-p-e100-rwu-v1",
-							name: "QOTSA",
+							id: "riversquomo",
+							photo: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/5.jpg",
+							name: "Rivers Cuomo",
 							link: "",
 							lastUpdated: timestamp(),
 							items: [
-								buildItem("qotsa-1", "photo", 10, "https://pbs.twimg.com/media/C8wTxgUVoAALPGA.jpg:large", "https://pbs.twimg.com/media/C8wTxgUVoAALPGA.jpg:small", '', false, false, timestamp())
+								Zuck.buildItem("riverscuomo", "photo", 10, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/9.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/9.jpg", '', false, false, timestamp())
 							]
 						}
 					]
 				});
-                
+
                 var el = document.querySelectorAll('#skin option');
                 var total = el.length;
                 for (var i = 0; i < total; i++) {

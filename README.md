@@ -1,6 +1,6 @@
 # zuck.js
 
-[![Zuck.JS demo](https://raw.githubusercontent.com/ramon82/zuck.js/master/preview.gif)](https://on.ramon82.com/2ojlR5C)
+[![Zuck.JS demo](https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/preview.gif)](https://on.ramon82.com/2ojlR5C)
 
 ## Add stories EVERYWHERE
 MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of a copy of Facebook Messenger Day of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories. 
@@ -20,10 +20,12 @@ Live demo: https://on.ramon82.com/2ojlR5C
 * A simple API to manage your "Stories timeline"
 * Lightweight (5kb gzipped - 15kb minified)
 * 3D cube effect!
-* Item navigation based on where user touched
+* Item navigation based on user touch
 
 
 ## How to use
+You can download this git repository or install via ```npm install zuck.js```
+
 Initialize:
 
 ```js
@@ -177,37 +179,14 @@ var stories = new Zuck({{element id string or element reference}});
 
 
 ### Tips
-Use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
-
+- You can use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
+- If you use Ionic or some javascript that uses ```location.hash```, you should always disable the "backNative" option which can mess up your navigation.
 
 ## Limitations
 On mobile browsers, video can't play with audio without a user gesture. So the script tries to play audio only when the user clicks to see the next story. 
 When the story is playing automatically, the video is muted, but an alert is displayed so the user may click to turn the audio on.
 
 Stories links opens in a new window too. This behaviour occurs because most websites are blocked on iframe embedding. 
-
-
-## Forks
-Things already created with zuck.js:
-
-* [BuddyPress Stories](https://github.com/mustafauysal/bp-stories)
-
-Send a PR to list yours!
-
-
-## Next features
-If anyone is interested in contributing:
-
-* AI
-* More AI
-* Chat bots
-* ULTIMATE BIG COLLECTION OF STICKERS (make sure to update the changelog with every new sticker pack)
-* Anyone missing Snapchat theme?
-* Something so sick that Zuck would copy after - INCEPTION!
-* Anything that would increase the lib weight to bet Ember.js or blow up user storage
-* Hm, did I say already MORE AI?
-
-Sorry I got inspired - It makes me so happy to see people laughing at this, thank you! :)
 
 
 ## License
