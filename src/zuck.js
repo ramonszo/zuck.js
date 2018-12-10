@@ -749,6 +749,7 @@ export const ZuckJS = (() => {
           }
 
           if (storyViewer) {
+            playVideoItem(storyViewer.querySelectorAll('.active'), false);
             storyViewer.classList.remove("longPress");
             storyViewer.classList.remove("paused");
           }
@@ -1061,7 +1062,6 @@ export const ZuckJS = (() => {
         video.addEventListener("loadedmetadata", setDuration);
         zuck.internalData["currentVideoElement"] = video;
 
-        video.currentTime = 0;
         video.play();
 
         if (unmute.target) {
