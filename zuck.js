@@ -242,6 +242,9 @@
           list: false,
           localStorage: true,
           callbacks: {
+            render: function render(item, mediaHtml) {
+              return mediaHtml;
+            },
             onOpen: function onOpen(storyId, callback) {
               callback();
             },
@@ -475,11 +478,12 @@
                 item["seen"] = true;
               }
 
+              var itemId = get(item, "id");
               var length = get(item, "length");
               var linkText = get(item, "linkText");
               var seenClass = get(item, "seen") === true ? "seen" : "";
               var commonAttrs =
-                'data-index="' + i + '" data-item-id="' + get(item, "id") + '"';
+                'data-index="' + i + '" data-item-id="' + itemId + '"';
 
               if (currentItem === i) {
                 currentItemTime = timeAgo(get(item, "time"));
@@ -495,6 +499,32 @@
                 '"><b style="animation-duration:' +
                 (length === "" ? "3" : length) +
                 's"></b></span>';
+
+              var mediaHtml = (get(item, "type") === "video"
+                ? '<video class="media" muted webkit-playsinline playsinline preload="auto" src="' +
+                get(item, "src") +
+                '" ' +
+                get(item, "type") +
+                '></video><b class="tip muted">' +
+                option("language", "unmute") +
+                "</b>"
+                : '<img class="media" src="' +
+                get(item, "src") +
+                '" ' +
+                get(item, "type") +
+                ">") +
+                (get(item, "link")
+                  ? '<a class="tip link" href="' +
+                  get(item, "link") +
+                  '" rel="noopener" target="_blank">' +
+                  (linkText == "" || !linkText
+                    ? option("language", "visitLink")
+                    : linkText) +
+                  "</a>"
+                  : "");
+
+              var renderCallback = option("callbacks", "render");
+
               htmlItems +=
                 '<div data-time="' +
                 get(item, "time") +
@@ -506,29 +536,7 @@
                 seenClass +
                 " " +
                 (currentItem === i ? "active" : "") +
-                '">' +
-                (get(item, "type") === "video"
-                  ? '<video class="media" muted webkit-playsinline playsinline preload="auto" src="' +
-                    get(item, "src") +
-                    '" ' +
-                    get(item, "type") +
-                    '></video><b class="tip muted">' +
-                    option("language", "unmute") +
-                    "</b>"
-                  : '<img class="media" src="' +
-                    get(item, "src") +
-                    '" ' +
-                    get(item, "type") +
-                    ">") +
-                (get(item, "link")
-                  ? '<a class="tip link" href="' +
-                    get(item, "link") +
-                    '" rel="noopener" target="_blank">' +
-                    (linkText == "" || !linkText
-                      ? option("language", "visitLink")
-                      : linkText) +
-                    "</a>"
-                  : "") +
+                '">' + renderCallback(item, mediaHtml) +
                 "</div>";
             });
             slides.innerHTML = htmlItems;
@@ -967,6 +975,7 @@
             var img = a.firstElementChild;
 
             items.push({
+              id: a.getAttribute("data-item-id"),
               src: a.getAttribute("href"),
               length: a.getAttribute("data-length"),
               type: a.getAttribute("data-type"),
@@ -1229,6 +1238,8 @@
             get(data, "src") +
             '" data-link="' +
             get(data, "link") +
+            '" data-item-id="' +
+            get(data, "id") +
             '" data-linkText="' +
             get(data, "linkText") +
             '" data-time="' +
@@ -1353,6 +1364,7 @@
           each(option("stories"), function(i, item) {
             zuck.add(item, true);
           });
+
 
           updateStoryseenPosition();
 
