@@ -95,19 +95,20 @@
     
           return 0;
         };
+
+        function exitFS() {
+          if (document.exitFullScreen) return document.exitFullScreen();
+          else if (document.webkitExitFullscreen) return document.webkitExitFullscreen();
+          else if (document.msExitFullscreen) return document.msExitFullscreen();
+          else if (document.mozCancelFullScreen) return document.mozCancelFullScreen();
+        }
     
         var fullScreen = function fullScreen(elem, cancel) {
           var func = "RequestFullScreen";
           var elFunc = "requestFullScreen"; //crappy vendor prefixes.
     
           if (cancel) {
-            if (document.exitFullscreen) {
-              document.exitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-              document.mozCancelFullScreen();
-            } else if (document.webkitExitFullscreen) {
-              document.webkitExitFullscreen();
-            }
+            exitFS();
           } else {
             try {
               if (elem[elFunc]) {
