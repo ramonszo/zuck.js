@@ -207,6 +207,8 @@
         cubeEffect: false,
         list: false,
         localStorage: true,
+        touchMoveEnabled: true,
+        moveToNextStoryAutomatically: true,
         callbacks: {
           onRender: function onRender(item, mediaHtml) {
             return mediaHtml;
@@ -344,6 +346,10 @@
           } else {
             transform = findPos(slideItems[target]);
             transform = transform[0] * -1;
+          }
+
+          if (false === option('moveToNextStoryAutomatically')) {
+            return;
           }
 
           translate(modalSlider, transform, transitionTime, null);
@@ -561,6 +567,10 @@
           };
 
           var touchMove = function touchMove(event) {
+            if(false === option('touchMoveEnabled')) {
+              return;
+            }
+
             var touches = event.touches ? event.touches[0] : event;
             var pageX = touches.pageX;
             var pageY = touches.pageY;
