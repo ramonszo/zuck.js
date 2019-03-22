@@ -208,7 +208,7 @@
         list: false,
         localStorage: true,
         callbacks: {
-          onRender: function onRender(item, mediaHtml) {
+          onRender: function onRender(storyId, item, mediaHtml) {
             return mediaHtml;
           },
           onOpen: function onOpen(storyId, callback) {
@@ -432,7 +432,7 @@
             }
 
             pointerItems += "\n                            <span ".concat(commonAttrs, " class=\"").concat(currentItem === i ? 'active' : '', " ").concat(seenClass, "\">\n                                <b style=\"animation-duration:").concat(length === '' ? '3' : length, "s\"></b>\n                            </span>");
-            htmlItems += "\n            <div data-time=\"".concat(get(item, 'time'), "\" data-type=\"").concat(get(item, 'type'), "\"").concat(commonAttrs, " class=\"item ").concat(seenClass, " ").concat(currentItem === i ? 'active' : '', "\">\n              ").concat(renderCallback(item, "\n                ".concat(get(item, 'type') === 'video' ? "\n                      <video class=\"media\" muted webkit-playsinline playsinline preload=\"auto\" src=\"".concat(get(item, 'src'), "\" ").concat(get(item, 'type'), "></video>\n                      <b class=\"tip muted\">").concat(option('language', 'unmute'), "</b>\n                ") : "\n                      <img class=\"media\" src=\"".concat(get(item, 'src'), "\" ").concat(get(item, 'type'), ">\n                "), "\n\n                ").concat(get(item, 'link') ? "\n                      <a class=\"tip link\" href=\"".concat(get(item, 'link'), "\" rel=\"noopener\" target=\"_blank\">\n                        ").concat(!linkText || linkText === '' ? option('language', 'visitLink') : linkText, "\n                      </a>\n                ") : "\n                ", "\n              ")), "\n            </div>");
+            htmlItems += "\n            <div data-time=\"".concat(get(item, 'time'), "\" data-type=\"").concat(get(item, 'type'), "\"").concat(commonAttrs, " class=\"item ").concat(seenClass, " ").concat(currentItem === i ? 'active' : '', "\">\n              ").concat(renderCallback(storyId, item, "\n                ".concat(get(item, 'type') === 'video' ? "\n                      <video class=\"media\" muted webkit-playsinline playsinline preload=\"auto\" src=\"".concat(get(item, 'src'), "\" ").concat(get(item, 'type'), "></video>\n                      <b class=\"tip muted\">").concat(option('language', 'unmute'), "</b>\n                ") : "\n                      <img class=\"media\" src=\"".concat(get(item, 'src'), "\" ").concat(get(item, 'type'), ">\n                "), "\n\n                ").concat(get(item, 'link') ? "\n                      <a class=\"tip link\" href=\"".concat(get(item, 'link'), "\" rel=\"noopener\" target=\"_blank\">\n                        ").concat(!linkText || linkText === '' ? option('language', 'visitLink') : linkText, "\n                      </a>\n                ") : "\n                ", "\n              ")), "\n            </div>");
           });
           slides.innerHTML = htmlItems;
           var video = slides.querySelector('video');
