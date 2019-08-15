@@ -500,7 +500,7 @@
                       <video class="media" muted webkit-playsinline playsinline preload="auto" src="${get(item, 'src')}" ${get(item, 'type')}></video>
                       <b class="tip muted">${option('language', 'unmute')}</b>
                 ` : `
-                      <img class="media" src="${get(item, 'src')}" ${get(item, 'type')}>
+                      <img loading="auto" class="media" src="${get(item, 'src')}" ${get(item, 'type')}>
                 `}
 
                 ${get(item, 'link') ? `
@@ -552,12 +552,34 @@
           }
 
           let storyViewer = d.createElement('div');
-          storyViewer.className =
-              `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
+          storyViewer.className = `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
           storyViewer.setAttribute('data-story-id', storyId);
 
-          const html =
-              `<div class="head"><div class="left">${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}<u class="img" style="background-image:url(${get(storyData, 'photo')});"></u><div><strong>${get(storyData, 'name')}</strong><span class="time">${currentItemTime}</span></div></div><div class="right"><span class="time">${currentItemTime}</span><span class="loading"></span><a class="close" tabIndex="2">&times;</a></div></div><div class="slides-pointers"><div>${pointerItems}</div></div>`;
+          const html = `
+            <div class="head">
+              <div class="left">
+                ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
+
+                <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}">
+
+                <div>
+                  <strong>${get(storyData, 'name')}</strong>
+                  <span class="time">${currentItemTime}</span>
+                </div>
+              </div>
+              
+              <div class="right">
+                <span class="time">${currentItemTime}</span>
+                <span class="loading"></span>
+                <a class="close" tabIndex="2">&times;</a>
+              </div>
+            </div>
+
+            <div class="slides-pointers">
+              <div>${pointerItems}</div>
+            </div>
+          `;
+
           storyViewer.innerHTML = html;
 
           each(storyViewer.querySelectorAll('.close, .back'), (i, el) => {
@@ -818,7 +840,7 @@
 
               if (option('openEffect')) {
                 const storyEl = query(
-                  `#${id} [data-id="${storyId}"] .img`
+                  `#${id} [data-id="${storyId}"] .itemPreview`
                 );
                 const pos = findPos(storyEl);
 
@@ -1132,10 +1154,24 @@
           preview = items[0]['preview'] || '';
         }
 
-        html =
-            `<a href="${get(data, 'link')}"><span class="img"><u style="background-image:url(${option('avatars') || !preview || preview === ''
-              ? get(data, 'photo')
-              : preview})"></u></span><span class="info"><strong>${get(data, 'name')}</strong><span class="time">${timeAgo(get(data, 'lastUpdated'))}</span></span></a><ul class="items"></ul>`;
+        html = `
+                <a class="itemLink" href="${get(data, 'link')}">
+                  <span class="itemPreview">
+                    <img lazy="eager" src="${
+                      option('avatars') || !preview || preview === ''
+                      ? get(data, 'photo')
+                      : preview
+                    }" />
+                  </span>
+                  <span class="info">
+                    <strong>${get(data, 'name')}</strong>
+                    <span class="time">${timeAgo(get(data, 'lastUpdated'))}</span>
+                  </span>
+                </a>
+                
+                <ul class="items"></ul>
+        `;
+
         story.innerHTML = html;
         parseStory(story);
 
@@ -1169,8 +1205,10 @@
         li.className = get(data, 'seen') ? 'seen' : '';
         li.setAttribute('data-id', get(data, 'id'));
 
-        li.innerHTML =
-            `<a href="${get(data, 'src')}" data-link="${get(data, 'link')}" data-linkText="${get(data, 'linkText')}" data-time="${get(data, 'time')}" data-type="${get(data, 'type')}" data-length="${get(data, 'length')}"><img src="${get(data, 'preview')}"></a>`;
+        // wow, too much jsx
+        li.innerHTML = `<a href="${get(data, 'src')}" data-link="${get(data, 'link')}" data-linkText="${get(data, 'linkText')}" data-time="${get(data, 'time')}" data-type="${get(data, 'type')}" data-length="${get(data, 'length')}">
+                          <img loading="auto" src="${get(data, 'preview')}">
+                        </a>`;
 
         const el = story.querySelectorAll('.items')[0];
         if (append) {
