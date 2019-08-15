@@ -4,7 +4,7 @@
     "description": "A javascript library that lets you add stories EVERYWHERE.",
     "homepage": "https://ramon.codes/projects/zuck.js",
     "author": "Ramon Souza <me@ramon.codes> (https://ramon.codes)",
-    "main": "./zuck.js",
+    "main": "./src/zuck.js",
     "keywords": [
         "stories",
         "story",

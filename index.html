@@ -3,134 +3,38 @@
     <title>Zuck.js</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
 
-    <!-- styles just for demo -->
+    <!-- Code only for demo -->
     <link rel="icon" href="ICON.png">
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
     <style>
-      body {
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-        padding: 0;
-        margin: 0;
-        color: #333
-      }
+      body{font-family:'Roboto', sans-serif;font-size:14px;padding:0;margin:0;color:#333 }
 
-      #stories {
-        padding: 12px;
-      }
+      #stories{padding:12px;max-width:500px;margin:0 auto;}
 
-      h1 {
-        text-align: center;
-        font-family: monospace;
-        padding: 0 12px;
-        border-bottom: 1px solid #ddd;
-        font-size: 24px;
-        height: 56px;
-        line-height: 56px;
-        margin-bottom: 0;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-      }
+      h1{text-align:center;font-family:monospace;padding:0 12px;border-bottom:1px solid #ddd;font-size:24px;height:56px;line-height:56px;margin-bottom:0;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;}
+      h1.Snapgram{background:#fff;color:#333;}
+      h1.FaceSnap{background:#3B5998;color:#fff;}
+      h1.VemDeZAP{background:#085E53;color:#fff;}
+      h1.Snapssenger{background:#0084FF;color:#fff;}
 
-      h1.Snapgram {
-        background: #fff;
-        color: #333;
-      }
+      .disclaimer{display:block;text-decoration:none !important;color:#333;line-height:1.5em;background:#ffffd2;border-radius:3px;margin:12px 12px 0;padding:12px 12px 12px 74px;font-size:13px;max-width:500px;overflow:hidden;min-height:50px;}
+      .disclaimer img{float:left;margin-right:12px;width:50px;position:absolute;margin-left:-62px;}
+      .disclaimer a{color:inherit !important;border:0;}
+      .disclaimer p{margin:0;}
+      .disclaimer p+p{margin-top:1.25em }
 
-      h1.FaceSnap {
-        background: #3B5998;
-        color: #fff;
-      }
+      .skin{text-transform:uppercase;white-space:nowrap;overflow:hidden;font-weight:bold;position:absolute;z-index:10;left:0;right:0;bottom:0;background:#fff;font-size:16px;padding:12px;color:#fff;background:#333;}
+      .skin select{background:#fff;font-size:inherit;text-transform:none;max-width:30%;}
 
-      h1.VemDeZAP {
-        background: #085E53;
-        color: #fff;
-      }
-
-      h1.Snapssenger {
-        background: #0084FF;
-        color: #fff;
-      }
-
-      .disclaimer {
-        display: block;
-        text-decoration: none !important;
-        color: #333;
-        line-height: 1.5em;
-        background: #ffffd2;
-        border-radius: 3px;
-        margin: 12px 12px 0;
-        padding: 12px 12px 12px 74px;
-        font-size: 13px;
-        max-width: 500px;
-        overflow: hidden;
-        min-height: 50px;
-      }
-
-      .disclaimer img {
-        float: left;
-        margin-right: 12px;
-        width: 50px;
-        position: absolute;
-        margin-left: -62px;
-      }
-
-      .disclaimer a {
-        color: inherit !important;
-        border: 0;
-      }
-
-      .disclaimer p {
-        margin: 0;
-      }
-
-      .disclaimer p+p {
-        margin-top: 1.25em
-      }
-
-      .skin {
-        text-transform: uppercase;
-        white-space: nowrap;
-        overflow: hidden;
-        font-weight: bold;
-        position: absolute;
-        z-index: 10;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #fff;
-        font-size: 16px;
-        padding: 12px;
-        color: #fff;
-        background: #333;
-      }
-
-      .skin select {
-        background: #fff;
-        font-size: inherit;
-        text-transform: none;
-        max-width: 30%;
-      }
-
-      #stories {
-        max-width: 500px;
-        margin: 0 auto;
-      }
-
-      @media (min-width: 524px) {
-        .disclaimer {
-          margin: 12px auto;
-        }
-      }
+      @media (min-width:524px){.disclaimer{margin:12px auto;}}
     </style>
 
     <!-- script styles -->
-    <link rel="stylesheet" href="zuck.css">
-    <link rel="stylesheet" href="skins/snapgram.css">
-    <link rel="stylesheet" href="skins/vemdezap.css">
-    <link rel="stylesheet" href="skins/facesnap.css">
-    <link rel="stylesheet" href="skins/snapssenger.css">
+    <link rel="stylesheet" href="dist/zuck.css">
+    <link rel="stylesheet" href="dist/skins/snapgram.css">
+    <link rel="stylesheet" href="dist/skins/vemdezap.css">
+    <link rel="stylesheet" href="dist/skins/facesnap.css">
+    <link rel="stylesheet" href="dist/skins/snapssenger.css">
   </head>
 
   <body style="display:none">
@@ -156,7 +60,7 @@
       </select>
     </div>
 
-    <script src="zuck.js"></script>
+    <script src="dist/zuck.js"></script>
     <script>
       var initDemo = function () {
         var header = document.getElementById("header");
