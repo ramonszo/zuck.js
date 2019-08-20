@@ -289,7 +289,7 @@
                     </a>`;
           },
 
-          viewerItemHead (storyData) {
+          viewerItemHead (storyData, currentStoryItem) {
             return `<div class="head">
                       <div class="left">
                         ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
@@ -300,12 +300,12 @@
 
                         <div class="info">
                           <strong class="name">${get(storyData, 'name')}</strong>
-                          <span class="time">${get(storyData, 'timeString')}</span>
+                          <span class="time">${get(storyData, 'timeAgo')}</span>
                         </div>
                       </div>
                       
                       <div class="right">
-                        <span class="time">${get(storyData, 'timeAgo')}</span>
+                        <span class="time">${get(currentStoryItem, 'timeAgo')}</span>
                         <span class="loading"></span>
                         <a class="close" tabIndex="2">&times;</a>
                       </div>
@@ -554,17 +554,14 @@
             item.timeAgo = timeAgo(get(item, 'time'));
 
             if (currentItem > i) {
+              storyData['items'][i]['timeAgo'] = item.timeAgo;
               storyData['items'][i]['seen'] = true;
               item['seen'] = true;
             }
 
-            const seenClass = get(item, 'seen') === true ? 'seen' : '';
-
             if (currentItem === i) {
               currentItemTime = item.timeAgo;
             }
-
-            storyData.timeAgo = item.timeAgo;
 
             pointerItems += option('template', 'viewerItemPointer')(i, currentItem, item);
             htmlItems += option('template', 'viewerItemBody')(i, currentItem, item); 
@@ -612,7 +609,7 @@
           storyViewer.className = `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
           storyViewer.setAttribute('data-story-id', storyId);
 
-          storyViewer.innerHTML = option('template', 'viewerItemHead')(storyData);
+          storyViewer.innerHTML = option('template', 'viewerItemHead')(storyData, currentItem);
           storyViewer.querySelector('.slides-pointers .wrap').innerHTML = pointerItems;
 
           each(storyViewer.querySelectorAll('.close, .back'), (i, el) => {
@@ -1073,7 +1070,7 @@
 
           video.play();
 
-          if (unmute.target) {
+          if (unmute && unmute.target) {
             unmuteVideoItem(video, storyViewer);
           }
         } else {
