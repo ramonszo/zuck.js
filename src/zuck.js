@@ -295,7 +295,9 @@
                       <div class="left">
                         ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
 
-                        <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}">
+                        <span class="itemPreview">
+                          <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}">
+                        </span>
 
                         <div class="info">
                           <strong class="name">${get(storyData, 'name')}</strong>
