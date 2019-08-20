@@ -30,28 +30,32 @@ var getCurrentSkin = function() {
       avatars: true,
       list: false,
       autoFullScreen: false,
-      cubeEffect: true
+      cubeEffect: true,
+      paginationArrows: false
     },
 
     VemDeZAP: {
       avatars: false,
       list: true,
       autoFullScreen: false,
-      cubeEffect: false
+      cubeEffect: false,
+      paginationArrows: true
     },
 
     FaceSnap: {
       avatars: true,
       list: false,
       autoFullScreen: true,
-      cubeEffect: false
+      cubeEffect: false,
+      paginationArrows: true
     },
 
     Snapssenger: {
       avatars: false,
       list: false,
       autoFullScreen: false,
-      cubeEffect: false
+      cubeEffect: false,
+      paginationArrows: false
     }
   };
 
@@ -61,7 +65,7 @@ var getCurrentSkin = function() {
     var what = skin == el[i].value ? true : false;
 
     if (what) {
-      el[i].setAttribute('selected', what);
+      el[i].setAttribute('selected', 'selected');
 
       header.innerHTML = skin;
       header.className = skin;

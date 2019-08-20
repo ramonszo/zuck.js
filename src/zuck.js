@@ -224,6 +224,24 @@
         return `${day}/${month + 1}/${year}`;
       };
 
+      const option = function (name, prop) {        
+        const type = function (what) {
+          return typeof what !== 'undefined';
+        };
+
+        if (prop) {
+          if (type(options[name])) {
+            return type(options[name][prop])
+              ? options[name][prop]
+              : optionsDefault[name][prop];
+          } else {
+            return optionsDefault[name][prop];
+          }
+        } else {
+          return type(options[name]) ? options[name] : optionsDefault[name];
+        }
+      };
+
       /* options */
       const id = timeline.id;
       const optionsDefault = {
@@ -232,6 +250,7 @@
         stories: [],
         backButton: true,
         backNative: false,
+        paginationArrows: false,
         previousTap: true,
         autoFullScreen: false,
         openEffect: true,
@@ -289,30 +308,41 @@
                     </a>`;
           },
 
-          viewerItemHead (storyData, currentStoryItem) {
-            return `<div class="head">
-                      <div class="left">
-                        ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
+          viewerItem (storyData, currentStoryItem) {
+            return `<div class="story-viewer">
+                      <div class="head">
+                        <div class="left">
+                          ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
 
-                        <span class="itemPreview">
-                          <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}">
-                        </span>
+                          <span class="itemPreview">
+                            <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}">
+                          </span>
 
-                        <div class="info">
-                          <strong class="name">${get(storyData, 'name')}</strong>
-                          <span class="time">${get(storyData, 'timeAgo')}</span>
+                          <div class="info">
+                            <strong class="name">${get(storyData, 'name')}</strong>
+                            <span class="time">${get(storyData, 'timeAgo')}</span>
+                          </div>
+                        </div>
+                        
+                        <div class="right">
+                          <span class="time">${get(currentStoryItem, 'timeAgo')}</span>
+                          <span class="loading"></span>
+                          <a class="close" tabIndex="2">&times;</a>
                         </div>
                       </div>
-                      
-                      <div class="right">
-                        <span class="time">${get(currentStoryItem, 'timeAgo')}</span>
-                        <span class="loading"></span>
-                        <a class="close" tabIndex="2">&times;</a>
-                      </div>
-                    </div>
 
-                    <div class="slides-pointers">
-                      <div class="wrap"></div>
+                      <div class="slides-pointers">
+                        <div class="wrap"></div>
+                      </div>
+
+                      ${
+                        option('paginationArrows')
+                        ? `<div class="slides-pagination">
+                            <span class="previous">&lsaquo;</span>
+                            <span class="next">&rsaquo;</span>
+                          </div>` 
+                        : ``
+                      }
                     </div>`;
           },
 
@@ -361,24 +391,6 @@
             tomorrow: 'tomorrow',
             days: 'days ago'
           }
-        }
-      };
-
-      let option = function (name, prop) {
-        const type = function (what) {
-          return typeof what !== 'undefined';
-        };
-
-        if (prop) {
-          if (type(options[name])) {
-            return type(options[name][prop])
-              ? options[name][prop]
-              : optionsDefault[name][prop];
-          } else {
-            return optionsDefault[name][prop];
-          }
-        } else {
-          return type(options[name]) ? options[name] : optionsDefault[name];
         }
       };
 
@@ -605,11 +617,13 @@
             };
           }
 
-          let storyViewer = document.createElement('div');
-          storyViewer.className = `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
-          storyViewer.setAttribute('data-story-id', storyId);
+          let storyViewerWrap = document.createElement('div');
+          storyViewerWrap.innerHTML = option('template', 'viewerItem')(storyData, currentItem);
 
-          storyViewer.innerHTML = option('template', 'viewerItemHead')(storyData, currentItem);
+          let storyViewer = storyViewerWrap.firstElementChild;
+          storyViewer.className = `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
+          
+          storyViewer.setAttribute('data-story-id', storyId);
           storyViewer.querySelector('.slides-pointers .wrap').innerHTML = pointerItems;
 
           each(storyViewer.querySelectorAll('.close, .back'), (i, el) => {

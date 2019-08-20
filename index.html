@@ -36,7 +36,7 @@
       <select id="skin" onchange="changeSkin(this.options[this.selectedIndex].value);">
         <option value="Snapgram">Snapgram (without fullscreen)</option>
         <option value="FaceSnap">FaceSnap (with fullscreen)</option>
-        <option value="VemDeZAP">VemDeZAP (timeline)</option>
+        <option value="VemDeZAP">VemDeZAP (timeline + arrows)</option>
         <option value="Snapssenger">Snapssenger (with previews)</option>
       </select>
     </div>
@@ -52,6 +52,7 @@
         skin: currentSkin['name'],
         autoFullScreen: currentSkin['params']['autoFullScreen'],
         avatars: currentSkin['params']['avatars'],
+        paginationArrows: currentSkin['params']['paginationArrows'],
         list: currentSkin['params']['list'],
         cubeEffect: currentSkin['params']['cubeEffect'],
         localStorage: true,

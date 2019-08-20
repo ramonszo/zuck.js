@@ -150,6 +150,27 @@
   display: none;
 }
 
+#zuck-modal-content .story-viewer .slides-pagination span {
+  position: absolute;
+  top: 50vh;
+  font-size: 48px;
+  color: #fff;
+  line-height: 48px;
+  width: 48px;
+  margin: 6px;
+  transform: translateY(-50%);
+  z-index: 1;
+  text-align: center;
+}
+
+#zuck-modal-content .story-viewer .slides-pagination .previous {
+  left: 0;
+}
+
+#zuck-modal-content .story-viewer .slides-pagination .next {
+  right: 0;
+}
+
 #zuck-modal-content .story-viewer .slides-pointers {
   display: table;
   table-layout: fixed;
