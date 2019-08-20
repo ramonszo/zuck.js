@@ -9,7 +9,6 @@
     const w = global;
 
     const ZuckJS = function (timeline, options) {
-      const d = document;
       const zuck = this;
 
       if (typeof timeline === 'string') {
@@ -1007,7 +1006,7 @@
         };
       };
 
-      let getStoryMorningGlory = function (what) {
+      const getStoryMorningGlory = function (what) {
         // my wife told me to stop singing Wonderwall. I SAID MAYBE.
         const currentStory = zuck.internalData['currentStory'];
         const whatElementYouMean = `${what}ElementSibling`;
@@ -1026,8 +1025,8 @@
         return false;
       };
 
-      let updateStorySeenPosition = function () {
-        each(d.querySelectorAll(`#${id} .story.seen`), (i, el) => {
+      const updateStorySeenPosition = function () {
+        each(document.querySelectorAll(`#${id} .story.seen`), (i, el) => {
           const newData = zuck.data[el.getAttribute('data-id')];
           const timeline = el.parentNode;
 
@@ -1036,7 +1035,7 @@
         });
       };
 
-      let playVideoItem = function (elements, unmute) {
+      const playVideoItem = function (elements, unmute) {
         const itemElement = elements[1];
         const itemPointer = elements[0];
         const storyViewer = itemPointer.parentNode.parentNode.parentNode;
@@ -1082,7 +1081,7 @@
         }
       };
 
-      let pauseVideoItem = function () {
+      const pauseVideoItem = function () {
         const video = zuck.internalData['currentVideoElement'];
         if (video) {
           try {
@@ -1091,7 +1090,7 @@
         }
       };
 
-      let unmuteVideoItem = function (video, storyViewer) {
+      const unmuteVideoItem = function (video, storyViewer) {
         video.muted = false;
         video.volume = 1.0;
         video.removeAttribute('muted');
@@ -1108,7 +1107,7 @@
       };
 
       /* data functions */
-      let saveLocalData = function (key, data) {
+      const saveLocalData = function (key, data) {
         try {
           if (option('localStorage')) {
             const keyName = `zuck-${id}-${key}`;
