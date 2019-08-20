@@ -9,15 +9,14 @@
     const w = global;
 
     const ZuckJS = function (timeline, options) {
-      const d = document;
       const zuck = this;
 
       if (typeof timeline === 'string') {
-        timeline = d.getElementById(timeline);
+        timeline = document.getElementById(timeline);
       }
 
       const query = function (qs) {
-        return d.querySelectorAll(qs)[0];
+        return document.querySelectorAll(qs)[0];
       };
 
       const get = function (array, what) {
@@ -225,15 +224,33 @@
         return `${day}/${month + 1}/${year}`;
       };
 
-        /* options */
-      const id = timeline.id;
+      const option = function (name, prop) {        
+        const type = function (what) {
+          return typeof what !== 'undefined';
+        };
 
+        if (prop) {
+          if (type(options[name])) {
+            return type(options[name][prop])
+              ? options[name][prop]
+              : optionsDefault[name][prop];
+          } else {
+            return optionsDefault[name][prop];
+          }
+        } else {
+          return type(options[name]) ? options[name] : optionsDefault[name];
+        }
+      };
+
+      /* options */
+      const id = timeline.id;
       const optionsDefault = {
         skin: 'snapgram',
         avatars: true,
         stories: [],
         backButton: true,
         backNative: false,
+        paginationArrows: false,
         previousTap: true,
         autoFullScreen: false,
         openEffect: true,
@@ -241,9 +258,6 @@
         list: false,
         localStorage: true,
         callbacks: {
-          onRender: function (item, mediaHtml) {
-            return mediaHtml;
-          },
           onOpen: function (storyId, callback) {
             callback();
           },
@@ -257,12 +271,108 @@
           onNextItem: function (storyId, nextStoryId, callback) {
             callback();
           },
-          onNavigateItem: function (
-            storyId,
-            nextStoryId,
-            callback
-          ) {
+          onNavigateItem: function (storyId, nextStoryId, callback) {
             callback();
+          }
+        },
+        template: {
+          timelineItem (itemData) {
+            return `
+              <div class="timelineItem story">
+                <a class="itemLink" href="${get(itemData, 'link')}">
+                  <span class="itemPreview">
+                    <img lazy="eager" src="${
+                      (option('avatars') || !get(itemData, 'currentPreview'))
+                      ? get(itemData, 'photo')
+                      : get(itemData, 'currentPreview')
+                    }" />
+                  </span>
+                  <span class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                    <strong class="name" itemprop="name">${get(itemData, 'name')}</strong>
+                    <span class="time">${get(itemData, 'lastUpdatedAgo')}</span>
+                  </span>
+                </a>
+                
+                <ul class="items"></ul>
+              </div>`;
+          },
+
+          timelineStoryItem (itemData) {
+            return `<a href="${get(itemData, 'src')}"
+                        data-link="${get(itemData, 'link')}"
+                        data-linkText="${get(itemData, 'linkText')}"
+                        data-time="${get(itemData, 'time')}"
+                        data-type="${get(itemData, 'type')}"
+                        data-length="${get(itemData, 'length')}">
+                      <img loading="auto" src="${get(itemData, 'preview')}">
+                    </a>`;
+          },
+
+          viewerItem (storyData, currentStoryItem) {
+            return `<div class="story-viewer">
+                      <div class="head">
+                        <div class="left">
+                          ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
+
+                          <span class="itemPreview">
+                            <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}">
+                          </span>
+
+                          <div class="info">
+                            <strong class="name">${get(storyData, 'name')}</strong>
+                            <span class="time">${get(storyData, 'timeAgo')}</span>
+                          </div>
+                        </div>
+                        
+                        <div class="right">
+                          <span class="time">${get(currentStoryItem, 'timeAgo')}</span>
+                          <span class="loading"></span>
+                          <a class="close" tabIndex="2">&times;</a>
+                        </div>
+                      </div>
+
+                      <div class="slides-pointers">
+                        <div class="wrap"></div>
+                      </div>
+
+                      ${
+                        option('paginationArrows')
+                        ? `<div class="slides-pagination">
+                            <span class="previous">&lsaquo;</span>
+                            <span class="next">&rsaquo;</span>
+                          </div>` 
+                        : ``
+                      }
+                    </div>`;
+          },
+
+          viewerItemPointer (index, currentIndex, item) {
+            return `<span 
+                      class="${currentIndex === index ? 'active' : ''} ${get(item, 'seen') === true ? 'seen' : ''}"
+                      data-index="${index}" data-item-id="${get(item, 'id')}">
+                        <b style="animation-duration:${get(item, 'length') === '' ? '3' : get(item, 'length')}s"></b>
+                    </span>`;
+          },
+
+          viewerItemBody (index, currentIndex, item) {
+            return `<div 
+                      class="item ${get(item, 'seen') === true ? 'seen' : ''} ${currentIndex === index ? 'active' : ''}"
+                      data-time="${get(item, 'time')}" data-type="${get(item, 'type')}" data-index="${index}" data-item-id="${get(item, 'id')}">
+                      ${
+                        get(item, 'type') === 'video' 
+                        ? `<video class="media" muted webkit-playsinline playsinline preload="auto" src="${get(item, 'src')}" ${get(item, 'type')}></video>
+                          <b class="tip muted">${option('language', 'unmute')}</b>` 
+                        : `<img loading="auto" class="media" src="${get(item, 'src')}" ${get(item, 'type')}>
+                      `}
+
+                      ${
+                        get(item, 'link') 
+                        ? `<a class="tip link" href="${get(item, 'link')}" rel="noopener" target="_blank">
+                              ${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}
+                            </a>` 
+                        : ``
+                      }
+                    </div>`;
           }
         },
         language: {
@@ -284,32 +394,14 @@
         }
       };
 
-      let option = function (name, prop) {
-        const type = function (what) {
-          return typeof what !== 'undefined';
-        };
-
-        if (prop) {
-          if (type(options[name])) {
-            return type(options[name][prop])
-              ? options[name][prop]
-              : optionsDefault[name][prop];
-          } else {
-            return optionsDefault[name][prop];
-          }
-        } else {
-          return type(options[name]) ? options[name] : optionsDefault[name];
-        }
-      };
-
-        /* modal */
-      const ZuckModal = function () {
+      /* modal */
+      const ZuckModal = () => {
         let modalZuckContainer = query('#zuck-modal');
 
         if (!modalZuckContainer && !w['Zuck'].hasModal) {
           w['Zuck'].hasModal = true;
 
-          modalZuckContainer = d.createElement('div');
+          modalZuckContainer = document.createElement('div');
           modalZuckContainer.id = 'zuck-modal';
 
           if (option('cubeEffect')) {
@@ -343,18 +435,19 @@
             }
           });
 
-          d.body.appendChild(modalZuckContainer);
+          document.body.appendChild(modalZuckContainer);
         }
 
-        let modalContent = query('#zuck-modal-content');
+        const modalContent = query('#zuck-modal-content');
+
         const moveStoryItem = function (direction) {
           const modalContainer = query('#zuck-modal');
 
           let target = '';
           let useless = '';
-          let transform = '0';
-          const modalSlider = query(`#zuck-modal-slider-${id}`);
+          let transform = 0;
 
+          const modalSlider = query(`#zuck-modal-slider-${id}`);
           const slideItems = {
             previous: query('#zuck-modal .story-viewer.previous'),
             next: query('#zuck-modal .story-viewer.next'),
@@ -384,8 +477,7 @@
               transform = modalContainer.slideWidth * -1;
             }
           } else {
-            transform = findPos(slideItems[target]);
-            transform = transform[0] * -1;
+            transform = findPos(slideItems[target])[0] * -1;
           }
 
           translate(modalSlider, transform, transitionTime, null);
@@ -447,18 +539,17 @@
           }, transitionTime + 50);
         };
 
-        let createStoryViewer = function (
-          storyData,
-          className,
-          forcePlay
-        ) {
+        const createStoryViewer = function (storyData, className, forcePlay) {
           const modalSlider = query(`#zuck-modal-slider-${id}`);
+          const storyItems = get(storyData, 'items');
+
+          storyData.timeAgo = storyItems && storyItems[0] ? timeAgo(get(storyItems[0], 'time')) : '';
 
           let htmlItems = '';
           let pointerItems = '';
 
           const storyId = get(storyData, 'id');
-          const slides = d.createElement('div');
+          const slides = document.createElement('div');
           const currentItem = get(storyData, 'currentItem') || 0;
           const exists = query(
             `#zuck-modal .story-viewer[data-story-id="${storyId}"]`
@@ -471,46 +562,21 @@
           }
 
           slides.className = 'slides';
-          each(get(storyData, 'items'), (i, item) => {
+          each(storyItems, (i, item) => {
+            item.timeAgo = timeAgo(get(item, 'time'));
+
             if (currentItem > i) {
+              storyData['items'][i]['timeAgo'] = item.timeAgo;
               storyData['items'][i]['seen'] = true;
               item['seen'] = true;
             }
 
-            const itemId = get(item, 'id');
-            const length = get(item, 'length');
-            const linkText = get(item, 'linkText');
-            const seenClass = get(item, 'seen') === true ? 'seen' : '';
-            const commonAttrs = `data-index="${i}" data-item-id="${itemId}"`;
-            const renderCallback = option('callbacks', 'onRender');
-
             if (currentItem === i) {
-              currentItemTime = timeAgo(get(item, 'time'));
+              currentItemTime = item.timeAgo;
             }
 
-            pointerItems += `
-                            <span ${commonAttrs} class="${currentItem === i ? 'active' : ''} ${seenClass}">
-                                <b style="animation-duration:${length === '' ? '3' : length}s"></b>
-                            </span>`;
-
-            htmlItems += `
-            <div data-time="${get(item, 'time')}" data-type="${get(item, 'type')}"${commonAttrs} class="item ${seenClass} ${currentItem === i ? 'active' : ''}">
-              ${renderCallback(item, `
-                ${get(item, 'type') === 'video' ? `
-                      <video class="media" muted webkit-playsinline playsinline preload="auto" src="${get(item, 'src')}" ${get(item, 'type')}></video>
-                      <b class="tip muted">${option('language', 'unmute')}</b>
-                ` : `
-                      <img class="media" src="${get(item, 'src')}" ${get(item, 'type')}>
-                `}
-
-                ${get(item, 'link') ? `
-                      <a class="tip link" href="${get(item, 'link')}" rel="noopener" target="_blank">
-                        ${!linkText || linkText === '' ? option('language', 'visitLink') : linkText}
-                      </a>
-                ` : `
-                `}
-              `)}
-            </div>`;
+            pointerItems += option('template', 'viewerItemPointer')(i, currentItem, item);
+            htmlItems += option('template', 'viewerItemBody')(i, currentItem, item); 
           });
 
           slides.innerHTML = htmlItems;
@@ -540,7 +606,7 @@
               storyViewer.classList.remove('loading');
             };
 
-            video.onready = video.onload = video.onplaying = video.oncanplay = () => {
+            video.onload = video.onplaying = video.oncanplay = () => {
               addMuted(video);
 
               storyViewer.classList.remove('loading');
@@ -551,14 +617,14 @@
             };
           }
 
-          let storyViewer = d.createElement('div');
-          storyViewer.className =
-              `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
-          storyViewer.setAttribute('data-story-id', storyId);
+          let storyViewerWrap = document.createElement('div');
+          storyViewerWrap.innerHTML = option('template', 'viewerItem')(storyData, currentItem);
 
-          const html =
-              `<div class="head"><div class="left">${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}<u class="img" style="background-image:url(${get(storyData, 'photo')});"></u><div><strong>${get(storyData, 'name')}</strong><span class="time">${currentItemTime}</span></div></div><div class="right"><span class="time">${currentItemTime}</span><span class="loading"></span><a class="close" tabIndex="2">&times;</a></div></div><div class="slides-pointers"><div>${pointerItems}</div></div>`;
-          storyViewer.innerHTML = html;
+          let storyViewer = storyViewerWrap.firstElementChild;
+          storyViewer.className = `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
+          
+          storyViewer.setAttribute('data-story-id', storyId);
+          storyViewer.querySelector('.slides-pointers .wrap').innerHTML = pointerItems;
 
           each(storyViewer.querySelectorAll('.close, .back'), (i, el) => {
             el.onclick = e => {
@@ -570,22 +636,14 @@
           storyViewer.appendChild(slides);
 
           if (className === 'viewing') {
-            playVideoItem(
-              storyViewer.querySelectorAll(
-                `[data-index="${currentItem}"].active`
-              ),
-              false
-            );
+            playVideoItem(storyViewer.querySelectorAll(`[data-index="${currentItem}"].active`), false);
           }
 
-          each(
-            storyViewer.querySelectorAll('.slides-pointers [data-index] > b'),
-            (i, el) => {
-              onAnimationEnd(el, () => {
-                zuck.nextItem(false);
-              });
-            }
-          );
+          each(storyViewer.querySelectorAll('.slides-pointers [data-index] > b'), (i, el) => {
+            onAnimationEnd(el, () => {
+              zuck.nextItem(false);
+            });
+          });
 
           if (className === 'previous') {
             prepend(modalSlider, storyViewer);
@@ -594,9 +652,7 @@
           }
         };
 
-        const createStoryTouchEvents = function (
-          modalSliderElement
-        ) {
+        const createStoryTouchEvents = function (modalSliderElement) {
           const modalContainer = query('#zuck-modal');
           const enableMouseEvents = true;
 
@@ -620,9 +676,7 @@
             const touches = event.touches ? event.touches[0] : event;
             const pos = findPos(query('#zuck-modal .story-viewer.viewing'));
 
-            modalContainer.slideWidth = query(
-              '#zuck-modal .story-viewer'
-            ).offsetWidth;
+            modalContainer.slideWidth = query('#zuck-modal .story-viewer').offsetWidth;
             position = {
               x: pos[0],
               y: pos[1]
@@ -701,7 +755,7 @@
 
               if (!isScrolling) {
                 if (isValid && !isOutOfBounds) {
-                  moveStoryItem(direction, true);
+                  moveStoryItem(direction);
                 } else {
                   translate(modalSlider, position.x, 300);
                 }
@@ -768,7 +822,7 @@
         };
 
         return {
-          show: function show (storyId, page) {
+          show (storyId, page) {
             const modalContainer = query('#zuck-modal');
 
             const callback = function () {
@@ -818,20 +872,15 @@
 
               if (option('openEffect')) {
                 const storyEl = query(
-                  `#${id} [data-id="${storyId}"] .img`
+                  `#${id} [data-id="${storyId}"] .itemPreview`
                 );
                 const pos = findPos(storyEl);
 
-                modalContainer.style.marginLeft =
-                    `${pos[0] + storyEl.offsetWidth / 2}px`;
-                modalContainer.style.marginTop =
-                    `${pos[1] + storyEl.offsetHeight / 2}px`;
-
+                modalContainer.style.marginLeft = `${pos[0] + storyEl.offsetWidth / 2}px`;
+                modalContainer.style.marginTop = `${pos[1] + storyEl.offsetHeight / 2}px`;
                 modalContainer.style.display = 'block';
 
-                modalContainer.slideWidth = query(
-                  '#zuck-modal .story-viewer'
-                ).offsetWidth;
+                modalContainer.slideWidth = query('#zuck-modal .story-viewer').offsetWidth;
 
                 setTimeout(() => {
                   modalContainer.classList.add('animated');
@@ -842,9 +891,7 @@
                 }, 300); // because effects
               } else {
                 modalContainer.style.display = 'block';
-                modalContainer.slideWidth = query(
-                  '#zuck-modal .story-viewer'
-                ).offsetWidth;
+                modalContainer.slideWidth = query('#zuck-modal .story-viewer').offsetWidth;
 
                 tryFullScreen();
               }
@@ -854,7 +901,7 @@
 
             option('callbacks', 'onOpen')(storyId, callback);
           },
-          next: function next (unmute) {
+          next (unmute) {
             const callback = function () {
               const lastStory = zuck.internalData['currentStory'];
               const lastStoryTimelineElement = query(
@@ -868,7 +915,7 @@
                 zuck.internalData['seenItems'][lastStory] = true;
 
                 saveLocalData('seenItems', zuck.internalData['seenItems']);
-                updateStoryseenPosition();
+                updateStorySeenPosition();
               }
 
               const stories = query('#zuck-modal .story-viewer.next');
@@ -884,7 +931,7 @@
               callback
             );
           },
-          close: function close () {
+          close () {
             const modalContainer = query('#zuck-modal');
 
             const callback = function () {
@@ -902,21 +949,17 @@
               }
             };
 
-            option('callbacks', 'onClose')(
-              zuck.internalData['currentStory'],
-              callback
-            );
+            option('callbacks', 'onClose')(zuck.internalData['currentStory'], callback);
           }
         };
       };
-      let modal = new ZuckModal();
+
+      let modal = ZuckModal();
 
       /* parse functions */
       const parseItems = function (story) {
         const storyId = story.getAttribute('data-id');
-        const storyItems = d.querySelectorAll(
-          `#${id} [data-id="${storyId}"] .items > li`
-        );
+        const storyItems = document.querySelectorAll(`#${id} [data-id="${storyId}"] .items > li`);
         const items = [];
 
         each(storyItems, (i, {firstElementChild}) => {
@@ -955,10 +998,10 @@
           zuck.data[storyId] = {
             id: storyId, // story id
             photo: story.getAttribute('data-photo'), // story photo (or user photo)
-            name: story.firstElementChild.lastElementChild.firstChild.innerText,
-            link: story.firstElementChild.getAttribute('href'),
+            name: story.querySelector('.name').innerText,
+            link: story.querySelector('.itemLink').getAttribute('href'),
             lastUpdated: story.getAttribute('data-last-updated'),
-            seen,
+            seen: seen,
             items: []
           };
         } catch (e) {
@@ -974,7 +1017,7 @@
         };
       };
 
-      let getStoryMorningGlory = function (what) {
+      const getStoryMorningGlory = function (what) {
         // my wife told me to stop singing Wonderwall. I SAID MAYBE.
         const currentStory = zuck.internalData['currentStory'];
         const whatElementYouMean = `${what}ElementSibling`;
@@ -993,8 +1036,8 @@
         return false;
       };
 
-      let updateStoryseenPosition = function () {
-        each(d.querySelectorAll(`#${id} .story.seen`), (i, el) => {
+      const updateStorySeenPosition = function () {
+        each(document.querySelectorAll(`#${id} .story.seen`), (i, el) => {
           const newData = zuck.data[el.getAttribute('data-id')];
           const timeline = el.parentNode;
 
@@ -1003,7 +1046,7 @@
         });
       };
 
-      let playVideoItem = function (elements, unmute) {
+      const playVideoItem = function (elements, unmute) {
         const itemElement = elements[1];
         const itemPointer = elements[0];
         const storyViewer = itemPointer.parentNode.parentNode.parentNode;
@@ -1041,7 +1084,7 @@
 
           video.play();
 
-          if (unmute.target) {
+          if (unmute && unmute.target) {
             unmuteVideoItem(video, storyViewer);
           }
         } else {
@@ -1049,7 +1092,7 @@
         }
       };
 
-      let pauseVideoItem = function () {
+      const pauseVideoItem = function () {
         const video = zuck.internalData['currentVideoElement'];
         if (video) {
           try {
@@ -1058,7 +1101,7 @@
         }
       };
 
-      let unmuteVideoItem = function (video, storyViewer) {
+      const unmuteVideoItem = function (video, storyViewer) {
         video.muted = false;
         video.volume = 1.0;
         video.removeAttribute('muted');
@@ -1074,8 +1117,8 @@
         }
       };
 
-        /* data functions */
-      let saveLocalData = function (key, data) {
+      /* data functions */
+      const saveLocalData = function (key, data) {
         try {
           if (option('localStorage')) {
             const keyName = `zuck-${id}-${key}`;
@@ -1097,7 +1140,7 @@
         }
       };
 
-        /* api */
+      /* api */
       zuck.data = {};
       zuck.internalData = {};
       zuck.internalData['seenItems'] = getLocalData('seenItems') || {};
@@ -1105,21 +1148,32 @@
       zuck.add = zuck.update = (data, append) => {
         const storyId = get(data, 'id');
         const storyEl = query(`#${id} [data-id="${storyId}"]`);
-        let html = '';
         const items = get(data, 'items');
-        let story = false;
+
+        let story = undefined;
 
         zuck.data[storyId] = {};
 
+        let preview = false;
+        if (items[0]) {
+          preview = items[0]['preview'] || '';
+        }
+
+        data.currentPreview = preview;
+        data.lastUpdatedAgo = timeAgo(get(data, 'lastUpdated'));
+
         if (!storyEl) {
-          story = d.createElement('div');
-          story.className = 'story';
+          let storyItem = document.createElement('div');
+          storyItem.innerHTML = option('template', 'timelineItem')(data);
+
+          story = storyItem.firstElementChild;
         } else {
           story = storyEl;
         }
 
         if (data['seen'] === false) {
           zuck.internalData['seenItems'][storyId] = false;
+
           saveLocalData('seenItems', zuck.internalData['seenItems']);
         }
 
@@ -1127,16 +1181,6 @@
         story.setAttribute('data-photo', get(data, 'photo'));
         story.setAttribute('data-last-updated', get(data, 'lastUpdated'));
 
-        let preview = false;
-        if (items[0]) {
-          preview = items[0]['preview'] || '';
-        }
-
-        html =
-            `<a href="${get(data, 'link')}"><span class="img"><u style="background-image:url(${option('avatars') || !preview || preview === ''
-              ? get(data, 'photo')
-              : preview})"></u></span><span class="info"><strong>${get(data, 'name')}</strong><span class="time">${timeAgo(get(data, 'lastUpdated'))}</span></span></a><ul class="items"></ul>`;
-        story.innerHTML = html;
         parseStory(story);
 
         if (!storyEl) {
@@ -1152,25 +1196,29 @@
         });
 
         if (!append) {
-          updateStoryseenPosition();
+          updateStorySeenPosition();
         }
       };
+
       zuck.next = () => {
         modal.next();
       };
-      zuck.remove = storyId => {
+
+      zuck.remove = (storyId) => {
         const story = query(`#${id} > [data-id="${storyId}"]`);
+
         story.parentNode.removeChild(story);
       };
+
       zuck.addItem = (storyId, data, append) => {
         const story = query(`#${id} > [data-id="${storyId}"]`);
-        const li = d.createElement('li');
+        const li = document.createElement('li');
 
         li.className = get(data, 'seen') ? 'seen' : '';
         li.setAttribute('data-id', get(data, 'id'));
 
-        li.innerHTML =
-            `<a href="${get(data, 'src')}" data-link="${get(data, 'link')}" data-linkText="${get(data, 'linkText')}" data-time="${get(data, 'time')}" data-type="${get(data, 'type')}" data-length="${get(data, 'length')}"><img src="${get(data, 'preview')}"></a>`;
+        // wow, too much jsx
+        li.innerHTML = option('template', 'timelineStoryItem')(data);
 
         const el = story.querySelectorAll('.items')[0];
         if (append) {
@@ -1181,6 +1229,7 @@
 
         parseItems(story);
       };
+
       zuck.removeItem = (storyId, itemId) => {
         const item = query(
           `#${id} > [data-id="${storyId}"] [data-id="${itemId}"]`
@@ -1188,28 +1237,23 @@
 
         timeline.parentNode.removeChild(item);
       };
+
       zuck.navigateItem = zuck.nextItem = (direction, event) => {
         const currentStory = zuck.internalData['currentStory'];
         const currentItem = zuck.data[currentStory]['currentItem'];
-        const storyViewer = query(
-          `#zuck-modal .story-viewer[data-story-id="${currentStory}"]`
-        );
+        const storyViewer = query(`#zuck-modal .story-viewer[data-story-id="${currentStory}"]`);
         const directionNumber = direction === 'previous' ? -1 : 1;
 
         if (!storyViewer || storyViewer.touchMove === 1) {
           return false;
         }
 
-        const currentItemElements = storyViewer.querySelectorAll(
-          `[data-index="${currentItem}"]`
-        );
+        const currentItemElements = storyViewer.querySelectorAll(`[data-index="${currentItem}"]`);
         const currentPointer = currentItemElements[0];
         const currentItemElement = currentItemElements[1];
 
         const navigateItem = currentItem + directionNumber;
-        const nextItems = storyViewer.querySelectorAll(
-          `[data-index="${navigateItem}"]`
-        );
+        const nextItems = storyViewer.querySelectorAll(`[data-index="${navigateItem}"]`);
         const nextPointer = nextItems[0];
         const nextItem = nextItems[1];
 
@@ -1236,32 +1280,26 @@
               el.innerText = timeAgo(nextItem.getAttribute('data-time'));
             });
 
-            zuck.data[currentStory]['currentItem'] =
-                zuck.data[currentStory]['currentItem'] + directionNumber;
+            zuck.data[currentStory]['currentItem'] =zuck.data[currentStory]['currentItem'] + directionNumber;
 
             playVideoItem(nextItems, event);
           };
 
           let callback = option('callbacks', 'onNavigateItem');
-          callback = !callback
-            ? option('callbacks', 'onNextItem')
-            : option('callbacks', 'onNavigateItem');
+          callback = !callback ? option('callbacks', 'onNextItem') : option('callbacks', 'onNavigateItem');
 
-          callback(
-            currentStory,
-            nextItem.getAttribute('data-story-id'),
-            navigateItemCallback
-          );
+          callback(currentStory, nextItem.getAttribute('data-story-id'), navigateItemCallback);
         } else if (storyViewer) {
           if (direction !== 'previous') {
             modal.next(event);
           }
         }
       };
+
       const init = function () {
         if (query(`#${id} .story`)) {
-          each(timeline.querySelectorAll('.story'), (i, story) => {
-            parseStory(story, true);
+          each(timeline.querySelectorAll('.story'), (storyIndex, story) => {
+            parseStory(story);
           });
         }
 
@@ -1285,13 +1323,12 @@
           zuck.add(item, true);
         });
 
-        updateStoryseenPosition();
+        updateStorySeenPosition();
 
         const avatars = option('avatars') ? 'user-icon' : 'story-preview';
         const list = option('list') ? 'list' : 'carousel';
 
-        timeline.className =
-            `stories ${avatars} ${list} ${(`${option('skin')}`).toLowerCase()}`;
+        timeline.className = `stories ${avatars} ${list} ${(`${option('skin')}`).toLowerCase()}`;
 
         return zuck;
       };
@@ -1299,7 +1336,10 @@
       return init();
     };
 
-      /* Helpers */
+    /* Helpers */
+    /**
+     * 
+     */
     ZuckJS.buildItem = (id, type, length, src, preview, link, linkText, seen, time) => {
       return {
         id,
