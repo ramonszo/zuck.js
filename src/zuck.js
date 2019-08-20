@@ -265,6 +265,9 @@
             callback();
           }
         },
+        templates: {
+
+        },
         language: {
           unmute: 'Touch to unmute',
           keyboardTip: 'Press space to see next',
@@ -302,7 +305,7 @@
         }
       };
 
-        /* modal */
+      /* modal */
       const ZuckModal = function () {
         let modalZuckContainer = query('#zuck-modal');
 
@@ -554,7 +557,7 @@
           let storyViewer = d.createElement('div');
           storyViewer.className = `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
           storyViewer.setAttribute('data-story-id', storyId);
-
+          
           const html = `
             <div class="head">
               <div class="left">
@@ -562,8 +565,8 @@
 
                 <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}">
 
-                <div>
-                  <strong>${get(storyData, 'name')}</strong>
+                <div class="info">
+                  <strong class="name">${get(storyData, 'name')}</strong>
                   <span class="time">${currentItemTime}</span>
                 </div>
               </div>
@@ -977,10 +980,10 @@
           zuck.data[storyId] = {
             id: storyId, // story id
             photo: story.getAttribute('data-photo'), // story photo (or user photo)
-            name: story.firstElementChild.lastElementChild.firstChild.innerText,
-            link: story.firstElementChild.getAttribute('href'),
+            name: story.querySelector('.name').innerText,
+            link: story.querySelector('.itemLink').getAttribute('href'),
             lastUpdated: story.getAttribute('data-last-updated'),
-            seen,
+            seen: seen,
             items: []
           };
         } catch (e) {
@@ -1096,7 +1099,7 @@
         }
       };
 
-        /* data functions */
+      /* data functions */
       let saveLocalData = function (key, data) {
         try {
           if (option('localStorage')) {
@@ -1119,7 +1122,7 @@
         }
       };
 
-        /* api */
+      /* api */
       zuck.data = {};
       zuck.internalData = {};
       zuck.internalData['seenItems'] = getLocalData('seenItems') || {};
@@ -1127,9 +1130,10 @@
       zuck.add = zuck.update = (data, append) => {
         const storyId = get(data, 'id');
         const storyEl = query(`#${id} [data-id="${storyId}"]`);
-        let html = '';
         const items = get(data, 'items');
-        let story = false;
+
+        let html = '';
+        let story = undefined;
 
         zuck.data[storyId] = {};
 
@@ -1154,17 +1158,19 @@
           preview = items[0]['preview'] || '';
         }
 
+        console.log('storyData', data);
+
         html = `
                 <a class="itemLink" href="${get(data, 'link')}">
                   <span class="itemPreview">
                     <img lazy="eager" src="${
-                      option('avatars') || !preview || preview === ''
+                      (option('avatars') || !preview)
                       ? get(data, 'photo')
                       : preview
                     }" />
                   </span>
-                  <span class="info">
-                    <strong>${get(data, 'name')}</strong>
+                  <span class="info" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+                    <strong class="name" itemprop="name">${get(data, 'name')}</strong>
                     <span class="time">${timeAgo(get(data, 'lastUpdated'))}</span>
                   </span>
                 </a>
@@ -1191,13 +1197,16 @@
           updateStoryseenPosition();
         }
       };
+
       zuck.next = () => {
         modal.next();
       };
+
       zuck.remove = storyId => {
         const story = query(`#${id} > [data-id="${storyId}"]`);
         story.parentNode.removeChild(story);
       };
+
       zuck.addItem = (storyId, data, append) => {
         const story = query(`#${id} > [data-id="${storyId}"]`);
         const li = d.createElement('li');
@@ -1219,6 +1228,7 @@
 
         parseItems(story);
       };
+
       zuck.removeItem = (storyId, itemId) => {
         const item = query(
           `#${id} > [data-id="${storyId}"] [data-id="${itemId}"]`
@@ -1296,6 +1306,7 @@
           }
         }
       };
+
       const init = function () {
         if (query(`#${id} .story`)) {
           each(timeline.querySelectorAll('.story'), (i, story) => {
@@ -1337,7 +1348,10 @@
       return init();
     };
 
-      /* Helpers */
+    /* Helpers */
+    /**
+     * 
+     */
     ZuckJS.buildItem = (id, type, length, src, preview, link, linkText, seen, time) => {
       return {
         id,
