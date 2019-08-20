@@ -1140,6 +1140,14 @@
 
         zuck.data[storyId] = {};
 
+        let preview = false;
+        if (items[0]) {
+          preview = items[0]['preview'] || '';
+        }
+
+        data.currentPreview = preview;
+        data.lastUpdatedAgo = timeAgo(get(data, 'lastUpdated'));
+
         if (!storyEl) {
           let storyItem = document.createElement('div');
           storyItem.innerHTML = option('template', 'timelineItem')(data);
@@ -1158,14 +1166,6 @@
         story.setAttribute('data-id', storyId);
         story.setAttribute('data-photo', get(data, 'photo'));
         story.setAttribute('data-last-updated', get(data, 'lastUpdated'));
-
-        let preview = false;
-        if (items[0]) {
-          preview = items[0]['preview'] || '';
-        }
-
-        data.currentPreview = preview;
-        data.lastUpdatedAgo = timeAgo(get(data, 'lastUpdated'));
 
         parseStory(story);
 
