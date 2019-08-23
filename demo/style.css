@@ -6,7 +6,7 @@ body {
   color: #333;
 }
 
-#stories {
+.storiesWrapper {
   padding: 12px;
   max-width: 500px;
   margin: 0 auto;

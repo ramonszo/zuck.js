@@ -242,6 +242,14 @@
         }
       };
 
+      const generateId = () => {
+        return 'stories-' + Math.random().toString(36).substr(2, 9);
+      }
+
+      if (!timeline.id) {
+        timeline.setAttribute('id', generateId());
+      }
+
       /* options */
       const id = timeline.id;
       const optionsDefault = {
@@ -1231,9 +1239,7 @@
       };
 
       zuck.removeItem = (storyId, itemId) => {
-        const item = query(
-          `#${id} > [data-id="${storyId}"] [data-id="${itemId}"]`
-        );
+        const item = query(`#${id} > [data-id="${storyId}"] [data-id="${itemId}"]`);
 
         timeline.parentNode.removeChild(item);
       };
@@ -1297,7 +1303,7 @@
       };
 
       const init = function () {
-        if (query(`#${id} .story`)) {
+        if (timeline && timeline.querySelector('.story')) {
           each(timeline.querySelectorAll('.story'), (storyIndex, story) => {
             parseStory(story);
           });
@@ -1328,7 +1334,7 @@
         const avatars = option('avatars') ? 'user-icon' : 'story-preview';
         const list = option('list') ? 'list' : 'carousel';
 
-        timeline.className = `stories ${avatars} ${list} ${(`${option('skin')}`).toLowerCase()}`;
+        timeline.className += ` stories ${avatars} ${list} ${(`${option('skin')}`).toLowerCase()}`;
 
         return zuck;
       };
