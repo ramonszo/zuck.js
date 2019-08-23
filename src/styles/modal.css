@@ -227,7 +227,7 @@
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.35), 1px 0 1px rgba(0, 0, 0, 0.35);
   padding: 6px 12px;
 }
-#zuck-modal-content .story-viewer .head .itemPreview {
+#zuck-modal-content .story-viewer .head .item-preview {
   overflow: hidden;
   vertical-align: top;
   background-size: cover;
@@ -240,7 +240,7 @@
   background-repeat: no-repeat;
   background-position: center;
 }
-#zuck-modal-content .story-viewer .head .itemPreview img {
+#zuck-modal-content .story-viewer .head .item-preview img {
   display: block;
   box-sizing: border-box;
   height: 100%;
@@ -368,7 +368,7 @@
     height: 24px;
     margin: 6px 0;
   }
-  #zuck-modal-content .story-viewer .head .itemPreview {
+  #zuck-modal-content .story-viewer .head .item-preview {
     width: 30px;
     height: 30px;
     margin-right: 12px;
@@ -405,7 +405,7 @@
   #zuck-modal-content .story-viewer.with-back-button .head .left > .back {
     display: block;
   }
-  #zuck-modal-content .story-viewer.with-back-button .head .left .itemPreview {
+  #zuck-modal-content .story-viewer.with-back-button .head .left .item-preview {
     margin-left: 18px;
   }
 

@@ -287,8 +287,8 @@
           timelineItem (itemData) {
             return `
               <div class="timelineItem story">
-                <a class="itemLink" href="${get(itemData, 'link')}">
-                  <span class="itemPreview">
+                <a class="item-link" href="${get(itemData, 'link')}">
+                  <span class="item-preview">
                     <img lazy="eager" src="${
                       (option('avatars') || !get(itemData, 'currentPreview'))
                       ? get(itemData, 'photo')
@@ -322,7 +322,7 @@
                         <div class="left">
                           ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
 
-                          <span class="itemPreview">
+                          <span class="item-preview">
                             <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}">
                           </span>
 
@@ -880,7 +880,7 @@
 
               if (option('openEffect')) {
                 const storyEl = query(
-                  `#${id} [data-id="${storyId}"] .itemPreview`
+                  `#${id} [data-id="${storyId}"] .item-preview`
                 );
                 const pos = findPos(storyEl);
 
@@ -1007,7 +1007,7 @@
             id: storyId, // story id
             photo: story.getAttribute('data-photo'), // story photo (or user photo)
             name: story.querySelector('.name').innerText,
-            link: story.querySelector('.itemLink').getAttribute('href'),
+            link: story.querySelector('.item-link').getAttribute('href'),
             lastUpdated: story.getAttribute('data-last-updated'),
             seen: seen,
             items: []
