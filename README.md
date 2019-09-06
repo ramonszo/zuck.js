@@ -3,7 +3,7 @@
 [![Zuck.JS demo](https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/preview.gif)](https://on.ramon82.com/2ojlR5C)
 
 ## Add stories EVERYWHERE
-MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of a copy of Facebook Messenger Day of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories. 
+MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of ~~a copy of Facebook Messenger Day (RIP)~~ of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories. 
 
 You can read stories from any endpoint (JSON, Firebase, etc.) and the script will do the rest.
 
@@ -13,14 +13,17 @@ Live demo: https://on.ramon82.com/2ojlR5C
 
 
 ## Features
-* Library agnostic
-* Custom themes: [Snapgram](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=VemDeZAP)
+* Vanilla JavaScript
+* Custom CSS themes: [Snapgram](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=VemDeZAP)
 * Desktop support (why not?)
 * A simple media viewer, with gestures and events
 * A simple API to manage your "Stories timeline"
 * Lightweight (5kb gzipped - 15kb minified)
 * 3D cube effect!
 * Item navigation based on user touch
+* Custom js templates
+* React support
+* Privacy (because the future is...)
 
 
 ## How to use
@@ -29,9 +32,7 @@ You can download this git repository or install via ```npm install zuck.js```
 Initialize:
 
 ```js
-
-var stories = new Zuck({
-  id: '',                // timeline container id or reference
+let stories = new Zuck(`{{element id string or element reference}}`, {
   skin: 'snapgram',      // container class
   avatars: true,         // shows user photo instead of last story item preview
   list: false,           // displays a timeline instead of carousel
@@ -41,52 +42,79 @@ var stories = new Zuck({
   backButton: true,      // adds a back button to close the story viewer
   backNative: false,     // uses window history to enable back button on browsers/android
   previousTap: true,     // use 1/3 of the screen to navigate to previous item when tap the story
+  localStorage: true,    // set true to save "seen" position. Element must have a id to save properly.
+  reactive: true,        // set true if you use frameworks like React to control the timeline (see react.sample.html)
 
   stories: [ // array of stories
     // see stories structure example
   ],
 
   callbacks:  {
-    'onOpen': function(storyId, callback) {
+    onOpen (storyId, callback) {
       callback();  // on open story viewer
     },
 
-    'onRender': function(item, mediaHTML) {
-      return mediaHTML; // on render story viewer, use if you want custom elements
-    },
-
-    'onView': function(storyId) {
+    onView (storyId) {
       // on view story
     },
 
-    'onEnd': function(storyId, callback) {
+    onEnd (storyId, callback) {
       callback();  // on end story
     },
 
-    'onClose': function(storyId, callback) {
+    onClose (storyId, callback) {
       callback();  // on close story viewer
     },
 
-    'onNavigateItem': function(storyId, nextStoryId, callback) {
+    onNavigateItem (storyId, nextStoryId, callback) {
       callback();  // on navigate item of story
     },
+
+    onDataUpdate (currentState, callback) {
+      callback(); // use to update state on your reactive framework
+    }
   },
 
-  'language': { // if you need to translate :)
-    'unmute': 'Touch to unmute',
-    'keyboardTip': 'Press space to see next',
-    'visitLink': 'Visit link',
-    'time': {
-      'ago':'ago', 
-      'hour':'hour', 
-      'hours':'hours', 
-      'minute':'minute', 
-      'minutes':'minutes', 
-      'fromnow': 'from now', 
-      'seconds':'seconds', 
-      'yesterday': 'yesterday', 
-      'tomorrow': 'tomorrow', 
-      'days':'days'
+  template: {
+    // use these functions to render custom templates
+    // see src/zuck.js for more details
+
+    timelineItem (itemData) {
+      return ``;
+    },
+
+    timelineStoryItem (itemData) {
+      return ``;
+    },
+
+    viewerItem (storyData, currentStoryItem) {
+      return ``;
+    },
+
+    viewerItemPointer (index, currentIndex, item) {
+      return ``;
+    },
+
+    viewerItemBody (index, currentIndex, item) {
+      return ``;
+    }
+  },
+
+  language: { // if you need to translate :)
+    unmute: 'Touch to unmute',
+    keyboardTip: 'Press space to see next',
+    visitLink: 'Visit link',
+    time: {
+      ago:'ago', 
+      hour:'hour', 
+      hours:'hours', 
+      minute:'minute', 
+      minutes:'minutes', 
+      fromnow: 'from now', 
+      seconds:'seconds', 
+      yesterday: 'yesterday', 
+      tomorrow: 'tomorrow', 
+      days:'days'
     }
   }
 });
@@ -125,6 +153,7 @@ A JSON example of the stories object:
     seen: false,          // set true if user has opened - if local storage is used, you don't need to care about this 
 
     items: [              // array of items
+        
         // story item example
         {
             id: "",       // item id
@@ -149,21 +178,23 @@ In your HTML:
 <div id="stories">
 
     <!-- story -->
-    <div class="story" data-id="{{story.id}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
-        <a href="{{story.link}}">
-            <span><u style="background-image:url({{story.photo}});"></u><span>
-            <span class="info">
-                <strong>{{story.name}}</strong>
-                <span class="time">{{story.lastUpdated}}</span>
-            </span>
+    <div class="story {{ story.seen ? 'seen' : '' }}" data-id="{{storyId}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
+        <a class="item-link" href="{{story.link}}">
+          <span class="item-preview">
+            <img src="{{story.photo}}" />
+          </span>
+          <span class="info" itemProp="author" itemScope="" itemType="http://schema.org/Person">
+            <strong class="name" itemProp="name">{{story.name}}</strong>
+            <span class="time">{{story.lastUpdated}}</span>
+          </span>
         </a>
         
         <ul class="items">
         
             <!-- story item -->
-            <li data-id="{{story.items.id}}" data-time="{{story.items.time}}" class="{{story.items.seen}}">
-                <a href="{{story.items.src}}" data-type="{{story.items.type}}" data-length="{{story.items.length}}" data-link="{{story.items.link}}" data-linkText="{{story.items.linkText}}">
-                    <img src="{{story.items.preview}}">
+            <li data-id="{{storyItemId}}" data-time="{{storyItem.time}}" class="{{storyItem.seen}}">
+                <a href="{{storyItem.src}}" data-type="{{storyItem.type}}" data-length="{{storyItem.length}}" data-link="{{storyItem.link}}" data-linkText="{{storyItem.linkText}}">
+                    <img src="{{storyItem.preview}}" />
                 </a>
             </li>
             <!--/ story item -->
@@ -178,13 +209,14 @@ In your HTML:
 Then in your JS:
 
 ```js
-var stories = new Zuck({{element id string or element reference}}); 
+let stories = new Zuck({{element id string or element reference}}); 
 ```
 
 
 ### Tips
 - You can use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
 - If you use Ionic or some js that uses ```location.hash```, you should always disable the "backNative" option which can mess your navigation.
+
 
 ## Limitations
 On mobile browsers, video can't play with audio without a user gesture. So the script tries to play audio only when the user clicks to see the next story. 

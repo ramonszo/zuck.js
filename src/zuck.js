@@ -285,7 +285,7 @@
       template: {
         timelineItem (itemData) {
           return `
-            <div class="timelineItem story ${get(itemData, 'seen') === true ? 'seen' : ''}">
+            <div class="story ${get(itemData, 'seen') === true ? 'seen' : ''}">
               <a class="item-link" href="${get(itemData, 'link')}">
                 <span class="item-preview">
                   <img lazy="eager" src="${
@@ -294,7 +294,7 @@
                     : get(itemData, 'currentPreview')
                   }" />
                 </span>
-                <span class="info" itemProp="author" itemScope="" itemType="http://schema.org/Person">
+                <span class="info" itemProp="author" itemScope itemType="http://schema.org/Person">
                   <strong class="name" itemProp="name">${get(itemData, 'name')}</strong>
                   <span class="time">${get(itemData, 'lastUpdatedAgo')}</span>
                 </span>
@@ -1360,7 +1360,7 @@
       if (!option('reactive')) {
         let seenItems = getLocalData('seenItems');
         
-        for (var key in seenItems) {
+        for (let key in seenItems) {
           if (seenItems.hasOwnProperty(key)) {
             if (zuck.data[key]) {
               zuck.data[key].seen = seenItems[key];
