@@ -1,0 +1,104 @@
+body {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Cantarell,"Helvetica Neue",sans-serif;
+  font-size: 14px;
+  padding: 0;
+  margin: 0;
+  color: #333;
+}
+
+.storiesWrapper {
+  padding: 12px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  font-family: monospace;
+  padding: 0 12px;
+  border-bottom: 1px solid #ddd;
+  font-size: 24px;
+  height: 56px;
+  line-height: 56px;
+  margin-bottom: 0;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+h1.Snapgram {
+  background: #fff;
+  color: #333;
+}
+h1.FaceSnap {
+  background: #3b5998;
+  color: #fff;
+}
+h1.VemDeZAP {
+  background: #085e53;
+  color: #fff;
+}
+h1.Snapssenger {
+  background: #0084ff;
+  color: #fff;
+}
+
+.disclaimer {
+  display: block;
+  text-decoration: none !important;
+  color: #333;
+  line-height: 1.5em;
+  background: #ffffd2;
+  border-radius: 3px;
+  margin: 12px 12px 0;
+  padding: 12px 12px 12px 74px;
+  font-size: 13px;
+  max-width: 500px;
+  overflow: hidden;
+  min-height: 50px;
+}
+.disclaimer img {
+  float: left;
+  margin-right: 12px;
+  width: 50px;
+  position: absolute;
+  margin-left: -62px;
+}
+.disclaimer a {
+  color: inherit !important;
+  border: 0;
+}
+.disclaimer p {
+  margin: 0;
+}
+.disclaimer p + p {
+  margin-top: 1.25em;
+}
+
+.skin {
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  font-weight: bold;
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #fff;
+  font-size: 16px;
+  padding: 12px;
+  color: #fff;
+  background: #333;
+}
+.skin select {
+  background: #fff;
+  font-size: inherit;
+  text-transform: none;
+  max-width: 30%;
+}
+
+@media (min-width: 524px) {
+  .disclaimer {
+    margin: 12px auto;
+  }
+}

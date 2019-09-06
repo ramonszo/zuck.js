@@ -1,0 +1,215 @@
+<html>
+  <head>
+    <title>zuck.js</title>
+
+    <link rel="icon" href="ICON.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0" />
+
+    <!-- demo styles -->
+    <link rel="stylesheet" href="demo/style.css">
+
+    <!-- lib styles -->
+    <link rel="stylesheet" href="dist/zuck.min.css">
+    
+    <!-- lib skins -->
+    <link rel="stylesheet" href="dist/skins/snapgram.css">
+    <link rel="stylesheet" href="dist/skins/vemdezap.css">
+    <link rel="stylesheet" href="dist/skins/facesnap.css">
+    <link rel="stylesheet" href="dist/skins/snapssenger.css">
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Too much time needed to setup webpack and blablabla -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.4.2/react-dom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.21.1/babel.min.js"></script>
+
+    <script src="dist/zuck.min.js"></script>
+    <script src="demo/script.js"></script>
+    
+    <script type="text/babel">
+      class Demo extends React.Component {
+        render() {
+          return (
+            <div>
+              <h1 id="header">&nbsp;</h1>
+
+              <a href="https://ramon.codes/projects/zuck.js" target="_blank" className="disclaimer">
+                <img src="ICON.png" alt="zuck.js logo" />
+
+                <p>This a demonstration of <strong>zuck.js</strong> javascript library.</p>
+                <p>Not associated with Facebook, Instagram, WhatsApp or Snapchat.</p>
+              </a>
+
+              <Stories />
+
+              <div className="skin">
+                Choose your theme: <select id="skin" onChange={(event) => changeSkin(event.target.value)}>
+                  <option value="Snapgram">Snapgram (without fullscreen)</option>
+                  <option value="FaceSnap">FaceSnap (with fullscreen)</option>
+                  <option value="VemDeZAP">VemDeZAP (timeline + arrows)</option>
+                  <option value="Snapssenger">Snapssenger (with previews)</option>
+                </select>
+              </div>
+            </div>
+          );
+        }
+      }
+    </script>
+
+    <script type="text/babel">
+      class Stories extends React.Component {
+        constructor(props){
+          super(props);
+
+          // React ^16.3
+          // this.storiesElement = React.createRef();
+
+          this.storiesElement = null;
+          this.storiesApi = null;
+          
+          this.state = {
+            stories: [
+              Zuck.buildTimelineItem(
+                "ramon", 
+                "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/1.jpg",
+                "Ramon",
+                "https://ramon.codes",
+                timestamp(),
+                [
+                  ["ramon-1", "photo", 3, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/1.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/1.jpg", '', false, false, timestamp()],
+                  ["ramon-2", "video", 0, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/2.mp4", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/2.jpg", '', false, false, timestamp()],
+                  ["ramon-3", "photo", 3, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/3.png", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/3.png", 'https://ramon.codes', 'Visit my Portfolio', false, timestamp()]
+                ]
+              ),
+              Zuck.buildTimelineItem(
+                "gorillaz",
+                "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/2.jpg",
+                "Gorillaz",
+                "",
+                timestamp(),
+                [
+                  ["gorillaz-1", "video", 0, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/4.mp4", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/4.jpg", '', false, false, timestamp()],
+                  ["gorillaz-2", "photo", 3, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/5.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/5.jpg", '', false, false, timestamp()],
+                ]
+              ),
+              Zuck.buildTimelineItem(
+                "ladygaga",
+                "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/3.jpg",
+                "Lady Gaga",
+                "",
+                timestamp(),
+                [
+                  ["ladygaga-1", "photo", 5, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/6.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/6.jpg", '', false, false, timestamp()],
+                  ["ladygaga-2", "photo", 3, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/7.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/7.jpg", 'http://ladygaga.com', false, false, timestamp()],
+                ]
+              ),
+              Zuck.buildTimelineItem(
+                "starboy",
+                "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/4.jpg",
+                "The Weeknd",
+                "",
+                timestamp(),
+                [
+                  ["starboy-1", "photo", 5, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/8.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/8.jpg", '', false, false, timestamp()]
+                ]
+              ),
+              Zuck.buildTimelineItem(
+                "riversquomo",
+                "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/5.jpg",
+                "Rivers Cuomo",
+                "",
+                timestamp(),
+                [
+                  ["riverscuomo", "photo", 10, "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/9.jpg", "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/9.jpg", '', false, false, timestamp()]
+                ]
+              )
+            ]
+          }
+        }
+        
+        componentDidMount() {
+          let currentSkin = getCurrentSkin(); // from demo
+
+          this.storiesApi = new Zuck(this.storiesElement, {
+            backNative: true,
+            previousTap: true,
+            skin: currentSkin['name'],
+            autoFullScreen: currentSkin['params']['autoFullScreen'],
+            avatars: currentSkin['params']['avatars'],
+            paginationArrows: currentSkin['params']['paginationArrows'],
+            list: currentSkin['params']['list'],
+            cubeEffect: currentSkin['params']['cubeEffect'],
+            localStorage: true,
+            stories: this.state.stories,
+            reactive: true,
+            callbacks: {
+              onDataUpdate: function (currentState, callback) {
+                this.setState(state => {
+                  state.stories = currentState;
+
+                  return state;
+                }, () => {
+                  callback();
+                });
+              }.bind(this)
+            }
+          });
+        }
+
+        render() {
+          const timelineItems = []
+
+          this.state.stories.forEach((story, storyId) => {
+            const storyItems = [];
+
+            story.items.forEach((storyItem) => {
+              storyItems.push(
+                <li key={storyItem.id} data-id={storyItem.id} data-time={storyItem.time} className={(storyItem.seen ? 'seen' : '')}>
+                    <a href={storyItem.src} data-type={storyItem.type} data-length={storyItem.length} data-link={storyItem.link} data-linkText={storyItem.linkText}>
+                        <img src={storyItem.preview} />
+                    </a>
+                </li>
+              );
+            });
+          
+            let arrayFunc = story.seen ? 'push' : 'unshift';
+            timelineItems[arrayFunc](
+              <div className={(story.seen ? 'story seen' : 'story')} key={storyId} data-id={storyId} data-last-updated={story.lastUpdated} data-photo={story.photo}>
+                <a className="item-link" href={story.link}>
+                  <span className="item-preview">
+                    <img src={story.photo} />
+                  </span>
+                  <span className="info" itemProp="author" itemScope="" itemType="http://schema.org/Person">
+                    <strong className="name" itemProp="name">{story.name}</strong>
+                    <span className="time">{story.lastUpdated}</span>
+                  </span>
+                </a>
+                
+                <ul className="items">
+                    {storyItems}
+                </ul>
+              </div>
+            );
+          });
+
+          return (
+            <div>
+              <div ref={node => this.storiesElement = node}  id="stories-react" className="storiesWrapper">
+                  {timelineItems}
+              </div>
+            </div>
+          );
+        }
+      }
+    </script>
+
+    <script type="text/babel">
+      ReactDOM.render(
+        <Demo />,
+        document.getElementById('root')
+      );
+    </script>
+  </body>
+</html>

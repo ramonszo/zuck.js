@@ -1,0 +1,118 @@
+.stories.carousel {
+  white-space: nowrap;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overflow-scrolling: touch;
+}
+.stories.carousel::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+.stories.carousel .story {
+  display: inline-block;
+  width: 18vw;
+  max-width: 90px;
+  margin: 0 6px;
+  vertical-align: top;
+}
+.stories.carousel .story:first-child {
+  margin-left: 0;
+}
+.stories.carousel .story:last-child {
+  margin-right: 0;
+}
+
+.stories.carousel .story > .item-link {
+  text-align: center;
+  display: block;
+}
+.stories.carousel .story > .item-link:active > .item-preview {
+  transform: scale(0.9);
+}
+.stories.carousel .story > .item-link > .item-preview {
+  display: block;
+  box-sizing: border-box;
+  font-size: 0;
+  max-height: 90px;
+  height: 18vw;
+  overflow: hidden;
+  transition: transform 0.2s;
+}
+.stories.carousel .story > .item-link > .item-preview img {
+  display: block;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+  object-fit: cover;
+}
+.stories.carousel .story > .item-link > .info {
+  display: inline-block;
+  margin-top: 0.5em;
+  line-height: 1.2em;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stories.carousel .story > .item-link > .info .name {
+  font-weight: 300;
+}
+.stories.carousel .story > .item-link > .info .time {
+  display: none;
+}
+.stories.carousel .story > .items {
+  display: none;
+}
+
+.stories.list {
+  white-space: nowrap;
+  overflow: auto;
+}
+.stories.list .story {
+  display: block;
+  width: auto;
+  margin: 6px;
+  padding-bottom: 6px;
+}
+
+.stories.list .story > .item-link {
+  text-align: left;
+  display: block;
+}
+.stories.list .story > .item-link > .item-preview {
+  height: 42px;
+  width: 42px;
+  max-width: 42px;
+  margin-right: 12px;
+  vertical-align: top;
+  display: inline-block;
+  box-sizing: border-box;
+  font-size: 0;
+  overflow: hidden;
+}
+.stories.list .story > .item-link > .item-preview img {
+  display: block;
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  background-size: cover;
+  background-position: center;
+}
+.stories.list .story > .item-link > .info {
+  display: inline-block;
+  line-height: 1.6em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: top;
+}
+.stories.list .story > .item-link > .info .name {
+  font-weight: 500;
+  display: block;
+}
+.stories.list .story > .item-link > .info .time {
+  display: inline-block;
+}
+.stories.list .story > .items {
+  display: none;
+}
