@@ -174,8 +174,9 @@
               );
             });
           
-            timelineItems.push(
-              <div className="story" key={storyId} data-id={storyId} data-last-updated={story.lastUpdated} data-photo={story.photo}>
+            let arrayFunc = story.seen ? 'push' : 'unshift';
+            timelineItems[arrayFunc](
+              <div className={(story.seen ? 'story seen' : 'story')} key={storyId} data-id={storyId} data-last-updated={story.lastUpdated} data-photo={story.photo}>
                 <a className="item-link" href={story.link}>
                   <span className="item-preview">
                     <img src={story.photo} />

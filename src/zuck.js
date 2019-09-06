@@ -285,7 +285,7 @@
       template: {
         timelineItem (itemData) {
           return `
-            <div class="timelineItem story">
+            <div class="timelineItem story ${get(itemData, 'seen') === true ? 'seen' : ''}">
               <a class="item-link" href="${get(itemData, 'link')}">
                 <span class="item-preview">
                   <img lazy="eager" src="${
@@ -552,7 +552,7 @@
         const modalSlider = query(`#zuck-modal-slider-${id}`);
         const storyItems = get(storyData, 'items');
 
-        // storyData.timeAgo = storyItems && storyItems[0] ? timeAgo(get(storyItems[0], 'time')) : '';
+        storyData.timeAgo = storyItems && storyItems[0] ? timeAgo(get(storyItems[0], 'time')) : '';
 
         let htmlItems = '';
         let pointerItems = '';
@@ -969,7 +969,7 @@
       const storyItems = document.querySelectorAll(`#${id} [data-id="${storyId}"] .items > li`);
       const items = [];
 
-      if(!option('reactive') || forceUpdate) {
+      if (!option('reactive') || forceUpdate) {
         each(storyItems, (i, {firstElementChild}) => {
           const a = firstElementChild;
           const img = a.firstElementChild;
@@ -1047,8 +1047,10 @@
       }
     };
 
+    // BIBLICAL
     const getStoryMorningGlory = function (what) {
       // my wife told me to stop singing Wonderwall. I SAID MAYBE.
+
       const currentStory = zuck.internalData['currentStory'];
       const whatElementYouMean = `${what}ElementSibling`;
 
@@ -1075,7 +1077,7 @@
           timeline.removeChild(el);
         }
 
-        zuck.add(newData, true);
+        zuck.update(newData, true);
       });
     };
 
@@ -1183,16 +1185,17 @@
       const items = get(data, 'items');
 
       let story = undefined;
-
-      // zuck.data[storyId] = {};
-
       let preview = false;
+      
       if (items[0]) {
         preview = items[0]['preview'] || '';
       }
 
+      if (zuck.internalData['seenItems'][storyId] === true) {
+        data.seen = true;
+      }
+
       data.currentPreview = preview;
-      // data.lastUpdatedAgo = timeAgo(get(data, 'lastUpdated'));
 
       if (!storyEl) {
         let storyItem = document.createElement('div');
@@ -1247,14 +1250,14 @@
 
       if (!option('reactive')) {
         const li = document.createElement('li');
+        const el = story.querySelectorAll('.items')[0];
 
         li.className = get(data, 'seen') ? 'seen' : '';
         li.setAttribute('data-id', get(data, 'id'));
 
         // wow, too much jsx
         li.innerHTML = option('template', 'timelineStoryItem')(data);
-
-        const el = story.querySelectorAll('.items')[0];
+        
         if (append) {
           el.appendChild(li);
         } else {
@@ -1352,6 +1355,18 @@
           },
           false
         );
+      }
+
+      if (!option('reactive')) {
+        let seenItems = getLocalData('seenItems');
+        
+        for (var key in seenItems) {
+          if (seenItems.hasOwnProperty(key)) {
+            if (zuck.data[key]) {
+              zuck.data[key].seen = seenItems[key];
+            }
+          }
+        }
       }
 
       each(option('stories'), (i, item) => {
