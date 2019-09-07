@@ -1,13 +1,14 @@
 # zuck.js
 
-[![Zuck.JS demo](https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/preview.gif)](https://on.ramon82.com/2ojlR5C)
+[![Zuck.JS demo](https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/preview.gif)](https://on.ramon82.com/2k9e7au)
 
 ## Add stories EVERYWHERE
 MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of ~~a copy of Facebook Messenger Day (RIP)~~ of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories. 
 
 You can read stories from any endpoint (JSON, Firebase, etc.) and the script will do the rest.
 
-Live demo: https://on.ramon82.com/2ojlR5C
+Live demo: https://on.ramon82.com/2k9e7au
+React sample: https://on.ramon82.com/2lDP53H
 
 [![CDNJS](https://img.shields.io/cdnjs/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square&maxAge=3600)](https://cdnjs.com/libraries/zuck.js) [![NPM](https://img.shields.io/npm/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square&maxAge=3600)](https://www.npmjs.com/package/zuck.js)
 
