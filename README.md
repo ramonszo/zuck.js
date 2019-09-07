@@ -229,3 +229,9 @@ Stories links opens in a new window too. This behaviour occurs because most webs
 
 ## License
 MIT
+
+
+## Show your support!
+Please ⭐️ this repository if this project helped you! You also can buy me a coffee:
+
+[![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F710G8L)
