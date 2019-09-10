@@ -405,8 +405,8 @@
     const ZuckModal = () => {
       let modalZuckContainer = query('#zuck-modal');
 
-      if (!modalZuckContainer && !window['Zuck'].hasModal) {
-        window['Zuck'].hasModal = true;
+      if (!modalZuckContainer && !zuck.hasModal) {
+        zuck.hasModal = true;
 
         modalZuckContainer = document.createElement('div');
         modalZuckContainer.id = 'zuck-modal';
