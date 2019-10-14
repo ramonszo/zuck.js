@@ -251,19 +251,19 @@
       },
       template: {
         timelineItem: function timelineItem(itemData) {
-          return "\n<div class=\"story ".concat(get(itemData, 'seen') === true ? 'seen' : '', "\">\n<a class=\"item-link\" href=\"").concat(get(itemData, 'link'), "\">\n<span class=\"item-preview\">\n<img lazy=\"eager\" src=\"").concat(option('avatars') || !get(itemData, 'currentPreview') ? get(itemData, 'photo') : get(itemData, 'currentPreview'), "\" />\n</span>\n<span class=\"info\" itemProp=\"author\" itemScope itemType=\"http://schema.org/Person\">\n<strong class=\"name\" itemProp=\"name\">").concat(get(itemData, 'name'), "</strong>\n<span class=\"time\">").concat(get(itemData, 'lastUpdatedAgo'), "</span>\n</span>\n</a>\n\n<ul class=\"items\"></ul>\n</div>");
+          return "\n            <div class=\"story ".concat(get(itemData, 'seen') === true ? 'seen' : '', "\">\n              <a class=\"item-link\" href=\"").concat(get(itemData, 'link'), "\">\n                <span class=\"item-preview\">\n                  <img lazy=\"eager\" src=\"").concat(option('avatars') || !get(itemData, 'currentPreview') ? get(itemData, 'photo') : get(itemData, 'currentPreview'), "\" />\n                </span>\n                <span class=\"info\" itemProp=\"author\" itemScope itemType=\"http://schema.org/Person\">\n                  <strong class=\"name\" itemProp=\"name\">").concat(get(itemData, 'name'), "</strong>\n                  <span class=\"time\">").concat(get(itemData, 'lastUpdatedAgo'), "</span>\n                </span>\n              </a>\n              \n              <ul class=\"items\"></ul>\n            </div>");
         },
         timelineStoryItem: function timelineStoryItem(itemData) {
-          return "<a href=\"".concat(get(itemData, 'src'), "\"\ndata-link=\"").concat(get(itemData, 'link'), "\"\ndata-linkText=\"").concat(get(itemData, 'linkText'), "\"\ndata-time=\"").concat(get(itemData, 'time'), "\"\ndata-type=\"").concat(get(itemData, 'type'), "\"\ndata-length=\"").concat(get(itemData, 'length'), "\">\n<img loading=\"auto\" src=\"").concat(get(itemData, 'preview'), "\" />\n</a>");
+          return "<a href=\"".concat(get(itemData, 'src'), "\"\n                      data-link=\"").concat(get(itemData, 'link'), "\"\n                      data-linkText=\"").concat(get(itemData, 'linkText'), "\"\n                      data-time=\"").concat(get(itemData, 'time'), "\"\n                      data-type=\"").concat(get(itemData, 'type'), "\"\n                      data-length=\"").concat(get(itemData, 'length'), "\">\n                    <img loading=\"auto\" src=\"").concat(get(itemData, 'preview'), "\" />\n                  </a>");
         },
         viewerItem: function viewerItem(storyData, currentStoryItem) {
-          return "<div class=\"story-viewer\">\n<div class=\"head\">\n<div class=\"left\">\n".concat(option('backButton') ? '<a class="back">&lsaquo;</a>' : '', "\n\n<span class=\"item-preview\">\n<img lazy=\"eager\" class=\"profilePhoto\" src=\"").concat(get(storyData, 'photo'), "\" />\n</span>\n\n<div class=\"info\">\n<strong class=\"name\">").concat(get(storyData, 'name'), "</strong>\n<span class=\"time\">").concat(get(storyData, 'timeAgo'), "</span>\n</div>\n</div>\n\n<div class=\"right\">\n<span class=\"time\">").concat(get(currentStoryItem, 'timeAgo'), "</span>\n<span class=\"loading\"></span>\n<a class=\"close\" tabIndex=\"2\">&times;</a>\n</div>\n</div>\n\n<div class=\"slides-pointers\">\n<div class=\"wrap\"></div>\n</div>\n\n").concat(option('paginationArrows') ? "<div class=\"slides-pagination\">\n<span class=\"previous\">&lsaquo;</span>\n<span class=\"next\">&rsaquo;</span>\n</div>" : "", "\n</div>");
+          return "<div class=\"story-viewer\">\n                    <div class=\"head\">\n                      <div class=\"left\">\n                        ".concat(option('backButton') ? '<a class="back">&lsaquo;</a>' : '', "\n\n                        <span class=\"item-preview\">\n                          <img lazy=\"eager\" class=\"profilePhoto\" src=\"").concat(get(storyData, 'photo'), "\" />\n                        </span>\n\n                        <div class=\"info\">\n                          <strong class=\"name\">").concat(get(storyData, 'name'), "</strong>\n                          <span class=\"time\">").concat(get(storyData, 'timeAgo'), "</span>\n                        </div>\n                      </div>\n                      \n                      <div class=\"right\">\n                        <span class=\"time\">").concat(get(currentStoryItem, 'timeAgo'), "</span>\n                        <span class=\"loading\"></span>\n                        <a class=\"close\" tabIndex=\"2\">&times;</a>\n                      </div>\n                    </div>\n\n                    <div class=\"slides-pointers\">\n                      <div class=\"wrap\"></div>\n                    </div>\n\n                    ").concat(option('paginationArrows') ? "<div class=\"slides-pagination\">\n                          <span class=\"previous\">&lsaquo;</span>\n                          <span class=\"next\">&rsaquo;</span>\n                        </div>" : "", "\n                  </div>");
         },
         viewerItemPointer: function viewerItemPointer(index, currentIndex, item) {
-          return "<span \nclass=\"".concat(currentIndex === index ? 'active' : '', " ").concat(get(item, 'seen') === true ? 'seen' : '', "\"\ndata-index=\"").concat(index, "\" data-item-id=\"").concat(get(item, 'id'), "\">\n<b style=\"animation-duration:").concat(get(item, 'length') === '' ? '3' : get(item, 'length'), "s\"></b>\n</span>");
+          return "<span \n                    class=\"".concat(currentIndex === index ? 'active' : '', " ").concat(get(item, 'seen') === true ? 'seen' : '', "\"\n                    data-index=\"").concat(index, "\" data-item-id=\"").concat(get(item, 'id'), "\">\n                      <b style=\"animation-duration:").concat(get(item, 'length') === '' ? '3' : get(item, 'length'), "s\"></b>\n                  </span>");
         },
         viewerItemBody: function viewerItemBody(index, currentIndex, item) {
-          return "<div \nclass=\"item ".concat(get(item, 'seen') === true ? 'seen' : '', " ").concat(currentIndex === index ? 'active' : '', "\"\ndata-time=\"").concat(get(item, 'time'), "\" data-type=\"").concat(get(item, 'type'), "\" data-index=\"").concat(index, "\" data-item-id=\"").concat(get(item, 'id'), "\">\n").concat(get(item, 'type') === 'video' ? "<video class=\"media\" muted webkit-playsinline playsinline preload=\"auto\" src=\"".concat(get(item, 'src'), "\" ").concat(get(item, 'type'), "></video>\n<b class=\"tip muted\">").concat(option('language', 'unmute'), "</b>") : "<img loading=\"auto\" class=\"media\" src=\"".concat(get(item, 'src'), "\" ").concat(get(item, 'type'), " />\n"), "\n\n").concat(get(item, 'link') ? "<a class=\"tip link\" href=\"".concat(get(item, 'link'), "\" rel=\"noopener\" target=\"_blank\">\n").concat(!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText'), "\n</a>") : "", "\n</div>");
+          return "<div \n                    class=\"item ".concat(get(item, 'seen') === true ? 'seen' : '', " ").concat(currentIndex === index ? 'active' : '', "\"\n                    data-time=\"").concat(get(item, 'time'), "\" data-type=\"").concat(get(item, 'type'), "\" data-index=\"").concat(index, "\" data-item-id=\"").concat(get(item, 'id'), "\">\n                    ").concat(get(item, 'type') === 'video' ? "<video class=\"media\" muted webkit-playsinline playsinline preload=\"auto\" src=\"".concat(get(item, 'src'), "\" ").concat(get(item, 'type'), "></video>\n                        <b class=\"tip muted\">").concat(option('language', 'unmute'), "</b>") : "<img loading=\"auto\" class=\"media\" src=\"".concat(get(item, 'src'), "\" ").concat(get(item, 'type'), " />\n                    "), "\n\n                    ").concat(get(item, 'link') ? "<a class=\"tip link\" href=\"".concat(get(item, 'link'), "\" rel=\"noopener\" target=\"_blank\">\n                            ").concat(!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText'), "\n                          </a>") : "", "\n                  </div>");
         }
       },
       language: {
@@ -535,14 +535,13 @@
           var storyViewer = query('#zuck-modal .viewing');
 
           if (event.target.nodeName === 'A') {
-            return true;
-          } else {
-            event.preventDefault();
+            return;
           }
 
           var touches = event.touches ? event.touches[0] : event;
           var pos = findPos(query('#zuck-modal .story-viewer.viewing'));
           modalContainer.slideWidth = query('#zuck-modal .story-viewer').offsetWidth;
+          modalContainer.slideHeight = query('#zuck-modal .story-viewer').offsetHeight;
           position = {
             x: pos[0],
             y: pos[1]
@@ -552,32 +551,40 @@
           touchOffset = {
             x: pageX,
             y: pageY,
-            time: Date.now()
+            time: Date.now(),
+            valid: true
           };
-          isScrolling = undefined;
-          delta = {};
 
-          if (enableMouseEvents) {
-            modalSlider.addEventListener('mousemove', touchMove);
-            modalSlider.addEventListener('mouseup', touchEnd);
-            modalSlider.addEventListener('mouseleave', touchEnd);
+          if (pageY < 80 || pageY > modalContainer.slideHeight - 80) {
+            touchOffset.valid = false;
+            return;
+          } else {
+            event.preventDefault();
+            isScrolling = undefined;
+            delta = {};
+
+            if (enableMouseEvents) {
+              modalSlider.addEventListener('mousemove', touchMove);
+              modalSlider.addEventListener('mouseup', touchEnd);
+              modalSlider.addEventListener('mouseleave', touchEnd);
+            }
+
+            modalSlider.addEventListener('touchmove', touchMove);
+            modalSlider.addEventListener('touchend', touchEnd);
+
+            if (storyViewer) {
+              storyViewer.classList.add('paused');
+            }
+
+            pauseVideoItem();
+            timer = setTimeout(function () {
+              storyViewer.classList.add('longPress');
+            }, 600);
+            nextTimer = setTimeout(function () {
+              clearInterval(nextTimer);
+              nextTimer = false;
+            }, 250);
           }
-
-          modalSlider.addEventListener('touchmove', touchMove);
-          modalSlider.addEventListener('touchend', touchEnd);
-
-          if (storyViewer) {
-            storyViewer.classList.add('paused');
-          }
-
-          pauseVideoItem();
-          timer = setTimeout(function () {
-            storyViewer.classList.add('longPress');
-          }, 600);
-          nextTimer = setTimeout(function () {
-            clearInterval(nextTimer);
-            nextTimer = false;
-          }, 250);
         };
 
         var touchMove = function touchMove(event) {
@@ -585,7 +592,7 @@
           var pageX = touches.pageX;
           var pageY = touches.pageY;
 
-          if (touchOffset) {
+          if (touchOffset && touchOffset.valid) {
             delta = {
               x: pageX - touchOffset.x,
               y: pageY - touchOffset.y
@@ -606,68 +613,72 @@
           var storyViewer = query('#zuck-modal .viewing');
           var lastTouchOffset = touchOffset;
 
-          if (delta) {
-            var duration = touchOffset ? Date.now() - touchOffset.time : undefined;
-            var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > modalContainer.slideWidth / 3;
-            var direction = delta.x < 0;
-            var index = direction ? query('#zuck-modal .story-viewer.next') : query('#zuck-modal .story-viewer.previous');
-            var isOutOfBounds = direction && !index || !direction && !index;
+          if (touchOffset && !touchOffset.valid) {
+            return;
+          } else {
+            if (delta) {
+              var duration = touchOffset ? Date.now() - touchOffset.time : undefined;
+              var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > modalContainer.slideWidth / 3;
+              var direction = delta.x < 0;
+              var index = direction ? query('#zuck-modal .story-viewer.next') : query('#zuck-modal .story-viewer.previous');
+              var isOutOfBounds = direction && !index || !direction && !index;
 
-            if (!isScrolling) {
-              if (isValid && !isOutOfBounds) {
-                moveStoryItem(direction);
-              } else {
-                translate(modalSlider, position.x, 300);
+              if (!isScrolling) {
+                if (isValid && !isOutOfBounds) {
+                  moveStoryItem(direction);
+                } else {
+                  translate(modalSlider, position.x, 300);
+                }
               }
+
+              touchOffset = undefined;
+
+              if (enableMouseEvents) {
+                modalSlider.removeEventListener('mousemove', touchMove);
+                modalSlider.removeEventListener('mouseup', touchEnd);
+                modalSlider.removeEventListener('mouseleave', touchEnd);
+              }
+
+              modalSlider.removeEventListener('touchmove', touchMove);
+              modalSlider.removeEventListener('touchend', touchEnd);
             }
 
-            touchOffset = undefined;
+            var video = zuck.internalData['currentVideoElement'];
 
-            if (enableMouseEvents) {
-              modalSlider.removeEventListener('mousemove', touchMove);
-              modalSlider.removeEventListener('mouseup', touchEnd);
-              modalSlider.removeEventListener('mouseleave', touchEnd);
+            if (timer) {
+              clearInterval(timer);
             }
 
-            modalSlider.removeEventListener('touchmove', touchMove);
-            modalSlider.removeEventListener('touchend', touchEnd);
-          }
+            if (storyViewer) {
+              playVideoItem(storyViewer, storyViewer.querySelectorAll('.active'), false);
+              storyViewer.classList.remove('longPress');
+              storyViewer.classList.remove('paused');
+            }
 
-          var video = zuck.internalData['currentVideoElement'];
+            if (nextTimer) {
+              clearInterval(nextTimer);
+              nextTimer = false;
 
-          if (timer) {
-            clearInterval(timer);
-          }
+              var navigateItem = function navigateItem() {
+                if (lastTouchOffset.x > window.screen.width / 3 || !option('previousTap')) {
+                  zuck.navigateItem('next', event);
+                } else {
+                  zuck.navigateItem('previous', event);
+                }
+              };
 
-          if (storyViewer) {
-            playVideoItem(storyViewer, storyViewer.querySelectorAll('.active'), false);
-            storyViewer.classList.remove('longPress');
-            storyViewer.classList.remove('paused');
-          }
+              var storyViewerViewing = query('#zuck-modal .viewing');
 
-          if (nextTimer) {
-            clearInterval(nextTimer);
-            nextTimer = false;
-
-            var navigateItem = function navigateItem() {
-              if (lastTouchOffset.x > window.screen.width / 3 || !option('previousTap')) {
-                zuck.navigateItem('next', event);
-              } else {
-                zuck.navigateItem('previous', event);
-              }
-            };
-
-            var storyViewerViewing = query('#zuck-modal .viewing');
-
-            if (storyViewerViewing && video) {
-              if (storyViewerViewing.classList.contains('muted')) {
-                unmuteVideoItem(video, storyViewerViewing);
+              if (storyViewerViewing && video) {
+                if (storyViewerViewing.classList.contains('muted')) {
+                  unmuteVideoItem(video, storyViewerViewing);
+                } else {
+                  navigateItem();
+                }
               } else {
                 navigateItem();
+                return false;
               }
-            } else {
-              navigateItem();
-              return false;
             }
           }
         };
@@ -1237,4 +1248,4 @@
   }
 
   return ZuckJS;
-})(window);
+})(window || {});

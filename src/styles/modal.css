@@ -179,8 +179,6 @@
   position: absolute;
   width: 100vh;
   top: 0;
-  bottom: 0;
-  top: 0;
   left: calc(50vw - 50vh);
   right: calc(50vw - 50vh);
   z-index: 100020;
@@ -234,7 +232,7 @@
   width: 42px;
   height: 42px;
   display: inline-block;
-  margin-right: 12px;
+  margin-right: 9px;
   border-radius: 50%;
   vertical-align: middle;
   background-repeat: no-repeat;
@@ -287,7 +285,7 @@
 #zuck-modal-content .story-viewer .head .left .back {
   display: none;
   width: 24px;
-  margin: -6px -6px 0 -6px;
+  margin: -9px -6px 0 -6px;
 }
 #zuck-modal-content .story-viewer .head .right .time {
   display: none;
@@ -371,7 +369,7 @@
   #zuck-modal-content .story-viewer .head .item-preview {
     width: 30px;
     height: 30px;
-    margin-right: 12px;
+    margin-right: 9px;
   }
   #zuck-modal-content .story-viewer .head .left {
     font-size: 15px;
@@ -392,10 +390,9 @@
     background: transparent;
     z-index: 20;
     visibility: visible;
-    margin: -6px 0;
     position: absolute;
     height: 42px;
-    width: 72px;
+    width: 24px;
     line-height: 36px;
     text-align: left;
     vertical-align: top;

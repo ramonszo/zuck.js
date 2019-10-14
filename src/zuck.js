@@ -4,7 +4,7 @@
     MIT License
 */
 
-(window => {
+module.exports = (window => {
   /* Utilities */
   const query = function (qs) {
     return document.querySelectorAll(qs)[0];
@@ -664,6 +664,7 @@
         const enableMouseEvents = true;
 
         const modalSlider = modalSliderElement;
+
         let position = {};
         let touchOffset = void 0;
         let isScrolling = void 0;
@@ -671,19 +672,19 @@
         let timer = void 0;
         let nextTimer = void 0;
 
-        const touchStart = function (event) {
+        let touchStart = function (event) {
           const storyViewer = query('#zuck-modal .viewing');
 
           if (event.target.nodeName === 'A') {
-            return true;
-          } else {
-            event.preventDefault();
+            return;
           }
 
           const touches = event.touches ? event.touches[0] : event;
           const pos = findPos(query('#zuck-modal .story-viewer.viewing'));
 
           modalContainer.slideWidth = query('#zuck-modal .story-viewer').offsetWidth;
+          modalContainer.slideHeight = query('#zuck-modal .story-viewer').offsetHeight;
+
           position = {
             x: pos[0],
             y: pos[1]
@@ -695,33 +696,43 @@
           touchOffset = {
             x: pageX,
             y: pageY,
-            time: Date.now()
+            time: Date.now(),
+            valid: true
           };
 
-          isScrolling = undefined;
-          delta = {};
+          if (pageY < 80 || pageY > (modalContainer.slideHeight - 80)) {
+            touchOffset.valid = false;
 
-          if (enableMouseEvents) {
-            modalSlider.addEventListener('mousemove', touchMove);
-            modalSlider.addEventListener('mouseup', touchEnd);
-            modalSlider.addEventListener('mouseleave', touchEnd);
+            return;
+          } else {
+            event.preventDefault();
+
+            isScrolling = undefined;
+            delta = {};
+
+            if (enableMouseEvents) {
+              modalSlider.addEventListener('mousemove', touchMove);
+              modalSlider.addEventListener('mouseup', touchEnd);
+              modalSlider.addEventListener('mouseleave', touchEnd);
+            }
+            modalSlider.addEventListener('touchmove', touchMove);
+            modalSlider.addEventListener('touchend', touchEnd);
+
+            if (storyViewer) {
+              storyViewer.classList.add('paused');
+            }
+
+            pauseVideoItem();
+
+            timer = setTimeout(() => {
+              storyViewer.classList.add('longPress');
+            }, 600);
+
+            nextTimer = setTimeout(() => {
+              clearInterval(nextTimer);
+              nextTimer = false;
+            }, 250);
           }
-          modalSlider.addEventListener('touchmove', touchMove);
-          modalSlider.addEventListener('touchend', touchEnd);
-
-          if (storyViewer) {
-            storyViewer.classList.add('paused');
-          }
-          pauseVideoItem();
-
-          timer = setTimeout(() => {
-            storyViewer.classList.add('longPress');
-          }, 600);
-
-          nextTimer = setTimeout(() => {
-            clearInterval(nextTimer);
-            nextTimer = false;
-          }, 250);
         };
 
         let touchMove = function (event) {
@@ -729,7 +740,7 @@
           const pageX = touches.pageX;
           const pageY = touches.pageY;
 
-          if (touchOffset) {
+          if (touchOffset && touchOffset.valid) {
             delta = {
               x: pageX - touchOffset.x,
               y: pageY - touchOffset.y
@@ -743,6 +754,7 @@
 
             if (!isScrolling && touchOffset) {
               event.preventDefault();
+
               translate(modalSlider, position.x + delta.x, 0, null);
             }
           }
@@ -752,72 +764,76 @@
           const storyViewer = query('#zuck-modal .viewing');
           const lastTouchOffset = touchOffset;
 
-          if (delta) {
-            const duration = touchOffset ? Date.now() - touchOffset.time : undefined;
-            const isValid = (Number(duration) < 300 && Math.abs(delta.x) > 25) || Math.abs(delta.x) > modalContainer.slideWidth / 3;
-            const direction = delta.x < 0;
+          if (touchOffset && !touchOffset.valid) {
+            return;
+          } else {
+            if (delta) {
+              const duration = touchOffset ? Date.now() - touchOffset.time : undefined;
+              const isValid = (Number(duration) < 300 && Math.abs(delta.x) > 25) || Math.abs(delta.x) > modalContainer.slideWidth / 3;
+              const direction = delta.x < 0;
 
-            const index = direction ? query('#zuck-modal .story-viewer.next') : query('#zuck-modal .story-viewer.previous');
-            const isOutOfBounds = (direction && !index) || (!direction && !index);
+              const index = direction ? query('#zuck-modal .story-viewer.next') : query('#zuck-modal .story-viewer.previous');
+              const isOutOfBounds = (direction && !index) || (!direction && !index);
 
-            if (!isScrolling) {
-              if (isValid && !isOutOfBounds) {
-                moveStoryItem(direction);
-              } else {
-                translate(modalSlider, position.x, 300);
+              if (!isScrolling) {
+                if (isValid && !isOutOfBounds) {
+                  moveStoryItem(direction);
+                } else {
+                  translate(modalSlider, position.x, 300);
+                }
               }
+
+              touchOffset = undefined;
+
+              if (enableMouseEvents) {
+                modalSlider.removeEventListener('mousemove', touchMove);
+                modalSlider.removeEventListener('mouseup', touchEnd);
+                modalSlider.removeEventListener('mouseleave', touchEnd);
+              }
+              modalSlider.removeEventListener('touchmove', touchMove);
+              modalSlider.removeEventListener('touchend', touchEnd);
             }
 
-            touchOffset = undefined;
+            const video = zuck.internalData['currentVideoElement'];
 
-            if (enableMouseEvents) {
-              modalSlider.removeEventListener('mousemove', touchMove);
-              modalSlider.removeEventListener('mouseup', touchEnd);
-              modalSlider.removeEventListener('mouseleave', touchEnd);
+            if (timer) {
+              clearInterval(timer);
             }
-            modalSlider.removeEventListener('touchmove', touchMove);
-            modalSlider.removeEventListener('touchend', touchEnd);
-          }
 
-          const video = zuck.internalData['currentVideoElement'];
+            if (storyViewer) {
+              playVideoItem(storyViewer, storyViewer.querySelectorAll('.active'), false);
+              storyViewer.classList.remove('longPress');
+              storyViewer.classList.remove('paused');
+            }
 
-          if (timer) {
-            clearInterval(timer);
-          }
+            if (nextTimer) {
+              clearInterval(nextTimer);
+              nextTimer = false;
 
-          if (storyViewer) {
-            playVideoItem(storyViewer, storyViewer.querySelectorAll('.active'), false);
-            storyViewer.classList.remove('longPress');
-            storyViewer.classList.remove('paused');
-          }
+              const navigateItem = function () {
+                if (
+                  lastTouchOffset.x > window.screen.width / 3 ||
+                    !option('previousTap')
+                ) {
+                  zuck.navigateItem('next', event);
+                } else {
+                  zuck.navigateItem('previous', event);
+                }
+              };
 
-          if (nextTimer) {
-            clearInterval(nextTimer);
-            nextTimer = false;
+              const storyViewerViewing = query('#zuck-modal .viewing');
 
-            const navigateItem = function () {
-              if (
-                lastTouchOffset.x > window.screen.width / 3 ||
-                  !option('previousTap')
-              ) {
-                zuck.navigateItem('next', event);
-              } else {
-                zuck.navigateItem('previous', event);
-              }
-            };
-
-            const storyViewerViewing = query('#zuck-modal .viewing');
-
-            if (storyViewerViewing && video) {
-              if (storyViewerViewing.classList.contains('muted')) {
-                unmuteVideoItem(video, storyViewerViewing);
+              if (storyViewerViewing && video) {
+                if (storyViewerViewing.classList.contains('muted')) {
+                  unmuteVideoItem(video, storyViewerViewing);
+                } else {
+                  navigateItem();
+                }
               } else {
                 navigateItem();
-              }
-            } else {
-              navigateItem();
 
-              return false;
+                return false;
+              }
             }
           }
         };
@@ -833,8 +849,7 @@
           const modalContainer = query('#zuck-modal');
 
           const callback = function () {
-            modalContent.innerHTML =
-                `<div id="zuck-modal-slider-${id}" class="slider"></div>`;
+            modalContent.innerHTML = `<div id="zuck-modal-slider-${id}" class="slider"></div>`;
 
             const storyData = zuck.data[storyId];
             const currentItem = storyData['currentItem'] || 0;
@@ -1436,4 +1451,4 @@
   }
 
   return ZuckJS;
-})(window);
+})(window || {});
