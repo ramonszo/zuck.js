@@ -546,16 +546,16 @@
             x: pos[0],
             y: pos[1]
           };
-          var pageX = touches.pageX;
-          var pageY = touches.pageY;
+          var clientX = touches.clientX;
+          var clientY = touches.clientY;
           touchOffset = {
-            x: pageX,
-            y: pageY,
+            x: clientX,
+            y: clientY,
             time: Date.now(),
             valid: true
           };
 
-          if (pageY < 80 || pageY > modalContainer.slideHeight - 80) {
+          if (clientY < 80 || clientY > modalContainer.slideHeight - 80) {
             touchOffset.valid = false;
             return;
           } else {
@@ -589,13 +589,13 @@
 
         var touchMove = function touchMove(event) {
           var touches = event.touches ? event.touches[0] : event;
-          var pageX = touches.pageX;
-          var pageY = touches.pageY;
+          var clientX = touches.clientX;
+          var clientY = touches.clientY;
 
           if (touchOffset && touchOffset.valid) {
             delta = {
-              x: pageX - touchOffset.x,
-              y: pageY - touchOffset.y
+              x: clientX - touchOffset.x,
+              y: clientY - touchOffset.y
             };
 
             if (typeof isScrolling === 'undefined') {

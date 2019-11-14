@@ -20,6 +20,10 @@
   outline: 0 !important;
   overflow: hidden;
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100%;
   background: rgba(0, 0, 0, 0.75);
   z-index: 100000;
   font-size: 14px;
@@ -45,13 +49,6 @@
   transform: scale(0.01);
   transform-origin: top left;
   transition: 0.25s;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100%;
-  top: 0;
-  bottom: 0;
 }
 #zuck-modal.with-effects.animated {
   transform: scale(1);
