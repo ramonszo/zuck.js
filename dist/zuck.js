@@ -660,10 +660,12 @@
               nextTimer = false;
 
               var navigateItem = function navigateItem() {
-                if (lastTouchOffset.x > window.screen.width / 3 || !option('previousTap')) {
-                  zuck.navigateItem('next', event);
-                } else {
-                  zuck.navigateItem('previous', event);
+                if (!direction) {
+                  if (lastTouchOffset.x > window.screen.width / 3 || !option('previousTap')) {
+                    zuck.navigateItem('next', event);
+                  } else {
+                    zuck.navigateItem('previous', event);
+                  }
                 }
               };
 
