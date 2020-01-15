@@ -95,11 +95,11 @@
         if (cancel) {
           if (document.fullscreenElement || document['webkitFullscreenElement'] || document['mozFullScreenElement'] || document['msFullscreenElement']) {
             if (document.exitFullscreen) {
-              document.exitFullscreen().catch(function () {});
+              document.exitFullscreen()["catch"](function () {});
             } else if (document['mozCancelFullScreen']) {
-              document['mozCancelFullScreen']().catch(function () {});
+              document['mozCancelFullScreen']()["catch"](function () {});
             } else if (document['mozCancelFullScreen']) {
-              document['mozCancelFullScreen']().catch(function () {});
+              document['mozCancelFullScreen']()["catch"](function () {});
             }
           }
         } else {
@@ -612,17 +612,16 @@
         var touchEnd = function touchEnd(event) {
           var storyViewer = query('#zuck-modal .viewing');
           var lastTouchOffset = touchOffset;
+          var duration = touchOffset ? Date.now() - touchOffset.time : undefined;
+          var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > modalContainer.slideWidth / 3;
+          var direction = delta.x < 0;
+          var index = direction ? query('#zuck-modal .story-viewer.next') : query('#zuck-modal .story-viewer.previous');
+          var isOutOfBounds = direction && !index || !direction && !index;
 
           if (touchOffset && !touchOffset.valid) {
             return;
           } else {
             if (delta) {
-              var duration = touchOffset ? Date.now() - touchOffset.time : undefined;
-              var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > modalContainer.slideWidth / 3;
-              var direction = delta.x < 0;
-              var index = direction ? query('#zuck-modal .story-viewer.next') : query('#zuck-modal .story-viewer.previous');
-              var isOutOfBounds = direction && !index || !direction && !index;
-
               if (!isScrolling) {
                 if (isValid && !isOutOfBounds) {
                   moveStoryItem(direction);

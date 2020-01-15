@@ -763,18 +763,18 @@ module.exports = (window => {
         let touchEnd = function (event) {
           const storyViewer = query('#zuck-modal .viewing');
           const lastTouchOffset = touchOffset;
+          
+          const duration = touchOffset ? Date.now() - touchOffset.time : undefined;
+          const isValid = (Number(duration) < 300 && Math.abs(delta.x) > 25) || Math.abs(delta.x) > modalContainer.slideWidth / 3;
+          const direction = delta.x < 0;
+
+          const index = direction ? query('#zuck-modal .story-viewer.next') : query('#zuck-modal .story-viewer.previous');
+          const isOutOfBounds = (direction && !index) || (!direction && !index);
 
           if (touchOffset && !touchOffset.valid) {
             return;
           } else {
             if (delta) {
-              const duration = touchOffset ? Date.now() - touchOffset.time : undefined;
-              const isValid = (Number(duration) < 300 && Math.abs(delta.x) > 25) || Math.abs(delta.x) > modalContainer.slideWidth / 3;
-              const direction = delta.x < 0;
-
-              const index = direction ? query('#zuck-modal .story-viewer.next') : query('#zuck-modal .story-viewer.previous');
-              const isOutOfBounds = (direction && !index) || (!direction && !index);
-
               if (!isScrolling) {
                 if (isValid && !isOutOfBounds) {
                   moveStoryItem(direction);
