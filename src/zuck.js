@@ -1034,7 +1034,7 @@ module.exports = (window => {
       
         zuck.data[storyId].id = storyId; // story id
         zuck.data[storyId].photo = story.getAttribute('data-photo'); // story preview (or user photo)
-        zuck.data[storyId].name = story.querySelector('.name').innerText;
+        zuck.data[storyId].name = story.querySelector('.name').textContent;
         zuck.data[storyId].link = story.querySelector('.item-link').getAttribute('href');
         zuck.data[storyId].lastUpdated = story.getAttribute('data-last-updated');
         zuck.data[storyId].seen = seen;
