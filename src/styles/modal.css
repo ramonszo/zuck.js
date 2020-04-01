@@ -354,6 +354,73 @@
   padding: 12px 24px;
 }
 
+
+#zuck-modal.rtl {
+  direction: rtl;
+  left: auto;
+  right: 0;
+}
+#zuck-modal.rtl.with-effects {
+  transform-origin: top right;
+}
+#zuck-modal.rtl.with-effects.animated {
+  margin-left: auto !important;
+  margin-right: 0 !important;
+}
+#zuck-modal.rtl .slider {
+  left: auto;
+  right: -100vw;
+}
+#zuck-modal.rtl .slider > .previous {
+  left: auto;
+  right: 0;
+  transform: rotateY(-270deg) translateX(50%);
+}
+#zuck-modal.rtl .slider > .viewing {
+  left: auto;
+  right: 100vw;
+}
+#zuck-modal.rtl .slider > .next {
+  left: auto;
+  right: 200vw;
+}
+#zuck-modal.rtl.with-cube .slider > .previous {
+  left: auto;
+  right: 100vw;
+  transform-origin: center right;
+}
+#zuck-modal.rtl.with-cube .slider > .viewing {
+  left: auto;
+  right: 100vw;
+  transform: translateZ(50vw);
+}
+#zuck-modal.rtl.with-cube .slider > .next {
+  left: auto;
+  right: 100vw;
+  transform-origin: top left;
+  transform: rotateY(270deg) translateX(-50%);
+}
+#zuck-modal.rtl #zuck-modal-content .story-viewer .slides-pagination .previous {
+  left: auto;
+  right: 0;
+}
+#zuck-modal.rtl #zuck-modal-content .story-viewer .slides-pagination .next {
+  right: auto;
+  left: 0;
+}
+#zuck-modal.rtl #zuck-modal-content .story-viewer .head .item-preview {
+  margin-right: auto;
+  margin-left: 9px;
+}
+#zuck-modal.rtl #zuck-modal-content .story-viewer .head .right {
+  float: left;
+}
+#zuck-modal.rtl #zuck-modal-content .story-viewer .tip {
+  left: auto;
+  right: 50%;
+  transform: translateX(50%);
+}
+
 @media (max-width: 1024px) {
   #zuck-modal-content .story-viewer .head {
     top: 3px;
@@ -416,5 +483,17 @@
   #zuck-modal-content .story-viewer .head .left .time,
   #zuck-modal-content .story-viewer .head .right .close {
     display: none;
+  }
+
+  #zuck-modal.rtl #zuck-modal-content .story-viewer .head .item-preview {
+    margin-right: auto;
+    margin-left: 9px;
+  }
+  #zuck-modal.rtl #zuck-modal-content .story-viewer .head .left > .back {
+    text-align: right;
+  }
+  #zuck-modal.rtl #zuck-modal-content .story-viewer.with-back-button .head .left .item-preview {
+    margin-left: auto;
+    margin-right: 18px;
   }
 }

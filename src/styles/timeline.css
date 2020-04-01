@@ -116,3 +116,22 @@
 .stories.list .story > .items {
   display: none;
 }
+
+.stories.rtl {
+  direction: rtl;
+}
+.stories.rtl.carousel .story:first-child {
+  margin-left: auto;
+  margin-right: 0;
+}
+.stories.rtl.carousel .story:last-child {
+  margin-right: auto;
+  margin-left: 0;
+}
+.stories.rtl.list .story > .item-link {
+  text-align: right;
+}
+.stories.rtl.list .story > .item-link > .item-preview {
+  margin-right: auto;
+  margin-left: 12px;
+}
