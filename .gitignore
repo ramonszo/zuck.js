@@ -36,6 +36,5 @@
 ehthumbs.db
 Thumbs.db
 .idea
-dist/zuck
 node_modules
 package-lock.json
