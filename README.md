@@ -26,6 +26,7 @@ React sample: https://on.ramon82.com/2lDP53H
 * Custom js templates
 * React support
 * Privacy (because the future is...)
+* RTL support
 
 
 ## How to use
@@ -46,6 +47,7 @@ let stories = new Zuck(`{{element id string or element reference}}`, {
   previousTap: true,     // use 1/3 of the screen to navigate to previous item when tap the story
   localStorage: true,    // set true to save "seen" position. Element must have a id to save properly.
   reactive: true,        // set true if you use frameworks like React to control the timeline (see react.sample.html)
+  rtl: false,            // enable/disable RTL
 
   stories: [ // array of stories
     // see stories structure example

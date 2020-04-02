@@ -82,11 +82,11 @@ module.exports = (window => {
   /* Zuckera */
   const ZuckJS = function (timeline, options) {
     const zuck = this;
-    const option = function (name, prop) {        
+    const option = function (name, prop) {
       const type = function (what) {
         return typeof what !== 'undefined';
       };
-  
+
       if (prop) {
         if (type(options[name])) {
           return type(options[name][prop])
@@ -103,7 +103,7 @@ module.exports = (window => {
     const fullScreen = function (elem, cancel) {
       const func = 'RequestFullScreen';
       const elFunc = 'requestFullScreen'; // crappy vendor prefixes.
-  
+
       try {
         if (cancel) {
           if (
@@ -137,65 +137,65 @@ module.exports = (window => {
       } catch (e) {
         console.warn('[Zuck.js] Can\'t access fullscreen');
       }
-    };  
+    };
 
     const translate = function (element, to, duration, ease) {
       const direction = to > 0 ? 1 : -1;
       const to3d = (Math.abs(to) / query('#zuck-modal').offsetWidth) * 90 * direction;
-  
+
       if (option('cubeEffect')) {
         const scaling = to3d === 0 ? 'scale(0.95)' : 'scale(0.930,0.930)';
-  
+
         setVendorVariable(
           query('#zuck-modal-content').style,
           'Transform',
           scaling
         );
-  
+
         if (to3d < -90 || to3d > 90) {
           return false;
         }
       }
-  
+
       const transform = !option('cubeEffect')
         ? `translate3d(${to}px, 0, 0)`
         : `rotateY(${to3d}deg)`;
-  
+
       if (element) {
         setVendorVariable(element.style, 'TransitionTimingFunction', ease);
         setVendorVariable(element.style, 'TransitionDuration', `${duration}ms`);
         setVendorVariable(element.style, 'Transform', transform);
       }
     };
-  
+
     const findPos = function (obj, offsetY, offsetX, stop) {
       let curleft = 0;
       let curtop = 0;
-  
+
       if (obj) {
         if (obj.offsetParent) {
           do {
             curleft += obj.offsetLeft;
             curtop += obj.offsetTop;
-  
+
             if (obj === stop) {
               break;
             }
           } while ((obj = obj.offsetParent));
         }
-  
+
         if (offsetY) {
           curtop = curtop - offsetY;
         }
-  
+
         if (offsetX) {
           curleft = curleft - offsetX;
         }
       }
-  
+
       return [curleft, curtop];
     };
-  
+
     if (typeof timeline === 'string') {
       timeline = document.getElementById(timeline);
     }
@@ -206,13 +206,13 @@ module.exports = (window => {
 
     const timeAgo = function (time) {
       time = Number(time) * 1000;
-  
+
       const dateObj = new Date(time);
       const dateStr = dateObj.getTime();
       let seconds = (new Date().getTime() - dateStr) / 1000;
-  
+
       const language = option('language', 'time');
-  
+
       const formats = [
         [60, ` ${language['seconds']}`, 1], // 60
         [120, `1 ${language['minute']}`, ''], // 60*2
@@ -222,14 +222,14 @@ module.exports = (window => {
         [172800, ` ${language['yesterday']}`, ''], // 60*60*24*2
         [604800, ` ${language['days']}`, 86400]
       ];
-  
+
       let currentFormat = 1;
       if (seconds < 0) {
         seconds = Math.abs(seconds);
-  
+
         currentFormat = 2;
       }
-  
+
       let i = 0;
       let format = void 0;
       while ((format = formats[i++])) {
@@ -241,17 +241,18 @@ module.exports = (window => {
           }
         }
       }
-  
+
       const day = dateObj.getDate();
       const month = dateObj.getMonth();
       const year = dateObj.getFullYear();
-  
+
       return `${day}/${month + 1}/${year}`;
     };
 
     /* options */
     const id = timeline.id;
     const optionsDefault = {
+      rtl: false,
       skin: 'snapgram',
       avatars: true,
       stories: [],
@@ -330,7 +331,7 @@ module.exports = (window => {
                           <span class="time">${get(storyData, 'timeAgo')}</span>
                         </div>
                       </div>
-                      
+
                       <div class="right">
                         <span class="time">${get(currentStoryItem, 'timeAgo')}</span>
                         <span class="loading"></span>
@@ -433,6 +434,10 @@ module.exports = (window => {
           modalZuckContainer.classList.add('with-effects');
         }
 
+        if (option('rtl')) {
+          modalZuckContainer.classList.add('rtl');
+        }
+
         onTransitionEnd(modalZuckContainer, () => {
           if (modalZuckContainer.classList.contains('closed')) {
             modalContent.innerHTML = '';
@@ -465,7 +470,9 @@ module.exports = (window => {
           (!slideItems['previous'] && !direction) ||
             (!slideItems['next'] && direction)
         ) {
-          return false;
+          if(!option('rtl')) {
+            return false;
+          }
         }
 
         if (!direction) {
@@ -490,6 +497,13 @@ module.exports = (window => {
         translate(modalSlider, transform, transitionTime, null);
 
         setTimeout(() => {
+          // set page data when transition complete
+          if(option('rtl')) {
+            const tmp = target;
+            target = useless;
+            useless = tmp;
+          }
+
           if (target !== '' && slideItems[target] && useless !== '') {
             const currentStory = slideItems[target].getAttribute('data-story-id');
             zuck.internalData['currentStory'] = currentStory;
@@ -583,7 +597,7 @@ module.exports = (window => {
           }
 
           pointerItems += option('template', 'viewerItemPointer')(i, currentItem, item);
-          htmlItems += option('template', 'viewerItemBody')(i, currentItem, item); 
+          htmlItems += option('template', 'viewerItemBody')(i, currentItem, item);
         });
 
         slides.innerHTML = htmlItems;
@@ -628,8 +642,9 @@ module.exports = (window => {
         storyViewerWrap.innerHTML = option('template', 'viewerItem')(storyData, currentItem);
 
         let storyViewer = storyViewerWrap.firstElementChild;
+
         storyViewer.className = `story-viewer muted ${className} ${!forcePlay ? 'stopped' : ''} ${option('backButton') ? 'with-back-button' : ''}`;
-        
+
         storyViewer.setAttribute('data-story-id', storyId);
         storyViewer.querySelector('.slides-pointers .wrap').innerHTML = pointerItems;
 
@@ -763,7 +778,7 @@ module.exports = (window => {
         let touchEnd = function (event) {
           const storyViewer = query('#zuck-modal .viewing');
           const lastTouchOffset = touchOffset;
-          
+
           const duration = touchOffset ? Date.now() - touchOffset.time : undefined;
           const isValid = (Number(duration) < 300 && Math.abs(delta.x) > 25) || Math.abs(delta.x) > modalContainer.slideWidth / 3;
           const direction = delta.x < 0;
@@ -813,9 +828,17 @@ module.exports = (window => {
               const navigateItem = function () {
                 if (!direction) {
                   if (lastTouchOffset.x > window.screen.width / 3 || !option('previousTap')) {
-                    zuck.navigateItem('next', event);
+                    if(option('rtl')) {
+                      zuck.navigateItem('previous', event);
+                    } else {
+                      zuck.navigateItem('next', event);
+                    }
                   } else {
-                    zuck.navigateItem('previous', event);
+                    if(option('rtl')) {
+                      zuck.navigateItem('next', event);
+                    } else {
+                      zuck.navigateItem('previous', event);
+                    }
                   }
                 }
               };
@@ -943,7 +966,11 @@ module.exports = (window => {
             if (!stories) {
               modal.close();
             } else {
-              moveStoryItem(true);
+              if(option('rtl')) {
+                moveStoryItem(false);
+              } else {
+                moveStoryItem(true);
+              }
             }
           };
 
@@ -1011,7 +1038,7 @@ module.exports = (window => {
 
     const parseStory = function (story, returnCallback) {
       const storyId = story.getAttribute('data-id');
-      
+
       let seen = false;
 
       if (zuck.internalData['seenItems'][storyId]) {
@@ -1031,7 +1058,7 @@ module.exports = (window => {
         if(!zuck.data[storyId]) {
           zuck.data[storyId] = {};
         }
-      
+
         zuck.data[storyId].id = storyId; // story id
         zuck.data[storyId].photo = story.getAttribute('data-photo'); // story preview (or user photo)
         zuck.data[storyId].name = story.querySelector('.name').innerText;
@@ -1200,7 +1227,7 @@ module.exports = (window => {
 
       let story = undefined;
       let preview = false;
-      
+
       if (items[0]) {
         preview = items[0]['preview'] || '';
       }
@@ -1271,7 +1298,7 @@ module.exports = (window => {
 
         // wow, too much jsx
         li.innerHTML = option('template', 'timelineStoryItem')(data);
-        
+
         if (append) {
           el.appendChild(li);
         } else {
@@ -1294,7 +1321,7 @@ module.exports = (window => {
       const currentStory = zuck.internalData['currentStory'];
       const currentItem = zuck.data[currentStory]['currentItem'];
       const storyViewer = query(`#zuck-modal .story-viewer[data-story-id="${currentStory}"]`);
-      const directionNumber = direction === 'previous' ? -1 : 1;
+      let directionNumber = direction === 'previous' ? -1 : 1;
 
       if (!storyViewer || storyViewer.touchMove === 1) {
         return false;
@@ -1373,7 +1400,7 @@ module.exports = (window => {
 
       if (!option('reactive')) {
         let seenItems = getLocalData('seenItems');
-        
+
         for (let key in seenItems) {
           if (seenItems.hasOwnProperty(key)) {
             if (zuck.data[key]) {
@@ -1391,8 +1418,9 @@ module.exports = (window => {
 
       const avatars = option('avatars') ? 'user-icon' : 'story-preview';
       const list = option('list') ? 'list' : 'carousel';
+      const rtl = option('rtl') ? 'rtl' : '';
 
-      timeline.className += ` stories ${avatars} ${list} ${(`${option('skin')}`).toLowerCase()}`;
+      timeline.className += ` stories ${avatars} ${list} ${(`${option('skin')}`).toLowerCase()} ${rtl}`;
 
       return zuck;
     };
