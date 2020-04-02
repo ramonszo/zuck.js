@@ -168,7 +168,9 @@ A JSON example of the stories object:
             link: "",     // a link to click on story
             linkText: "", // link text
             time: "",     // optional a date to display with the story item. unix timestamp are converted to "time ago" format
-            seen: false   // set true if current user was read
+            seen: false,   // set true if current user was read
+            [custom-key]: 'custom-value',
+            [another-custom-key]: 'another-custom-value'
         }
     ]
 }
@@ -197,7 +199,7 @@ In your HTML:
         
             <!-- story item -->
             <li data-id="{{storyItemId}}" data-time="{{storyItem.time}}" class="{{storyItem.seen}}">
-                <a href="{{storyItem.src}}" data-type="{{storyItem.type}}" data-length="{{storyItem.length}}" data-link="{{storyItem.link}}" data-linkText="{{storyItem.linkText}}">
+                <a href="{{storyItem.src}}" data-type="{{storyItem.type}}" data-length="{{storyItem.length}}" data-link="{{storyItem.link}}" data-linkText="{{storyItem.linkText}}" data-custom-key="{{storyItem.custom-key}}" data-another-custom-key="{{storyItem.another-custom-key}}">
                     <img src="{{storyItem.preview}}" />
                 </a>
             </li>
