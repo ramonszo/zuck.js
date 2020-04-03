@@ -1,4 +1,9 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+const devMode = process.env.NODE_ENV !== 'production';
+
 module.exports = {
   entry: {
     'zuck.js': './src/zuck.js',
@@ -21,16 +26,31 @@ module.exports = {
     extensions: ['*', '.js', 'css']
   },
   plugins: [
-    new MiniCssExtractPlugin({})
+    new MiniCssExtractPlugin({
+      filename: devMode ? '[name].css' : '[name].min.css'
+    })
   ],
   output: {
     path: `${__dirname}/dist`,
     publicPath: '/',
-    filename: '[name]',
-    library: 'zuck.js'
+    filename: (chunkData) => {
+      let [name, extension] = chunkData.chunk.name.split('.');
+      let suffix = devMode ? '' : '.min';
+
+      if (extension) {
+        extension = `.${extension}`;
+      } else {
+        suffix = '';
+        extension = devMode ? '.css.js' : '.css.min.js';
+      }
+
+      return `${name}${suffix}${extension}`;
+    },
+    library: 'Zuck'
   },
   optimization: {
-    minimize: process.env.NODE_ENV === 'production'
+    minimize: !devMode,
+    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
   },
   devServer: {
     contentBase: __dirname,

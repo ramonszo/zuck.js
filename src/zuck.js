@@ -230,7 +230,7 @@ module.exports = (window => {
 
       let result = false;
       each(formats, (formatKey, format) => {
-        if (seconds < format[0]) {
+        if (seconds < format[0] && !result) {
           if (typeof format[2] === 'string') {
             result = format[currentFormat];
           } else if (format !== null) {
@@ -317,8 +317,8 @@ module.exports = (window => {
             data-length="${get(itemData, 'length')}"
           `;
 
-          for(const dataKey in itemData) {
-            if(reserved.indexOf(dataKey) === -1) {
+          for (const dataKey in itemData) {
+            if (reserved.indexOf(dataKey) === -1) {
               attributes += ` data-${dataKey}="${itemData[dataKey]}"`;
             }
           }
@@ -1015,7 +1015,7 @@ module.exports = (window => {
       const items = [];
 
       if (!option('reactive') || forceUpdate) {
-        each(storyItems, (i, {firstElementChild}) => {
+        each(storyItems, (i, { firstElementChild }) => {
           const a = firstElementChild;
           const img = a.firstElementChild;
 
@@ -1027,15 +1027,15 @@ module.exports = (window => {
             time: a.getAttribute('data-time'),
             link: a.getAttribute('data-link'),
             linkText: a.getAttribute('data-linkText'),
-            preview: img.getAttribute('src'),
+            preview: img.getAttribute('src')
           };
 
           // collect all attributes
           const all = a.attributes;
           // exclude the reserved options
           const reserved = ['data-id', 'href', 'data-length', 'data-type', 'data-time', 'data-link', 'data-linktext'];
-          for(let z=0; z < all.length; z++) {
-            if(reserved.indexOf(all[z].nodeName) === -1) {
+          for (let z = 0; z < all.length; z++) {
+            if (reserved.indexOf(all[z].nodeName) === -1) {
               item[all[z].nodeName.replace('data-', '')] = all[z].nodeValue;
             }
           }

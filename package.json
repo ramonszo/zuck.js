@@ -43,9 +43,11 @@
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.18.2",
     "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
     "prettier": "1.18.2",
     "semistandard": "^14.2.0",
     "style-loader": "^1.0.0",
+    "terser-webpack-plugin": "^2.3.5",
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0"
@@ -88,6 +90,6 @@
   "scripts": {
     "build:prod": "NODE_ENV=production webpack --mode production",
     "build:dev": "NODE_ENV=development webpack --mode development",
-    "watch": "webpack-dev-server --config=./webpack.config.js --mode development"
+    "watch": "webpack-dev-server --config=./webpack.config.js --mode production"
   }
 }
