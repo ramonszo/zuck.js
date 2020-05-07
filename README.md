@@ -157,7 +157,8 @@ A JSON example of the stories object:
     {
       id: "",       // item id
       type: "",     // photo or video
-      length: 3,    // photo timeout or video length in seconds - uses 3 seconds timeout for images if not set
+      length: 3,    // photo timeout or video length in seconds - uses 3 seconds as default
+      loop: false,  // loop video if needed. Makes no sense if video real duration is greater than length. Use case: mp4 gifs
       src: "",      // photo or video src
       preview: "",  // optional - item thumbnail to show in the story carousel instead of the story defined image
       link: "",     // a link to click on story
