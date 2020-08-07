@@ -44,6 +44,14 @@ let stories = new Zuck(`{{element id string or element reference}}`, {
   localStorage: true,    // set true to save "seen" position. Element must have a id to save properly.
   reactive: true,        // set true if you use frameworks like React to control the timeline (see react.sample.html)
   rtl: false,            // enable/disable RTL
+  
+  /**
+   * Function to change the displayed date format. 
+   * The default format is dd/mm/yyyy
+   * @see https://github.com/ramon82/zuck.js/blob/cba22b9cb1a4baf0a6a86f36dc559d1f5da92ad3/src/zuck.js#L205-L251
+  timeFormat: (time) => {
+     return ''
+  }
 
   stories: [ // array of stories
     // see stories structure example
