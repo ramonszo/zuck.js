@@ -202,7 +202,7 @@ module.exports = (window => {
       timeline.setAttribute('id', generateId());
     }
 
-    const timeAgo = function (time) {
+    const timeAgo = option('timeFormat') || function (time) {
       time = Number(time) * 1000;
 
       const dateObj = new Date(time);
