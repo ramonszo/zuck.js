@@ -287,23 +287,24 @@ module.exports = (window => {
       template: {
         timelineItem (itemData) {
           return `
+            ${get(itemData,"photo")? '' : `<div class="row">`}
             <div class="story ${get(itemData, 'seen') === true ? 'seen' : ''}">
               <a class="item-link" href="${get(itemData, 'link')}">
-                <span class="item-preview">
+                ${get(itemData,"photo")?
+                `<span class="item-preview">
                   <img lazy="eager" src="${
                     (option('avatars') || !get(itemData, 'currentPreview'))
                     ? get(itemData, 'photo')
                     : get(itemData, 'currentPreview')
                   }" />
-                </span>
+                </span>`:`<span class="item-preview" style="display: none"></span>`}
                 <span class="info" itemProp="author" itemScope itemType="http://schema.org/Person">
-                  <strong class="name" itemProp="name">${get(itemData, 'name')}</strong>
-                  <span class="time">${get(itemData, 'lastUpdatedAgo')}</span>
+                  <strong class="name poppins-medium" itemProp="name">${get(itemData, 'name')}</strong>
                 </span>
               </a>
-              
               <ul class="items"></ul>
-            </div>`;
+            </div>
+            ${get(itemData,"photo") ? '' : `</div>`}`;
         },
 
         timelineStoryItem (itemData) {
@@ -333,19 +334,20 @@ module.exports = (window => {
                     <div class="head">
                       <div class="left">
                         ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
-
-                        <span class="item-preview">
+                        
+                        ${get(storyData,"photo")?
+                        `<span class="item-preview">
                           <img lazy="eager" class="profilePhoto" src="${get(storyData, 'photo')}" />
-                        </span>
+                        </span>`:""}
 
                         <div class="info">
-                          <strong class="name">${get(storyData, 'name')}</strong>
-                          <span class="time">${get(storyData, 'timeAgo')}</span>
+                          <strong class="name poppins-medium">${get(storyData, 'name')}</strong>
                         </div>
                       </div>
 
                       <div class="right">
-                        <span class="time">${get(currentStoryItem, 'timeAgo')}</span>
+                        <a class="paused_story poppins-light"><i class="far fa-pause-circle fa-2x" aria-hidden="true"></i> PAUSE</a>
+                        <a class="play_story poppins-light" style="display:none";><i class="far fa-play-circle fa-2x" aria-hidden="true"></i> PLAY</a>
                         <span class="loading"></span>
                         <a class="close" tabIndex="2">&times;</a>
                       </div>
@@ -358,8 +360,9 @@ module.exports = (window => {
                     ${
                       option('paginationArrows')
                       ? `<div class="slides-pagination">
-                          <span class="previous">&lsaquo;</span>
-                          <span class="next">&rsaquo;</span>
+                          <span class="previous"><i class="fas fa-chevron-circle-left fa-xs"></i></span>
+                          <div class="storyline"></div>
+                          <span class="next"><i class="fas fa-chevron-circle-right fa-xs"></i></span>
                         </div>`
                       : ''
                     }
@@ -390,6 +393,25 @@ module.exports = (window => {
                       ? `<a class="tip link" href="${get(item, 'link')}" rel="noopener" target="_blank">
                             ${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}
                           </a>`
+                      : ''
+                    }
+        
+                    ${
+                      get(item, 'link')
+                      ? `<a class="tip read-moreh read-more-btn-highlights inter-bold" href="${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}" rel="noopener" target="_blank">
+                          READ MORE <i class="fas fa-arrow-right"></i>
+                          </a>`
+                      : ''
+                    }
+
+                    ${
+                       get(item, 'link')
+                       ? `<div class="L_story_social">
+                            <ul class="list-inline">
+                              <li class="list-inline-item"><a href="https://api.whatsapp.com/send?text=${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}" class="tip whatsapp" target="_blank"> <i class="fab fa-whatsapp"></i></a></li>
+                              <li class="list-inline-item"><a href="https://telegram.me/share/url?url=${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}" class="tip telegram" target="_blank"> <i class="fa fa-paper-plane"></i></a></li>
+                              <li class="list-inline-item"><a href="https://www.facebook.com/sharer/sharer.php?u=${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}" class="tip facebook" target="blank"> <i class="fab fa-facebook-f"></i></a></li>
+                              <li class="list-inline-item"><a href="#" class="tip copy"><small>COPY LINK</small></a></li></ul></div>`
                       : ''
                     }
                   </div>`;
@@ -660,9 +682,23 @@ module.exports = (window => {
             modal.close();
           };
         });
-
+        
+        each(storyViewer.querySelectorAll('.paused_story'), (i, el) => {
+          el.onclick = e => {
+            e.preventDefault();
+            storyViewer.classList.add("paused"), storyViewer.querySelector(".paused_story").style.display = "none", storyViewer.querySelector(".play_story").style.display = "inline", storyViewer.querySelector(".play_story").innerHTML = "<i class='far fa-play-circle fa-2x' aria-hidden='true'></i> PLAY";
+          };
+        });
+            
+        each(storyViewer.querySelectorAll('.play_story'), (i, el) => {
+          el.onclick = e => {
+            e.preventDefault();
+            storyViewer.classList.remove("paused"), storyViewer.querySelector(".paused_story").style.display = "inline", storyViewer.querySelector(".play_story").style.display = "none", storyViewer.querySelector(".paused_story").innerHTML = "<i class='far fa-play-circle fa-2x' aria-hidden='true'></i> PAUSE";
+          };
+        });
+        
         storyViewer.appendChild(slides);
-
+        
         if (className === 'viewing') {
           playVideoItem(storyViewer, storyViewer.querySelectorAll(`[data-index="${currentItem}"].active`), false);
         }
