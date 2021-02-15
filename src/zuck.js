@@ -333,7 +333,7 @@ module.exports = (window => {
           return `<div class="story-viewer">
                     <div class="head">
                       <div class="left">
-                        ${option('backButton') ? '<a class="back">&lsaquo;</a>' : ''}
+                       
                         
                         ${get(storyData,"photo")?
                         `<span class="item-preview">
@@ -346,10 +346,11 @@ module.exports = (window => {
                       </div>
 
                       <div class="right">
-                        <a class="paused_story poppins-light"><i class="far fa-pause-circle fa-2x" aria-hidden="true"></i> PAUSE</a>
-                        <a class="play_story poppins-light" style="display:none";><i class="far fa-play-circle fa-2x" aria-hidden="true"></i> PLAY</a>
+                        <a class="paused_story poppins-light"><i class="far fa-pause-circle fa-2x" aria-hidden="true"></i> <span class="text">PAUSE</span></a>
+                        <a class="play_story poppins-light" style="display:none";><i class="far fa-play-circle fa-2x" aria-hidden="true"></i> <span class="text">PLAY</span></a>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
                         <span class="loading"></span>
-                        <a class="close" tabIndex="2">&times;</a>
+                         ${option('backButton') ? '<a class="back" tabIndex="2">&times;</a>' : ''}
                       </div>
                     </div>
 
@@ -398,7 +399,7 @@ module.exports = (window => {
         
                     ${
                       get(item, 'link')
-                      ? `<a class="tip read-moreh read-more-btn-highlights inter-bold" href="${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}" rel="noopener" target="_blank">
+                      ? `<a class="tip read-moreh read-more-btn-highlights inter-bold" href="${get(item, 'link')}" rel="noopener" target="_blank">
                           READ MORE <i class="fas fa-arrow-right"></i>
                           </a>`
                       : ''
@@ -408,10 +409,10 @@ module.exports = (window => {
                        get(item, 'link')
                        ? `<div class="L_story_social">
                             <ul class="list-inline">
-                              <li class="list-inline-item"><a href="https://api.whatsapp.com/send?text=${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}" class="tip whatsapp" target="_blank"> <i class="fab fa-whatsapp"></i></a></li>
-                              <li class="list-inline-item"><a href="https://telegram.me/share/url?url=${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}" class="tip telegram" target="_blank"> <i class="fa fa-paper-plane"></i></a></li>
-                              <li class="list-inline-item"><a href="https://www.facebook.com/sharer/sharer.php?u=${!get(item, 'linkText') || get(item, 'linkText') === '' ? option('language', 'visitLink') : get(item, 'linkText')}" class="tip facebook" target="blank"> <i class="fab fa-facebook-f"></i></a></li>
-                              <li class="list-inline-item"><a href="#" class="tip copy"><small>COPY LINK</small></a></li></ul></div>`
+                              <li class="list-inline-item"><a href="https://api.whatsapp.com/send?text=${get(item, 'link')}" class="tip whatsapp" target="_blank"> <i class="fab fa-whatsapp"></i></a></li>
+                              <li class="list-inline-item"><a href="https://telegram.me/share/url?url=${get(item, 'link')}" class="tip telegram" target="_blank"> <i class="fa fa-paper-plane"></i></a></li>
+                              <li class="list-inline-item"><a href="https://www.facebook.com/sharer/sharer.php?u=${get(item, 'link')}" class="tip facebook" target="blank"> <i class="fab fa-facebook-f"></i></a></li>
+                              <li class="list-inline-item"><a href="#" class="tip copy">COPY LINK</a></li></ul></div>`
                       : ''
                     }
                   </div>`;
@@ -686,14 +687,14 @@ module.exports = (window => {
         each(storyViewer.querySelectorAll('.paused_story'), (i, el) => {
           el.onclick = e => {
             e.preventDefault();
-            storyViewer.classList.add("paused"), storyViewer.querySelector(".paused_story").style.display = "none", storyViewer.querySelector(".play_story").style.display = "inline", storyViewer.querySelector(".play_story").innerHTML = "<i class='far fa-play-circle fa-2x' aria-hidden='true'></i> PLAY";
+            storyViewer.classList.add("paused"), storyViewer.querySelector(".paused_story").style.display = "none", storyViewer.querySelector(".play_story").style.display = "inline-block", storyViewer.querySelector(".play_story").innerHTML = "<i class='far fa-play-circle fa-2x' aria-hidden='true'></i> <span class='text'>PLAY</span>";
           };
         });
             
         each(storyViewer.querySelectorAll('.play_story'), (i, el) => {
           el.onclick = e => {
             e.preventDefault();
-            storyViewer.classList.remove("paused"), storyViewer.querySelector(".paused_story").style.display = "inline", storyViewer.querySelector(".play_story").style.display = "none", storyViewer.querySelector(".paused_story").innerHTML = "<i class='far fa-play-circle fa-2x' aria-hidden='true'></i> PAUSE";
+            storyViewer.classList.remove("paused"), storyViewer.querySelector(".paused_story").style.display = "inline-block", storyViewer.querySelector(".play_story").style.display = "none", storyViewer.querySelector(".paused_story").innerHTML = "<i class='far fa-pause-circle fa-2x' aria-hidden='true'></i> <span class='text'>PAUSE</span>";
           };
         });
         
