@@ -1,95 +1,95 @@
 {
-  "name": "zuck.js",
-  "version": "1.6.0",
-  "description": "A javascript library that lets you add stories EVERYWHERE.",
-  "homepage": "https://ramon.codes/projects/zuck.js",
-  "author": "Ramon Souza <me@ramon.codes> (https://ramon.codes)",
-  "main": "./src/zuck.js",
-  "keywords": [
-    "stories",
-    "story",
-    "zuck",
-    "zuckerberg",
-    "facebook",
-    "instagram",
-    "snapchat",
-    "whatsapp",
-    "slider",
-    "modal",
-    "viewer",
-    "media",
-    "react"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ramon82/zuck.js.git"
-  },
-  "bugs": {
-    "url": "https://github.com/ramon82/zuck.js/issues"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/plugin-transform-runtime": "^7.6.2",
-    "@babel/preset-env": "^7.9.0",
-    "@babel/preset-es2015": "^7.0.0-beta.53",
-    "@babel/runtime": "^7.9.2",
-    "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.0.6",
-    "babel-preset-airbnb": "^4.4.0",
-    "css-loader": "^3.2.0",
-    "eslint": "^6.6.0",
-    "eslint-config-semistandard": "^15.0.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-import": "^2.18.2",
-    "mini-css-extract-plugin": "^0.9.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "prettier": "1.18.2",
-    "semistandard": "^14.2.0",
-    "style-loader": "^1.0.0",
-    "terser-webpack-plugin": "^2.3.5",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
-  },
-  "eslintConfig": {
-    "env": {
-      "browser": true,
-      "serviceworker": true
-    },
-    "parserOptions": {
-      "ecmaVersion": 2018,
-      "sourceType": "module",
-      "ecmaFeatures": {
-        "jsx": true,
-        "modules": true
-      }
-    },
-    "parser": "babel-eslint",
-    "extends": [
-      "semistandard"
-    ]
-  },
-  "babel": {
-    "presets": [
-      [
-        "@babel/preset-env",
-        {
-          "targets": {
-            "chrome": 43,
-            "ie": 11,
-            "firefox": 40
-          }
-        }
-      ]
+    "name": "zuck.js",
+    "version": "1.6.01",
+    "description": "A javascript library that lets you add stories EVERYWHERE.",
+    "homepage": "https://ramon.codes/projects/zuck.js",
+    "author": "Ramon Souza <me@ramon.codes> (https://ramon.codes)",
+    "main": "./src/zuck.js",
+    "keywords": [
+        "stories",
+        "story",
+        "zuck",
+        "zuckerberg",
+        "facebook",
+        "instagram",
+        "snapchat",
+        "whatsapp",
+        "slider",
+        "modal",
+        "viewer",
+        "media",
+        "react"
     ],
-    "plugins": [
-      "@babel/plugin-transform-runtime"
-    ]
-  },
-  "scripts": {
-    "build:prod": "NODE_ENV=production webpack --mode production",
-    "build:dev": "NODE_ENV=development webpack --mode development",
-    "watch": "webpack-dev-server --config=./webpack.config.js --mode production"
-  }
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ramon82/zuck.js.git"
+    },
+    "bugs": {
+        "url": "https://github.com/ramon82/zuck.js/issues"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@babel/core": "^7.7.2",
+        "@babel/plugin-transform-runtime": "^7.6.2",
+        "@babel/preset-env": "^7.9.0",
+        "@babel/preset-es2015": "^7.0.0-beta.53",
+        "@babel/runtime": "^7.9.2",
+        "babel-eslint": "^10.1.0",
+        "babel-loader": "^8.0.6",
+        "babel-preset-airbnb": "^4.4.0",
+        "css-loader": "^3.2.0",
+        "eslint": "^6.6.0",
+        "eslint-config-semistandard": "^15.0.0",
+        "eslint-config-standard": "^14.1.1",
+        "eslint-plugin-import": "^2.18.2",
+        "mini-css-extract-plugin": "^0.9.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
+        "prettier": "1.18.2",
+        "semistandard": "^14.2.0",
+        "style-loader": "^1.0.0",
+        "terser-webpack-plugin": "^2.3.5",
+        "webpack": "^4.41.2",
+        "webpack-cli": "^3.3.10",
+        "webpack-dev-server": "^3.9.0"
+    },
+    "eslintConfig": {
+        "env": {
+            "browser": true,
+            "serviceworker": true
+        },
+        "parserOptions": {
+            "ecmaVersion": 2018,
+            "sourceType": "module",
+            "ecmaFeatures": {
+                "jsx": true,
+                "modules": true
+            }
+        },
+        "parser": "babel-eslint",
+        "extends": [
+            "semistandard"
+        ]
+    },
+    "babel": {
+        "presets": [
+            [
+                "@babel/preset-env",
+                {
+                    "targets": {
+                        "chrome": 43,
+                        "ie": 11,
+                        "firefox": 40
+                    }
+                }
+            ]
+        ],
+        "plugins": [
+            "@babel/plugin-transform-runtime"
+        ]
+    },
+    "scripts": {
+        "build:prod": "NODE_ENV=production webpack --mode production",
+        "build:dev": "NODE_ENV=development webpack --mode development",
+        "watch": "webpack-dev-server --config=./webpack.config.js --mode production"
+    }
 }
