@@ -11,7 +11,7 @@ Live demo: https://on.ramon82.com/2k9e7au
 
 React sample: https://on.ramon82.com/2lDP53H
 
-[![CDNJS](https://img.shields.io/cdnjs/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square&maxAge=3600)](https://cdnjs.com/libraries/zuck.js) [![NPM](https://img.shields.io/npm/v/zuck.js.svg?colorA=333333&colorB=D32F2F&style=flat-square&maxAge=3600)](https://www.npmjs.com/package/zuck.js)
+[![CDNJS](https://img.shields.io/cdnjs/v/zuck.js.svg?style=for-the-badge&logoColor=white&color=AA0000&maxAge=3600)](https://cdnjs.com/libraries/zuck.js) [![NPM](https://img.shields.io/npm/v/zuck.js.svg?style=for-the-badge&logoColor=white&color=AA0000&maxAge=3600)](https://www.npmjs.com/package/zuck.js)
 
 
 ## Features
@@ -242,3 +242,9 @@ MIT
 Please ⭐️ this repository if this project helped you! Feel free to buy me a coffee:
 
 [![ko-fi](https://www.ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/F1F710G8L)
+
+---
+
+<a href="https://ramon82.com" target="_blank">
+  <img src="https://utils.ramon82.com/hit.svg?referrer=github.com&title=GitHub%20/%20zuck.js&location=https://github.com/ramon82/zuck.js" width="24" height="24" />
+</a>
