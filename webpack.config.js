@@ -6,7 +6,7 @@ const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   entry: {
-    'zuck.js': './src/zuck.js',
+    'zuck.js': './src/zuck.ts',
     zuck: './src/zuck.css'
   },
   module: {
@@ -17,13 +17,18 @@ module.exports = {
         use: ['babel-loader']
       },
       {
+        test: /\.(ts)$/,
+        exclude: /node_modules/,
+        use: ['ts-loader']
+      },
+      {
         test: /\.css$/,
         use: [MiniCssExtractPlugin.loader, 'css-loader']
       }
     ]
   },
   resolve: {
-    extensions: ['*', '.js', 'css']
+    extensions: ['*', '.js', '.ts', 'css']
   },
   plugins: [
     new MiniCssExtractPlugin({
@@ -53,7 +58,7 @@ module.exports = {
     minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
   },
   devServer: {
-    contentBase: __dirname,
+    allowedHosts: __dirname,
     host: '127.0.0.1',
     port: 8080
   }

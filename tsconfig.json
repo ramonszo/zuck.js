@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "module": "amd", // must be 'amd' or 'system' to use 'outFile'
+    "lib": ["es2015", "dom", "es5", "es6"], // must include some of these to suppress certain errors; adds the 'Set' type
+    "jsx": "react", // compile jsx to js
+    "sourceMap": true, // ensure debuggable
+    "outFile": "./dist/zuck.js", // must be under /static/ to be served
+    "moduleResolution": "node", // suppresses issue with `default` or `export`
+    "esModuleInterop": true,    
+    "paths": {
+      "~data/*": ["data/*"],
+      "~texts/*": ["texts/*"],
+      "~components/*": ["components/*"],
+      "~hooks/*": ["hooks/*"],
+      "~contexts/*": ["contexts/*"],
+      "~layouts/*": ["layouts/*"],
+      "~utils/*": ["utils/*"]
+    }
+  },
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules"]
+}
