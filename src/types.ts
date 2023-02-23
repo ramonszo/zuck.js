@@ -10,7 +10,7 @@ export type StoryItem = {
   linkText?: Maybe<string>;
   time?: Maybe<string>;
   seen?: Maybe<boolean>;
-  [customKey: string]: any;
+  [customKey: string]: unknown;
 };
 
 export type TimelineItem = {
@@ -23,7 +23,7 @@ export type TimelineItem = {
   currentItem?: Maybe<number>;
   currentPreview?: Maybe<string>;
   seen?: Maybe<boolean>;
-  [customKey: string]: any;
+  [customKey: string]: unknown;
 };
 
 export type ModalOptions = {
@@ -32,7 +32,7 @@ export type ModalOptions = {
   openEffect?: boolean;
   rtl?: boolean;
   callbacks: {
-    onView: (storyId: string) => void;
+    onView: (storyId: string, callback: () => void) => void;
     onOpen: (storyId: string, callback: () => void) => void;
     onEnd: (storyId: string, callback: () => void) => void;
     onClose: (storyId: string, callback: () => void) => void;
@@ -43,15 +43,15 @@ export type ModalContainer = HTMLDivElement & {
   slideWidth?: number;
   slideHeight?: number;
   transitionEndEvent?: boolean;
-}
+};
 
 export type TransitionElement = HTMLElement & {
   transitionEndEvent?: boolean;
-}
+};
 
 export type Callbacks = {
   onOpen: (storyId: number, callback: () => void) => void;
-  onView: (storyId: number) => void;
+  onView: (storyId: number, callback: () => void) => void;
   onEnd: (storyId: number, callback: () => void) => void;
   onClose: (storyId: number, callback: () => void) => void;
   onNextItem: (
@@ -64,7 +64,7 @@ export type Callbacks = {
     nextStoryId: number,
     callback: () => void
   ) => void;
-}
+};
 
 export type OptionsLanguage = {
   unmute: string;
@@ -81,7 +81,7 @@ export type OptionsLanguage = {
     yesterday: string;
     tomorrow: string;
     days: string;
-  }
+  };
 };
 
 export type StoriesTimeline = TimelineItem[];
@@ -106,23 +106,51 @@ export type Options = {
     timelineItem: (itemData: TimelineItem) => string;
     timelineStoryItem: (itemData: StoryItem) => string;
     viewerItem: (storyData: StoryItem, currentStoryItem: StoryItem) => string;
-    viewerItemPointer: (index: number, currentIndex: number, item: StoryItem) => string;
-    viewerItemBody: (index: number, currentIndex: number, item: StoryItem) => string;
+    viewerItemPointer: (
+      index: number,
+      currentIndex: number,
+      item: StoryItem
+    ) => string;
+    viewerItemBody: (
+      index: number,
+      currentIndex: number,
+      item: StoryItem
+    ) => string;
   };
-  [customKey: string]: any;
-}
+  [customKey: string]: unknown;
+};
 
 export type Zuck = {
-  hasModal: boolean;
+  id: string;
+  hasModal?: boolean;
+  saveLocalData?: <T>(key: string, data: T) => void;
+  getLocalData?: <T>(key: string) => T | undefined;
   internalData: {
-    currentStory: TimelineItem;
-    seenItems: string[];
+    currentStory?: TimelineItem['id'];
+    currentVideoElement?: Maybe<HTMLVideoElement>;
+    seenItems?: {
+      [keyName: string]: boolean;
+    };
   };
   data: TimelineItem[];
+  option: (name: string, prop?: string) => any;
+  add: (data: TimelineItem, append?: boolean) => void;
+  update: (data: TimelineItem, append?: boolean) => void;
   addItem: (storyId: string, data: TimelineItem, append?: boolean) => void;
   removeItem: (storyId: string, itemId: string) => void;
-  nextItem : (storyId: string) => void;
-  navigateItem: (storyId: string, itemId: string) => void;
+  nextItem: (storyId: string) => void;
+  navigateItem: (storyId: string, event?: Event) => void;
   next: () => void;
   remove: (storyId: string) => void;
+  updateStorySeenPosition: () => void;
+  playVideoItem: (
+    storyViewer?: Maybe<HTMLElement>,
+    elements?: NodeListOf<Element>,
+    unmute?: Event
+  ) => void;
+  pauseVideoItem: () => void;
+  unmuteVideoItem: (
+    video: HTMLVideoElement,
+    storyViewer?: Maybe<HTMLElement>
+  ) => void;
 };
