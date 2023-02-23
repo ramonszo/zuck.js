@@ -29,28 +29,30 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/plugin-transform-runtime": "^7.6.2",
+    "@babel/core": "^7.21.0",
+    "@babel/plugin-transform-runtime": "^7.21.0",
     "@babel/preset-env": "^7.9.0",
     "@babel/preset-es2015": "^7.0.0-beta.53",
-    "@babel/runtime": "^7.9.2",
+    "@babel/runtime": "^7.21.0",
     "babel-eslint": "^10.1.0",
-    "babel-loader": "^8.0.6",
-    "babel-preset-airbnb": "^4.4.0",
-    "css-loader": "^3.2.0",
-    "eslint": "^6.6.0",
-    "eslint-config-semistandard": "^15.0.0",
-    "eslint-config-standard": "^14.1.1",
+    "babel-loader": "^9.1.2",
+    "babel-preset-airbnb": "^5.0.0",
+    "css-loader": "^6.7.3",
+    "eslint": "^8.34.0",
+    "eslint-config-semistandard": "^17.0.0",
+    "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.18.2",
-    "mini-css-extract-plugin": "^0.9.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
-    "prettier": "1.18.2",
-    "semistandard": "^14.2.0",
-    "style-loader": "^1.0.0",
-    "terser-webpack-plugin": "^2.3.5",
-    "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.9.0"
+    "mini-css-extract-plugin": "^2.7.2",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "prettier": "2.8.4",
+    "semistandard": "^16.0.1",
+    "style-loader": "^3.3.1",
+    "terser-webpack-plugin": "^5.3.6",
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.9.5",
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.11.1"
   },
   "eslintConfig": {
     "env": {
@@ -90,6 +92,7 @@
   "scripts": {
     "build:prod": "NODE_ENV=production webpack --mode production",
     "build:dev": "NODE_ENV=development webpack --mode development",
+    "build:ts": "NODE_ENV=development tsc ./src/index.ts -outDir ./dist",
     "watch": "webpack-dev-server --config=./webpack.config.js --mode production"
   }
 }

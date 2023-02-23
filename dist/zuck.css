@@ -1,3 +1,6 @@
+/*!************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/styles/modal.css ***!
+  \************************************************************************/
 @keyframes zuckSlideTime {
   0% {
     max-width: 0;
@@ -498,6 +501,9 @@
   }
 }
 
+/*!***************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/styles/timeline.css ***!
+  \***************************************************************************/
 .stories.carousel {
   white-space: nowrap;
   overflow: auto;
@@ -635,6 +641,9 @@
   margin-right: auto;
   margin-left: 12px;
 }
+/*!****************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/zuck.css ***!
+  \****************************************************************/
 /*
     zuck.js
     https://github.com/ramon82/zuck.js

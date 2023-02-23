@@ -1044,6 +1044,7 @@ module.exports = (window => {
           items.push(item);
         });
 
+        console.log('zuck.data', zuck.data, items);
         zuck.data[storyId].items = items;
 
         const callback = option('callbacks', 'onDataUpdate');
