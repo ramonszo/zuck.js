@@ -247,40 +247,43 @@ export const modal = (zuck: Zuck) => {
         const storyWrap = document.querySelector(
           `#zuck-modal [data-story-id="${storyId}"]`
         ) as HTMLElement;
+
+        let items: undefined | NodeListOf<Element> = undefined;
+
         if (storyWrap) {
-          const items = storyWrap.querySelectorAll('[data-index].active');
+          items = storyWrap.querySelectorAll<HTMLElement>(
+            '[data-index].active'
+          );
+
+          const duration = items?.[0]?.firstElementChild as HTMLElement;
+
+          zuck.data[storyId].currentItem = safeNum(
+            items?.[0]?.getAttribute('data-index')
+          );
 
           if (items?.[0]) {
-            const duration = items?.[0].firstElementChild as HTMLElement;
-
-            zuck.data[storyId].currentItem = safeNum(
-              items?.[0].getAttribute('data-index')
-            );
-
-            if (items?.[0]) {
-              items[0].innerHTML = `<b style="${duration?.style.cssText}"></b>`;
-            }
+            items[0].innerHTML = `<b style="${duration.style.cssText}"></b>`;
 
             onAnimationEnd(duration, () => {
-              zuck.nextItem(undefined);
+              zuck.nextItem();
             });
           }
-
-          translate(modalSlider, 0, 0, null);
-
-          if (items) {
-            const storyViewer = document.querySelector<HTMLElement>(
-              `#zuck-modal .story-viewer[data-story-id="${currentStory}"]`
-            );
-
-            zuck.playVideoItem(storyViewer, items);
-          }
-
-          zuck.option<Callbacks['onView']>(
-            'callbacks',
-            'onView'
-          )(zuck.internalData.currentStory);
         }
+
+        translate(modalSlider, 0, 0, null);
+
+        if (items) {
+          const storyViewer = document.querySelector<HTMLElement>(
+            `#zuck-modal .story-viewer[data-story-id="${currentStory}"]`
+          );
+
+          zuck.playVideoItem(storyViewer, items);
+        }
+
+        zuck.option<Callbacks['onView']>(
+          'callbacks',
+          'onView'
+        )(zuck.internalData.currentStory);
       }
     }, transitionTime + 50);
   };
@@ -331,8 +334,6 @@ export const modal = (zuck: Zuck) => {
 
     const video = slides.querySelector('video');
     const addMuted = function (video: HTMLVideoElement) {
-      const storyViewer = document.querySelector<HTMLElement>('.story-viewer');
-
       if (video.muted) {
         storyViewer?.classList.add('muted');
       } else {
@@ -343,8 +344,6 @@ export const modal = (zuck: Zuck) => {
     if (video) {
       video.onwaiting = () => {
         if (video.paused) {
-          const storyViewer =
-            document.querySelector<HTMLElement>('.story-viewer');
           storyViewer?.classList.add('paused');
           storyViewer?.classList.add('loading');
         }
@@ -353,8 +352,6 @@ export const modal = (zuck: Zuck) => {
       video.onplay = () => {
         addMuted(video);
 
-        const storyViewer =
-          document.querySelector<HTMLElement>('.story-viewer');
         storyViewer?.classList.remove('stopped');
         storyViewer?.classList.remove('paused');
         storyViewer?.classList.remove('loading');
@@ -366,8 +363,6 @@ export const modal = (zuck: Zuck) => {
           () => {
             addMuted(video);
 
-            const storyViewer =
-              document.querySelector<HTMLElement>('.story-viewer');
             storyViewer?.classList.remove('loading');
           };
 
@@ -383,6 +378,7 @@ export const modal = (zuck: Zuck) => {
     )(storyData, storyItems[currentItem]);
 
     const storyViewer = storyViewerWrap.firstElementChild as HTMLElement;
+
     const storyViewerPointerWrap = storyViewer.querySelector<HTMLElement>(
       '.slides-pointers .wrap'
     );
@@ -404,7 +400,7 @@ export const modal = (zuck: Zuck) => {
       .forEach((el) => {
         el.onclick = (e) => {
           e.preventDefault();
-          close();
+          modalZuckContainer.modal.close();
         };
       });
 
@@ -821,7 +817,7 @@ export const modal = (zuck: Zuck) => {
         '#zuck-modal .story-viewer.next'
       );
       if (!stories) {
-        close();
+        modalZuckContainer.modal.close();
       } else {
         if (zuck.option('rtl')) {
           moveStoryItem(false);

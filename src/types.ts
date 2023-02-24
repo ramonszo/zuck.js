@@ -139,8 +139,8 @@ export type Zuck = {
   update: (data: TimelineItem, append?: boolean) => void;
   addItem: (storyId: string, data: TimelineItem, append?: boolean) => void;
   removeItem: (storyId: string, itemId: string) => void;
-  nextItem: (storyId: string) => void;
-  navigateItem: (storyId: string, event?: Event) => void;
+  nextItem: (storyId?: string, event?: Event) => void;
+  navigateItem: (storyId?: string, event?: Event) => void;
   next: () => void;
   remove: (storyId: string) => void;
 

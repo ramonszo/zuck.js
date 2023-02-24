@@ -19,11 +19,35 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
   const { option } = loadOptions(options);
   const data = option('stories') || {};
   const internalData: Zuck['internalData'] = {};
+
+  /* data functions */
+  const saveLocalData = function <T>(key: string, data: T) {
+    try {
+      if (option('localStorage')) {
+        const keyName = `zuck-${id}-${key}`;
+
+        window.localStorage[keyName] = JSON.stringify(data);
+      }
+    } catch (e) {}
+  };
+
+  const getLocalData = function <T>(key: string): T | undefined {
+    if (option('localStorage')) {
+      const keyName = `zuck-${id}-${key}`;
+
+      return window.localStorage[keyName]
+        ? JSON.parse(window.localStorage[keyName])
+        : undefined;
+    } else {
+      return undefined;
+    }
+  };
+
   internalData.seenItems = getLocalData('seenItems') || {};
 
   const playVideoItem = function (
     storyViewer?: Maybe<HTMLElement>,
-    elements?: NodeListOf<Element>,
+    elements?: NodeListOf<Element> | Element[],
     unmute?: Event
   ) {
     const itemElement = elements?.[1];
@@ -210,29 +234,6 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
     }
   };
 
-  /* data functions */
-  const saveLocalData = function <T>(key: string, data: T) {
-    try {
-      if (option('localStorage')) {
-        const keyName = `zuck-${id}-${key}`;
-
-        window.localStorage[keyName] = JSON.stringify(data);
-      }
-    } catch (e) {}
-  };
-
-  const getLocalData = function <T>(key: string): T | undefined {
-    if (option('localStorage')) {
-      const keyName = `zuck-${id}-${key}`;
-
-      return window.localStorage[keyName]
-        ? JSON.parse(window.localStorage[keyName])
-        : undefined;
-    } else {
-      return undefined;
-    }
-  };
-
   const add = (data: TimelineItem, append?: boolean) => {
     const storyId = data['id'] || '';
     const storyEl = document.querySelector<HTMLElement>(
@@ -348,7 +349,10 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
     }
   };
 
-  const nextItem = (direction: 'previous' | 'next', event?: Event): boolean => {
+  const nextItem = (
+    direction?: 'previous' | 'next',
+    event?: Event
+  ): boolean => {
     const currentStory = internalData.currentStory;
     const currentItem = data[currentStory].currentItem;
     const storyViewer = document.querySelector<HTMLElement>(
