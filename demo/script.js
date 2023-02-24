@@ -14,7 +14,7 @@ const timestamp = function () {
   const shift = shifts[timeIndex++] || 0;
   const date = new Date(now - shift * 1000);
 
-  return date.getTime() / 1000;
+  return Math.round(date.getTime() / 1000);
 };
 
 const changeSkin = function (skin) {

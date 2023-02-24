@@ -1,7 +1,7 @@
-import { notUndefined, safeNum } from './utils';
-import { Options, StoryItem, TimelineItem } from './types';
+import { notUndefined, safeNum, timeAgo } from './utils';
+import { Options, StoryItem, TimelineItem, Zuck } from './types';
 
-export const optionsDefault = (option?: any) => ({
+export const optionsDefault = (option?: Zuck['option']) => ({
   rtl: false,
   skin: 'snapgram',
   avatars: true,
@@ -51,7 +51,9 @@ export const optionsDefault = (option?: any) => ({
             </span>
             <span class="info" itemProp="author" itemScope itemType="http://schema.org/Person">
               <strong class="name" itemProp="name">${itemData['name']}</strong>
-              <span class="time">${itemData['lastUpdatedAgo']}</span>
+              <span class="time">${
+                timeAgo(itemData['lastUpdated'], option('language')) || ''
+              }</span>
             </span>
           </a>
 
@@ -66,19 +68,14 @@ export const optionsDefault = (option?: any) => ({
         'src',
         'link',
         'linkText',
+        'loop',
         'time',
         'type',
         'length',
         'preview'
       ];
-      let attributes = `
-        href="${itemData['src']}"
-        data-link="${itemData['link']}"
-        data-linkText="${itemData['linkText']}"
-        data-time="${itemData['time']}"
-        data-type="${itemData['type']}"
-        data-length="${itemData['length']}"
-      `;
+
+      let attributes = ``;
 
       for (const dataKey in itemData) {
         if (reserved.indexOf(dataKey) === -1) {
@@ -86,7 +83,11 @@ export const optionsDefault = (option?: any) => ({
         }
       }
 
-      return `<a ${attributes}>
+      reserved.forEach((dataKey) => {
+        attributes += ` data-${dataKey}="${itemData[dataKey]}"`;
+      });
+
+      return `<a href="${itemData['src']}" ${attributes}>
                 <img loading="auto" src="${itemData['preview']}" />
               </a>`;
     },
@@ -107,12 +108,17 @@ export const optionsDefault = (option?: any) => ({
 
                     <div class="info">
                       <strong class="name">${storyData['name']}</strong>
-                      <span class="time">${storyData['timeAgo']}</span>
+                      <span class="time">${
+                        timeAgo(storyData['time'], option('language')) || ''
+                      }</span>
                     </div>
                   </div>
 
                   <div class="right">
-                    <span class="time">${currentStoryItem['timeAgo']}</span>
+                    <span class="time">${
+                      timeAgo(currentStoryItem['time'], option('language')) ||
+                      ''
+                    }</span>
                     <span class="loading"></span>
                     <a class="close" tabIndex="2">&times;</a>
                   </div>
@@ -155,7 +161,9 @@ export const optionsDefault = (option?: any) => ({
       }" data-index="${index}" data-item-id="${item['id']}">
                 ${
                   item['type'] === 'video'
-                    ? `<video class="media" muted webkit-playsinline playsinline preload="auto" src="${
+                    ? `<video class="media" data-length="${item.length}" ${
+                        item.loop ? 'loop' : ''
+                      } muted webkit-playsinline playsinline preload="auto" src="${
                         item['src']
                       }" ${item['type']}></video>
                     <b class="tip muted">${option('language', 'unmute')}</b>`

@@ -10,7 +10,7 @@
 
     <!-- lib styles -->
     <link rel="stylesheet" href="dist/zuck.min.css">
-    
+
     <!-- lib skins -->
     <link rel="stylesheet" href="dist/skins/snapgram.css">
     <link rel="stylesheet" href="dist/skins/vemdezap.css">
@@ -46,7 +46,7 @@
 
     <script>
       var currentSkin = getCurrentSkin();
-      var stories = Zuck.default(document.querySelector('#stories'), {
+      var stories = window.Zuck(document.querySelector('#stories'), {
         backNative: true,
         previousTap: true,
         skin: currentSkin['name'],
@@ -58,14 +58,14 @@
         localStorage: true,
         stories: [
           {
-            id: "ramon", 
+            id: "ramon",
             photo: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/users/1.jpg",
             name: "Ramon",
             time: timestamp(),
             items: [
-              {id: "ramon-1", type: "photo", duration: 3, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/1.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/1.jpg", link: '', linkText: false, seen: false, time: timestamp()},
-              {id: "ramon-2", type: "video", duration: 0, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/2.mp4", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/2.jpg", link: '', linkText: false, seen: false, time: timestamp()},
-              {id: "ramon-3", type: "photo", duration: 3, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/3.png", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/3.png", link: 'https://ramon.codes', linkText: 'Visit my Portfolio', seen: false, time: timestamp()}
+              {id: "ramon-1", type: "photo", length: 3, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/1.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/1.jpg", link: '', linkText: false, time: timestamp()},
+              {id: "ramon-2", type: "video", length: 0, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/2.mp4", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/2.jpg", link: '', linkText: false, time: timestamp()},
+              {id: "ramon-3", type: "photo", length: 3, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/3.png", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/3.png", link: 'https://ramon.codes', linkText: 'Visit my Portfolio', time: timestamp()}
             ]
           },
           {
@@ -74,8 +74,8 @@
             name: "Gorillaz",
             time: timestamp(),
             items: [
-              {id: "gorillaz-1", type: "video", duration: 0, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/4.mp4", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/4.jpg", link: '', linkText: false, seen: false, time: timestamp()},
-              {id: "gorillaz-2", type: "photo", duration: 3, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/5.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/5.jpg", link: '', linkText: false, seen: false, time: timestamp()},
+              {id: "gorillaz-1", type: "video", length: 0, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/4.mp4", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/4.jpg", link: '', linkText: false, time: timestamp()},
+              {id: "gorillaz-2", type: "photo", length: 3, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/5.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/5.jpg", link: '', linkText: false, time: timestamp()},
             ]
           },
           {
@@ -84,8 +84,8 @@
             name: "Lady Gaga",
             time: timestamp(),
             items: [
-              {id: "ladygaga-1", type: "photo", duration: 5, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/6.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/6.jpg", link: '', linkText: false, seen: false, time: timestamp()},
-              {id: "ladygaga-2", type: "photo", duration: 3, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/7.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/7.jpg", link: 'http://ladygaga.com', linkText: false, seen: false, time: timestamp()},
+              {id: "ladygaga-1", type: "photo", length: 5, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/6.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/6.jpg", link: '', linkText: false, time: timestamp()},
+              {id: "ladygaga-2", type: "photo", length: 3, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/7.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/7.jpg", link: 'http://ladygaga.com', linkText: false, time: timestamp()},
             ]
           },
           {
@@ -94,7 +94,7 @@
             name: "The Weeknd",
             time: timestamp(),
             items: [
-              {id: "starboy-1", type: "photo", duration: 5, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/8.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/8.jpg", link: '', linkText: false, seen: false, time: timestamp()}
+              {id: "starboy-1", type: "photo", length: 5, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/8.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/8.jpg", link: '', linkText: false, time: timestamp()}
             ]
           },
           {
@@ -103,7 +103,7 @@
             name: "Rivers Cuomo",
             time: timestamp(),
             items: [
-              {id: "riverscuomo-1", type: "photo", duration: 10, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/9.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/9.jpg", link: '', linkText: false, seen: false, time: timestamp()}
+              {id: "riverscuomo-1", type: "photo", length: 10, src: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/9.jpg", preview: "https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/stories/9.jpg", link: '', linkText: false, time: timestamp()}
             ]
           }
         ]

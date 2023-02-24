@@ -6,8 +6,8 @@ const devMode = process.env.NODE_ENV !== 'production';
 
 module.exports = {
   entry: {
-    'zuck.js': './src/zuck.ts',
-    zuck: './src/zuck.css'
+    'zuck.js': './src/index.ts',
+    zuck: './src/styles/index.css'
   },
   module: {
     rules: [
@@ -36,7 +36,8 @@ module.exports = {
     })
   ],
   output: {
-    libraryTarget: 'umd',
+    libraryTarget: 'window',
+    libraryExport: 'default', // export the default as window.MyClass
     path: `${__dirname}/dist`,
     publicPath: '/',
     filename: (chunkData) => {
@@ -60,6 +61,9 @@ module.exports = {
   },
   devServer: {
     allowedHosts: __dirname,
+    static: {
+      directory: __dirname
+    },
     host: '127.0.0.1',
     port: 8080
   }

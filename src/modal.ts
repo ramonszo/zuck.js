@@ -1,180 +1,77 @@
 import {
+  Callbacks,
+  DocumentElementWithFullscreen,
+  DocumentWithFullscreen,
+  Maybe,
+  ModalContainer,
+  Templates,
+  TimelineItem,
+  Zuck
+} from 'types';
+import {
   findPos,
   onAnimationEnd,
   onTransitionEnd,
   prepend,
   safeNum,
-  setVendorVariable,
-  timeAgo
+  setVendorVariable
 } from './utils';
-import { Maybe, ModalContainer, TimelineItem, Zuck } from 'types';
 
 export const modal = (zuck: Zuck) => {
   const id = zuck.id;
 
-  const show = (storyId?: TimelineItem['id']) => {
-    const modalContainer =
-      document.querySelector<ModalContainer>('#zuck-modal');
+  let modalZuckContainer =
+    document.querySelector<ModalContainer>('#zuck-modal');
 
-    const callback = function () {
+  if (!modalZuckContainer && !zuck.hasModal) {
+    zuck.hasModal = true;
+
+    modalZuckContainer = document.createElement('div');
+    modalZuckContainer.id = 'zuck-modal';
+
+    if (zuck.option('cubeEffect')) {
+      modalZuckContainer.className = 'with-cube';
+    }
+
+    modalZuckContainer.innerHTML = '<div id="zuck-modal-content"></div>';
+    modalZuckContainer.style.display = 'none';
+
+    modalZuckContainer.setAttribute('tabIndex', '1');
+    modalZuckContainer.onkeyup = ({ keyCode }) => {
+      const code = keyCode;
+
+      if (code === 27) {
+        modalZuckContainer.modal.close();
+      } else if (code === 13 || code === 32) {
+        modalZuckContainer.modal.next();
+      }
+    };
+
+    if (zuck.option('openEffect')) {
+      modalZuckContainer?.classList.add('with-effects');
+    }
+
+    if (zuck.option('rtl')) {
+      modalZuckContainer?.classList.add('rtl');
+    }
+
+    onTransitionEnd(modalZuckContainer, () => {
       const modalContent = document.querySelector<HTMLElement>(
         '#zuck-modal-content'
       );
-      modalContent.innerHTML = `<div id="zuck-modal-slider-${id}" class="slider"></div>`;
 
-      if (!modalContent || !storyId) {
-        return;
-      }
-
-      const storyData = zuck.data[storyId];
-      const currentItem = storyData.currentItem || 0;
-      const modalSlider = document.querySelector<HTMLElement>(
-        `#zuck-modal-slider-${id}`
-      );
-
-      createStoryTouchEvents(modalSlider);
-
-      zuck.internalData.currentStory = storyId;
-      storyData.currentItem = currentItem;
-
-      if (zuck.option('backNative')) {
-        window.location.hash = `#!${id}`;
-      }
-
-      const previousItemData = getStoryMorningGlory('previous');
-      if (previousItemData) {
-        createStoryViewer(previousItemData, 'previous');
-      }
-
-      createStoryViewer(storyData, 'viewing', true);
-
-      const nextItemData = getStoryMorningGlory('next');
-      if (nextItemData) {
-        createStoryViewer(nextItemData, 'next');
-      }
-
-      if (zuck.option('autoFullScreen')) {
-        modalContainer?.classList.add('fullscreen');
-      }
-
-      const tryFullScreen = () => {
-        if (
-          modalContainer?.classList.contains('fullscreen') &&
-          zuck.option('autoFullScreen') &&
-          window.screen.availWidth <= 1024
-        ) {
-          fullScreen(modalContainer);
-        }
-
-        modalContainer?.focus();
-      };
-
-      const storyViewerWrap = document.querySelector<HTMLElement>(
-        '#zuck-modal .story-viewer'
-      );
-
-      if (zuck.option('openEffect') && modalContainer) {
-        const storyEl = document.querySelector<HTMLElement>(
-          `#${id} [data-id="${storyId}"] .item-preview`
-        );
-
-        const pos = findPos(storyEl);
-
-        modalContainer.style.marginLeft = `${
-          pos[0] + safeNum(storyEl?.offsetWidth) / 2
-        }px`;
-        modalContainer.style.marginTop = `${
-          pos[1] + safeNum(storyEl?.offsetHeight) / 2
-        }px`;
-        modalContainer.style.display = 'block';
-
-        modalContainer.slideWidth = storyViewerWrap?.offsetWidth || 0;
-
-        setTimeout(() => {
-          modalContainer?.classList.add('animated');
-        }, 10);
-
-        setTimeout(() => {
-          tryFullScreen();
-        }, 300); // because effects
-      } else {
-        if (modalContainer) {
-          modalContainer.style.display = 'block';
-          modalContainer.slideWidth = storyViewerWrap?.offsetWidth || 0;
-        }
-
-        tryFullScreen();
-      }
-
-      zuck.option('callbacks', 'onView')(storyId);
-    };
-
-    zuck.option('callbacks', 'onOpen')(storyId, callback);
-  };
-
-  const next = () => {
-    const callback = function () {
-      const lastStory = zuck.internalData.currentStory;
-      const lastStoryTimelineElement = document.querySelector<HTMLElement>(
-        `#${id} [data-id="${lastStory}"]`
-      );
-
-      if (lastStoryTimelineElement) {
-        lastStoryTimelineElement?.classList.add('seen');
-
-        zuck.data[lastStory].seen = true;
-        zuck.internalData.seenItems[lastStory] = true;
-
-        zuck.saveLocalData('seenItems', zuck.internalData.seenItems);
-        zuck.updateStorySeenPosition();
-      }
-
-      const stories = document.querySelector<HTMLElement>(
-        '#zuck-modal .story-viewer.next'
-      );
-      if (!stories) {
-        close();
-      } else {
-        if (zuck.option('rtl')) {
-          moveStoryItem(false);
-        } else {
-          moveStoryItem(true);
-        }
-      }
-    };
-
-    zuck.option('callbacks', 'onEnd')(zuck.internalData.currentStory, callback);
-  };
-
-  const close = () => {
-    const modalContainer =
-      document.querySelector<ModalContainer>('#zuck-modal');
-    const modalContent = document.querySelector<HTMLElement>(
-      '#zuck-modal-content'
-    );
-
-    const callback = function () {
-      if (zuck.option('backNative')) {
-        window.location.hash = '';
-      }
-
-      fullScreen(modalContainer, true);
-
-      if (modalContainer && modalContent) {
-        if (zuck.option('openEffect')) {
-          modalContainer.classList.add('closed');
-        } else {
+      if (modalZuckContainer?.classList.contains('closed')) {
+        if (modalContent) {
           modalContent.innerHTML = '';
-          modalContainer.style.display = 'none';
         }
+        modalZuckContainer.style.display = 'none';
+        modalZuckContainer.classList.remove('closed');
+        modalZuckContainer.classList.remove('animated');
       }
-    };
+    });
 
-    zuck.option('callbacks', 'onClose')(
-      zuck.internalData.currentStory,
-      callback
-    );
-  };
+    document.body.appendChild(modalZuckContainer);
+  }
 
   const translate = function (
     element?: Maybe<HTMLElement>,
@@ -220,8 +117,8 @@ export const modal = (zuck: Zuck) => {
   };
 
   const fullScreen = function (elem?: Maybe<HTMLElement>, cancel?: boolean) {
-    const anyDocument = document as any;
-    const anyElem = elem as any;
+    const anyDocument = document as DocumentWithFullscreen;
+    const anyElem = elem as DocumentElementWithFullscreen;
 
     const func = 'RequestFullScreen';
     const elFunc = 'requestFullScreen';
@@ -379,7 +276,10 @@ export const modal = (zuck: Zuck) => {
             zuck.playVideoItem(storyViewer, items);
           }
 
-          zuck.option('callbacks', 'onView')(zuck.internalData.currentStory);
+          zuck.option<Callbacks['onView']>(
+            'callbacks',
+            'onView'
+          )(zuck.internalData.currentStory);
         }
       }
     }, transitionTime + 50);
@@ -395,11 +295,7 @@ export const modal = (zuck: Zuck) => {
     );
     const storyItems = storyData['items'];
 
-    storyData.timeAgo =
-      storyItems && storyItems[0]
-        ? timeAgo(storyItems[0]['time'], zuck.option('language'))
-        : '';
-
+    storyData.time = storyItems && storyItems[0]['time'];
     let htmlItems = '';
     let pointerItems = '';
 
@@ -416,24 +312,19 @@ export const modal = (zuck: Zuck) => {
 
     slides.className = 'slides';
     storyItems.forEach((item, i) => {
-      item.timeAgo = timeAgo(item['time'], zuck.option('language'));
-
       if (currentItem > i) {
-        storyData.items[i].timeAgo = item.timeAgo;
         storyData.items[i].seen = true;
         item.seen = true;
       }
 
-      pointerItems += zuck.option('template', 'viewerItemPointer')(
-        i,
-        currentItem,
-        item
-      );
-      htmlItems += zuck.option('template', 'viewerItemBody')(
-        i,
-        currentItem,
-        item
-      );
+      pointerItems += zuck.option<Templates['viewerItemPointer']>(
+        'template',
+        'viewerItemPointer'
+      )(i, currentItem, item);
+      htmlItems += zuck.option<Templates['viewerItemBody']>(
+        'template',
+        'viewerItemBody'
+      )(i, currentItem, item);
     });
 
     slides.innerHTML = htmlItems;
@@ -486,10 +377,10 @@ export const modal = (zuck: Zuck) => {
     }
 
     const storyViewerWrap = document.createElement('div');
-    storyViewerWrap.innerHTML = zuck.option('template', 'viewerItem')(
-      storyData,
-      currentItem
-    );
+    storyViewerWrap.innerHTML = zuck.option<Templates['viewerItem']>(
+      'template',
+      'viewerItem'
+    )(storyData, storyItems[currentItem]);
 
     const storyViewer = storyViewerWrap.firstElementChild as HTMLElement;
     const storyViewerPointerWrap = storyViewer.querySelector<HTMLElement>(
@@ -810,70 +701,177 @@ export const modal = (zuck: Zuck) => {
     return false;
   };
 
-  const init = () => {
-    let modalContainer = document.querySelector<HTMLElement>('#zuck-modal');
-    let modalContent = document.querySelector<HTMLElement>(
+  const show = (storyId?: TimelineItem['id']) => {
+    const modalContainer =
+      document.querySelector<ModalContainer>('#zuck-modal');
+
+    const callback = function () {
+      const modalContent = document.querySelector<HTMLElement>(
+        '#zuck-modal-content'
+      );
+      modalContent.innerHTML = `<div id="zuck-modal-slider-${id}" class="slider"></div>`;
+
+      if (!modalContent || !storyId) {
+        return;
+      }
+
+      const storyData = zuck.data[storyId];
+      const currentItem = storyData.currentItem || 0;
+      const modalSlider = document.querySelector<HTMLElement>(
+        `#zuck-modal-slider-${id}`
+      );
+
+      createStoryTouchEvents(modalSlider);
+
+      zuck.internalData.currentStory = storyId;
+      storyData.currentItem = currentItem;
+
+      if (zuck.option('backNative')) {
+        window.location.hash = `#!${id}`;
+      }
+
+      const previousItemData = getStoryMorningGlory('previous');
+      if (previousItemData) {
+        createStoryViewer(previousItemData, 'previous');
+      }
+
+      createStoryViewer(storyData, 'viewing', true);
+
+      const nextItemData = getStoryMorningGlory('next');
+      if (nextItemData) {
+        createStoryViewer(nextItemData, 'next');
+      }
+
+      if (zuck.option('autoFullScreen')) {
+        modalContainer?.classList.add('fullscreen');
+      }
+
+      const tryFullScreen = () => {
+        if (
+          modalContainer?.classList.contains('fullscreen') &&
+          zuck.option('autoFullScreen') &&
+          window.screen.availWidth <= 1024
+        ) {
+          fullScreen(modalContainer);
+        }
+
+        modalContainer?.focus();
+      };
+
+      const storyViewerWrap = document.querySelector<HTMLElement>(
+        '#zuck-modal .story-viewer'
+      );
+
+      if (zuck.option('openEffect') && modalContainer) {
+        const storyEl = document.querySelector<HTMLElement>(
+          `#${id} [data-id="${storyId}"] .item-preview`
+        );
+
+        const pos = findPos(storyEl);
+
+        modalContainer.style.marginLeft = `${
+          pos[0] + safeNum(storyEl?.offsetWidth) / 2
+        }px`;
+        modalContainer.style.marginTop = `${
+          pos[1] + safeNum(storyEl?.offsetHeight) / 2
+        }px`;
+        modalContainer.style.display = 'block';
+
+        modalContainer.slideWidth = storyViewerWrap?.offsetWidth || 0;
+
+        setTimeout(() => {
+          modalContainer?.classList.add('animated');
+        }, 10);
+
+        setTimeout(() => {
+          tryFullScreen();
+        }, 300); // because effects
+      } else {
+        if (modalContainer) {
+          modalContainer.style.display = 'block';
+          modalContainer.slideWidth = storyViewerWrap?.offsetWidth || 0;
+        }
+
+        tryFullScreen();
+      }
+
+      zuck.option<Callbacks['onView']>('callbacks', 'onView')(storyId);
+    };
+
+    zuck.option<Callbacks['onOpen']>('callbacks', 'onOpen')(storyId, callback);
+  };
+  const next = () => {
+    const callback = function () {
+      const lastStory = zuck.internalData.currentStory;
+      const lastStoryTimelineElement = document.querySelector<HTMLElement>(
+        `#${id} [data-id="${lastStory}"]`
+      );
+
+      if (lastStoryTimelineElement) {
+        lastStoryTimelineElement?.classList.add('seen');
+
+        zuck.data[lastStory].seen = true;
+        zuck.internalData.seenItems[lastStory] = true;
+
+        zuck.saveLocalData('seenItems', zuck.internalData.seenItems);
+        zuck.updateStorySeenPosition();
+      }
+
+      const stories = document.querySelector<HTMLElement>(
+        '#zuck-modal .story-viewer.next'
+      );
+      if (!stories) {
+        close();
+      } else {
+        if (zuck.option('rtl')) {
+          moveStoryItem(false);
+        } else {
+          moveStoryItem(true);
+        }
+      }
+    };
+
+    zuck.option<Callbacks['onEnd']>('callbacks', 'onEnd')(
+      zuck.internalData.currentStory,
+      callback
+    );
+  };
+
+  const close = () => {
+    const modalContainer =
+      document.querySelector<ModalContainer>('#zuck-modal');
+    const modalContent = document.querySelector<HTMLElement>(
       '#zuck-modal-content'
     );
 
-    if (!modalContainer && !zuck.hasModal) {
-      zuck.hasModal = true;
-
-      modalContainer = document.createElement('div');
-      modalContainer.id = 'zuck-modal';
-
-      if (zuck.option('cubeEffect')) {
-        modalContainer.className = 'with-cube';
+    const callback = function () {
+      if (zuck.option('backNative')) {
+        window.location.hash = '';
       }
 
-      modalContainer.innerHTML = '<div id="zuck-modal-content"></div>';
-      modalContainer.style.display = 'none';
+      fullScreen(modalContainer, true);
 
-      modalContent = document.querySelector<HTMLElement>('#zuck-modal-content');
-
-      modalContainer.setAttribute('tabIndex', '1');
-      modalContainer.onkeyup = ({ keyCode }) => {
-        const code = keyCode;
-
-        if (code === 27) {
-          close();
-        } else if (code === 13 || code === 32) {
-          next();
-        }
-      };
-
-      if (zuck.option('openEffect')) {
-        modalContainer?.classList.add('with-effects');
-      }
-
-      if (zuck.option('rtl')) {
-        modalContainer?.classList.add('rtl');
-      }
-
-      onTransitionEnd(modalContainer, () => {
-        if (
-          modalContainer?.classList.contains('closed') &&
-          modalContainer &&
-          modalContent
-        ) {
+      if (modalContainer && modalContent) {
+        if (zuck.option('openEffect')) {
+          modalContainer.classList.add('closed');
+        } else {
           modalContent.innerHTML = '';
           modalContainer.style.display = 'none';
-          modalContainer.classList.remove('closed');
-          modalContainer.classList.remove('animated');
         }
-      });
-
-      document.body.appendChild(modalContainer);
-    }
-
-    zuck.updateStorySeenPosition();
-
-    return {
-      show,
-      close,
-      next
+      }
     };
+
+    zuck.option<Callbacks['onClose']>('callbacks', 'onClose')(
+      zuck.internalData.currentStory,
+      callback
+    );
   };
 
-  return init();
+  modalZuckContainer.modal = {
+    show,
+    next,
+    close
+  };
+
+  return modalZuckContainer.modal;
 };

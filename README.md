@@ -31,9 +31,10 @@ Initialize:
 ```js
 let element = document.querySelector("#stories");
 let stories = Zuck(element, options);
+
+// See `./src/options.ts` for reference.
 ```
 
-See `./src/options.ts` for reference.
 
 Add/update a story (timeline item):
 

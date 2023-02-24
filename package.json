@@ -78,7 +78,7 @@
   "scripts": {
     "build:prod": "NODE_ENV=production webpack --mode production",
     "build:dev": "NODE_ENV=development webpack --mode development",
-    "watch": "webpack-dev-server --config=./webpack.config.js --mode production",
+    "dev": "webpack-dev-server --config=./webpack.config.js --mode production",
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --fix"
   }

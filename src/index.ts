@@ -17,6 +17,9 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
 
   const id = timeline.id;
   const { option } = loadOptions(options);
+  const data = option('stories') || {};
+  const internalData: Zuck['internalData'] = {};
+  internalData.seenItems = getLocalData('seenItems') || {};
 
   const playVideoItem = function (
     storyViewer?: Maybe<HTMLElement>,
@@ -44,11 +47,15 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       }
 
       const setDuration = function () {
-        if (video.duration) {
+        let duration = video.duration;
+        if (+video.dataset.length) {
+          duration = +video.dataset.length;
+        }
+        if (duration) {
           setVendorVariable(
             itemPointer.getElementsByTagName('b')[0]?.style,
             'AnimationDuration',
-            `${video.duration}s`
+            `${duration}s`
           );
         }
       };
@@ -62,14 +69,14 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       try {
         unmuteVideoItem(video, storyViewer);
       } catch (e) {
-        console.log('Could not unmute video', unmute);
+        console.warn('Could not unmute video', unmute);
       }
     } else {
       zuck.internalData.currentVideoElement = undefined;
     }
   };
 
-  const pauseVideoItem = function (): void {
+  const pauseVideoItem = function () {
     const video = zuck.internalData.currentVideoElement;
     if (video) {
       try {
@@ -81,7 +88,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
   const unmuteVideoItem = function (
     video: HTMLVideoElement,
     storyViewer?: Maybe<HTMLElement>
-  ): void {
+  ) {
     video.muted = false;
     video.volume = 1.0;
     video.removeAttribute('muted');
@@ -124,9 +131,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
           items: []
         };
 
-        // collect all attributes
         const all = a?.attributes;
-        // exclude the reserved options
         const reserved = [
           'data-id',
           'href',
@@ -134,7 +139,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
           'data-type',
           'data-time',
           'data-link',
-          'data-linktext'
+          'data-linkText'
         ];
 
         if (all) {
@@ -206,7 +211,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
   };
 
   /* data functions */
-  const saveLocalData = function <T>(key: string, data: T): void {
+  const saveLocalData = function <T>(key: string, data: T) {
     try {
       if (option('localStorage')) {
         const keyName = `zuck-${id}-${key}`;
@@ -227,30 +232,6 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       return undefined;
     }
   };
-
-  const updateStorySeenPosition = function () {
-    document
-      .querySelectorAll<HTMLElement>(`#${id} .story.seen`)
-      .forEach((el: HTMLElement) => {
-        const storyId = el?.getAttribute('data-id');
-
-        if (storyId) {
-          const newData = zuck.data[storyId];
-          const timeline = el?.parentNode;
-
-          if (!zuck.option('reactive') && timeline) {
-            timeline.removeChild(el);
-          }
-
-          zuck.update(newData, true);
-        }
-      });
-  };
-
-  /* api */
-  const data = option('stories') || {};
-  const internalData: Zuck['internalData'] = {};
-  internalData.seenItems = getLocalData('seenItems') || {};
 
   const add = (data: TimelineItem, append?: boolean) => {
     const storyId = data['id'] || '';
@@ -447,6 +428,25 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
 
   const navigateItem = nextItem;
 
+  const updateStorySeenPosition = function () {
+    document
+      .querySelectorAll<HTMLElement>(`#${id} .story.seen`)
+      .forEach((el: HTMLElement) => {
+        const storyId = el?.getAttribute('data-id');
+
+        if (storyId) {
+          const newData = data[storyId];
+          const timeline = el?.parentNode;
+
+          if (!option('reactive') && timeline) {
+            timeline.removeChild(el);
+          }
+
+          update(newData, true);
+        }
+      });
+  };
+
   const init = (): Zuck => {
     if (timeline && timeline.querySelector('.story')) {
       timeline.querySelectorAll<HTMLElement>('.story').forEach((story) => {
@@ -488,6 +488,8 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       add(item, true);
     });
 
+    updateStorySeenPosition();
+
     const avatars = option('avatars') ? 'user-icon' : 'story-preview';
     const list = option('list') ? 'list' : 'carousel';
     const rtl = option('rtl') ? 'rtl' : '';
@@ -523,9 +525,5 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
 
   return zuck;
 };
-
-if (typeof window !== 'undefined') {
-  (window as any).Zuck = ZuckJS;
-}
 
 export default ZuckJS;

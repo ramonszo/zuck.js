@@ -1,9 +1,4 @@
-import {
-  Maybe,
-  ModalContainer,
-  OptionsLanguage,
-  TransitionElement
-} from './types';
+import { Language, Maybe, ModalContainer, TransitionElement } from './types';
 
 export const notUndefined = function (what: unknown): boolean {
   return typeof what !== 'undefined';
@@ -26,7 +21,7 @@ export const setVendorVariable = (
   ];
 
   variables?.forEach((val) => {
-    (ref as any)[val] = value;
+    ref[val] = value;
   });
 };
 
@@ -114,8 +109,10 @@ export const findPos = function (
 };
 export const timeAgo = (
   time?: Maybe<number | string>,
-  language?: OptionsLanguage['time']
+  languageObject?: Language
 ) => {
+  const language = languageObject.time;
+
   time = safeNum(time) * 1000;
 
   const dateObj = new Date(time);
