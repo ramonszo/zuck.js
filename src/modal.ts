@@ -451,7 +451,7 @@ export const modal = (zuck: Zuck) => {
       | null
       | undefined = null;
     let isScrolling: boolean | null | undefined = null;
-    let delta: { x: number; y: number } | null | undefined = null;
+    let delta: { x?: number; y?: number } | null | undefined = null;
     let timer: ReturnType<typeof setTimeout> | undefined = undefined;
     let nextTimer: ReturnType<typeof setTimeout> | undefined = undefined;
 
@@ -463,7 +463,7 @@ export const modal = (zuck: Zuck) => {
         '#zuck-modal .story-viewer'
       );
 
-      if (event.target && event.target instanceof HTMLAnchorElement) {
+      if ((event.target as Node).nodeName === 'A') {
         return;
       }
 
@@ -500,7 +500,7 @@ export const modal = (zuck: Zuck) => {
         event.preventDefault();
 
         isScrolling = undefined;
-        delta = undefined;
+        delta = {};
 
         if (enableMouseEvents) {
           modalSlider?.addEventListener('mousemove', touchMove);
@@ -524,6 +524,7 @@ export const modal = (zuck: Zuck) => {
 
         nextTimer = setTimeout(() => {
           clearInterval(nextTimer);
+          nextTimer = undefined;
         }, 250);
       }
     };
@@ -592,15 +593,13 @@ export const modal = (zuck: Zuck) => {
 
           touchOffset = undefined;
 
-          if (modalSlider) {
-            if (enableMouseEvents) {
-              modalSlider.removeEventListener('mousemove', touchMove);
-              modalSlider.removeEventListener('mouseup', touchEnd);
-              modalSlider.removeEventListener('mouseleave', touchEnd);
-            }
-            modalSlider.removeEventListener('touchmove', touchMove);
-            modalSlider.removeEventListener('touchend', touchEnd);
+          if (enableMouseEvents) {
+            modalSlider?.removeEventListener('mousemove', touchMove);
+            modalSlider?.removeEventListener('mouseup', touchEnd);
+            modalSlider?.removeEventListener('mouseleave', touchEnd);
           }
+          modalSlider?.removeEventListener('touchmove', touchMove);
+          modalSlider?.removeEventListener('touchend', touchEnd);
         }
 
         const video = zuck.internalData.currentVideoElement;
@@ -621,8 +620,9 @@ export const modal = (zuck: Zuck) => {
 
         if (nextTimer) {
           clearInterval(nextTimer);
+          nextTimer = undefined;
 
-          const navigateItem = (): boolean => {
+          const navigateItem = () => {
             if (!direction) {
               if (
                 safeNum(lastTouchOffset?.x) > window.screen.availWidth / 3 ||
@@ -641,8 +641,6 @@ export const modal = (zuck: Zuck) => {
                 }
               }
             }
-
-            return true;
           };
 
           const storyViewerViewing = document.querySelector<HTMLElement>(
@@ -664,11 +662,9 @@ export const modal = (zuck: Zuck) => {
       }
     };
 
-    if (modalSlider) {
-      modalSlider.addEventListener('touchstart', touchStart);
-      if (enableMouseEvents) {
-        modalSlider.addEventListener('mousedown', touchStart);
-      }
+    modalSlider?.addEventListener('touchstart', touchStart);
+    if (enableMouseEvents) {
+      modalSlider?.addEventListener('mousedown', touchStart);
     }
   };
 
@@ -676,24 +672,20 @@ export const modal = (zuck: Zuck) => {
     // my wife told me to stop singing Wonderwall. I SAID MAYBE.
 
     const currentStory = zuck.internalData.currentStory;
+    const whatElementYouMean = `${what}ElementSibling`;
 
     if (currentStory) {
-      const current = document.querySelector<HTMLElement>(
-        `#${zuck.id} [data-id="${currentStory}"]`
-      );
-      const foundStory =
-        what === 'previous'
-          ? current?.previousElementSibling
-          : current?.nextElementSibling;
+      const foundStory = document.querySelector(
+        `#${id} [data-id="${currentStory}"]`
+      )[whatElementYouMean];
 
       if (foundStory) {
-        const storyId = foundStory?.getAttribute('data-id') || '';
+        const storyId = foundStory.getAttribute('data-id');
         const data = zuck.data[storyId] || false;
 
         return data;
       }
     }
-
     return false;
   };
 
@@ -847,11 +839,14 @@ export const modal = (zuck: Zuck) => {
 
       fullScreen(modalContainer, true);
 
-      if (modalContainer && modalContent) {
+      if (modalContainer) {
         if (zuck.option('openEffect')) {
           modalContainer.classList.add('closed');
         } else {
-          modalContent.innerHTML = '';
+          if (modalContent) {
+            modalContent.innerHTML = '';
+          }
+
           modalContainer.style.display = 'none';
         }
       }

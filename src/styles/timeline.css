@@ -23,6 +23,7 @@
 }
 
 .stories.carousel .story > .item-link {
+  cursor: pointer;
   text-align: center;
   display: block;
 }

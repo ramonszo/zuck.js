@@ -529,6 +529,7 @@
 }
 
 .stories.carousel .story > .item-link {
+  cursor: pointer;
   text-align: center;
   display: block;
 }
@@ -641,6 +642,7 @@
   margin-right: auto;
   margin-left: 12px;
 }
+
 /*!************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js!./src/styles/index.css ***!
   \************************************************************************/
