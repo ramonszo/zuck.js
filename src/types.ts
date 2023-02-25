@@ -143,6 +143,7 @@ export type Zuck = {
   navigateItem: (storyId?: string, event?: Event) => void;
   next: () => void;
   remove: (storyId: string) => void;
+  findStoryIndex: (storyId: string) => number;
 
   saveLocalData?: <T>(key: string, data: T) => void;
   getLocalData?: <T>(key: string) => T | undefined;

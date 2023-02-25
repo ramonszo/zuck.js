@@ -3,6 +3,7 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
+  user-select: none;
 }
 .stories.carousel::-webkit-scrollbar {
   width: 0px;

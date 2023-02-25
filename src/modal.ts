@@ -244,6 +244,7 @@ export const modal = (zuck: Zuck) => {
         }
 
         const storyId = zuck.internalData.currentStory;
+        const storyIndex = zuck.findStoryIndex(storyId);
         const storyWrap = document.querySelector(
           `#zuck-modal [data-story-id="${storyId}"]`
         ) as HTMLElement;
@@ -257,7 +258,7 @@ export const modal = (zuck: Zuck) => {
 
           const duration = items?.[0]?.firstElementChild as HTMLElement;
 
-          zuck.data[storyId].currentItem = safeNum(
+          zuck.data[storyIndex].currentItem = safeNum(
             items?.[0]?.getAttribute('data-index')
           );
 
@@ -298,7 +299,7 @@ export const modal = (zuck: Zuck) => {
     );
     const storyItems = storyData['items'];
 
-    storyData.time = storyItems && storyItems[0]['time'];
+    storyData.time = storyItems && storyItems?.[0]['time'];
     let htmlItems = '';
     let pointerItems = '';
 
@@ -625,7 +626,7 @@ export const modal = (zuck: Zuck) => {
           const navigateItem = () => {
             if (!direction) {
               if (
-                safeNum(lastTouchOffset?.x) > window.screen.availWidth / 3 ||
+                safeNum(lastTouchOffset?.x) > document.body.offsetWidth / 3 ||
                 !zuck.option('previousTap')
               ) {
                 if (zuck.option('rtl')) {
@@ -681,7 +682,8 @@ export const modal = (zuck: Zuck) => {
 
       if (foundStory) {
         const storyId = foundStory.getAttribute('data-id');
-        const data = zuck.data[storyId] || false;
+        const storyIndex = zuck.findStoryIndex(storyId);
+        const data = zuck.data[storyIndex] || false;
 
         return data;
       }
@@ -703,7 +705,8 @@ export const modal = (zuck: Zuck) => {
         return;
       }
 
-      const storyData = zuck.data[storyId];
+      const storyIndex = zuck.findStoryIndex(storyId);
+      const storyData = zuck.data[storyIndex];
       const currentItem = storyData.currentItem || 0;
       const modalSlider = document.querySelector<HTMLElement>(
         `#zuck-modal-slider-${id}`
@@ -738,7 +741,7 @@ export const modal = (zuck: Zuck) => {
         if (
           modalContainer?.classList.contains('fullscreen') &&
           zuck.option('autoFullScreen') &&
-          window.screen.availWidth <= 1024
+          document.body.offsetWidth <= 1024
         ) {
           fullScreen(modalContainer);
         }
@@ -791,6 +794,7 @@ export const modal = (zuck: Zuck) => {
   const next = () => {
     const callback = function () {
       const lastStory = zuck.internalData.currentStory;
+      const lastStoryIndex = zuck.findStoryIndex(lastStory);
       const lastStoryTimelineElement = document.querySelector<HTMLElement>(
         `#${id} [data-id="${lastStory}"]`
       );
@@ -798,7 +802,7 @@ export const modal = (zuck: Zuck) => {
       if (lastStoryTimelineElement) {
         lastStoryTimelineElement?.classList.add('seen');
 
-        zuck.data[lastStory].seen = true;
+        zuck.data[lastStoryIndex].seen = true;
         zuck.internalData.seenItems[lastStory] = true;
 
         zuck.saveLocalData('seenItems', zuck.internalData.seenItems);

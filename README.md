@@ -81,7 +81,7 @@ In your HTML:
         <ul class="items">
 
             <!-- story item -->
-            <li data-id="{{storyItemId}}" data-time="{{storyItem.time}}" class="{{storyItem.seen}}">
+            <li data-id="{{storyItemId}}" data-time="{{storyItem.time}}" class="{{storyItem.seen ? 'seen' : '' }}">
                 <a href="{{storyItem.src}}"
 
                  data-type="{{storyItem.type}}"

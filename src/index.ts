@@ -57,7 +57,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       return false;
     }
 
-    const cur = zuck.internalData.currentVideoElement;
+    const cur = internalData.currentVideoElement;
     if (cur) {
       cur.pause();
     }
@@ -65,7 +65,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
     if (itemElement.getAttribute('data-type') === 'video') {
       const video = itemElement.getElementsByTagName('video')[0];
       if (!video) {
-        zuck.internalData.currentVideoElement = undefined;
+        internalData.currentVideoElement = undefined;
 
         return false;
       }
@@ -86,7 +86,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
 
       setDuration();
       video.addEventListener('loadedmetadata', setDuration);
-      zuck.internalData.currentVideoElement = video;
+      internalData.currentVideoElement = video;
 
       video.play();
 
@@ -96,12 +96,16 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
         console.warn('Could not unmute video', unmute);
       }
     } else {
-      zuck.internalData.currentVideoElement = undefined;
+      internalData.currentVideoElement = undefined;
     }
   };
 
+  const findStoryIndex = function (id: TimelineItem['id']) {
+    return data.findIndex((item: TimelineItem) => item.id === id);
+  };
+
   const pauseVideoItem = function () {
-    const video = zuck.internalData.currentVideoElement;
+    const video = internalData.currentVideoElement;
     if (video) {
       try {
         video.pause();
@@ -133,6 +137,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
     forceUpdate?: boolean
   ) {
     const storyId = story?.getAttribute('data-id') || '';
+    const storyIndex = findStoryIndex(storyId);
     const storyItems = document.querySelectorAll<HTMLElement>(
       `#${id} [data-id="${storyId}"] .items > li`
     );
@@ -142,17 +147,18 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       storyItems.forEach(({ firstElementChild }: HTMLElement) => {
         const a = firstElementChild;
         const img = a?.firstElementChild;
+        const li = a?.parentElement;
 
         const item: StoryItem = {
-          id: a?.getAttribute('data-id'),
+          id: a?.getAttribute('data-id') || li?.getAttribute('data-id'),
           src: a?.getAttribute('href'),
           length: safeNum(a?.getAttribute('data-length')),
           type: a?.getAttribute('data-type'),
-          time: a?.getAttribute('data-time'),
+          time: a?.getAttribute('data-time') || li?.getAttribute('data-time'),
           link: a?.getAttribute('data-link') || '',
           linkText: a?.getAttribute('data-linkText'),
           preview: img?.getAttribute('src'),
-          items: []
+          seen: li?.classList.contains('seen')
         };
 
         const all = a?.attributes;
@@ -178,7 +184,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
         items.push(item);
       });
 
-      data[storyId].items = items;
+      data[storyIndex].items = items;
 
       const callback = option('callbacks', 'onDataUpdate');
       if (callback) {
@@ -189,6 +195,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
 
   const parseStory = function (story?: Maybe<HTMLElement>) {
     const storyId = story?.getAttribute('data-id') || '';
+    const storyIndex = findStoryIndex(storyId);
 
     let seen = false;
 
@@ -197,25 +204,29 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
     }
 
     try {
-      if (!data[storyId]) {
-        data[storyId] = {};
+      let storyData: Partial<StoryItem> = {};
+      if (storyIndex !== -1) {
+        storyData = data[storyIndex];
       }
 
-      data[storyId].id = storyId;
-      data[storyId].photo = story?.getAttribute('data-photo');
-      data[storyId].name =
-        story?.querySelector<HTMLElement>('.name')?.innerText;
-      data[storyId].link = story
-        ?.querySelector('.item-link')
-        ?.getAttribute('href');
-      data[storyId].lastUpdated = story?.getAttribute('data-last-updated');
-      data[storyId].seen = seen;
+      storyData.id = storyId;
+      storyData.photo = story?.getAttribute('data-photo');
+      storyData.name = story?.querySelector<HTMLElement>('.name')?.innerText;
+      storyData.link = story?.querySelector('.item-link')?.getAttribute('href');
+      storyData.lastUpdated = story?.getAttribute('data-last-updated');
+      storyData.seen = seen;
 
-      if (!data[storyId].items) {
-        data[storyId].items = [];
+      if (!storyData.items) {
+        storyData.items = [];
+      }
+
+      if (storyIndex === -1) {
+        data.push(storyData);
+      } else {
+        data[storyIndex] = storyData;
       }
     } catch (e) {
-      data[storyId] = {
+      data[storyIndex] = {
         items: []
       };
     }
@@ -326,7 +337,6 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
         li.setAttribute('data-id', data['id']);
       }
 
-      // wow, too much jsx
       li.innerHTML = option('template', 'timelineStoryItem')(data);
 
       if (append) {
@@ -345,7 +355,12 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
     );
 
     if (!option('reactive')) {
-      timeline?.parentNode?.removeChild(item as Node);
+      item?.parentNode?.removeChild(item as Node);
+      data.forEach((story) => {
+        if (story.id === storyId) {
+          story.items = story.items.filter((item) => item.id !== itemId);
+        }
+      });
     }
   };
 
@@ -354,7 +369,8 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
     event?: Event
   ): boolean => {
     const currentStory = internalData.currentStory;
-    const currentItem = data[currentStory].currentItem;
+    const currentStoryIndex = findStoryIndex(internalData.currentStory);
+    const currentItem = data[currentStoryIndex].currentItem;
     const storyViewer = document.querySelector<HTMLElement>(
       `#zuck-modal .story-viewer[data-story-id="${currentStory}"]`
     );
@@ -405,8 +421,8 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
             );
           });
 
-        data[currentStory].currentItem =
-          data[currentStory].currentItem + directionNumber;
+        data[currentStoryIndex].currentItem =
+          data[currentStoryIndex].currentItem + directionNumber;
 
         playVideoItem(storyViewer, nextItems, event);
       };
@@ -423,7 +439,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       );
     } else if (storyViewer) {
       if (direction !== 'previous') {
-        modal.next(); // call(event)
+        modal.next();
       }
     }
 
@@ -437,9 +453,10 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       .querySelectorAll<HTMLElement>(`#${id} .story.seen`)
       .forEach((el: HTMLElement) => {
         const storyId = el?.getAttribute('data-id');
+        const storyIndex = findStoryIndex(storyId);
 
         if (storyId) {
-          const newData = data[storyId];
+          const newData = data[storyIndex];
           const timeline = el?.parentNode;
 
           if (!option('reactive') && timeline) {
@@ -455,6 +472,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
     if (timeline && timeline.querySelector('.story')) {
       timeline.querySelectorAll<HTMLElement>('.story').forEach((story) => {
         parseStory(story);
+        parseItems(story);
       });
     }
 
@@ -517,6 +535,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       addItem,
       removeItem,
       nextItem,
+      findStoryIndex,
       updateStorySeenPosition,
       playVideoItem,
       pauseVideoItem,
