@@ -18,7 +18,8 @@
     "modal",
     "viewer",
     "media",
-    "react"
+    "react",
+    "typescript"
   ],
   "repository": {
     "type": "git",
@@ -37,7 +38,6 @@
     "@typescript-eslint/parser": "^5.53.0",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^9.1.2",
-    "babel-preset-airbnb": "^5.0.0",
     "css-loader": "^6.7.3",
     "css-minimizer-webpack-plugin": "^4.2.2",
     "eslint": "8.7.0",
@@ -47,7 +47,6 @@
     "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
     "mini-css-extract-plugin": "^2.7.2",
     "prettier": "^2.8.1",
-    "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.3.6",
     "ts-loader": "^9.4.2",
     "typescript": "^4.9.5",

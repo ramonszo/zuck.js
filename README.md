@@ -16,99 +16,60 @@ React sample: https://on.ramon.codes/2lDP53H
 
 ## Features
 * Custom CSS themes: [Snapgram](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=VemDeZAP)
-* Gestures, Custom events & custom templates
+* Gestures, Custom events & Custom templates
 * A simple API to manage your "Stories timeline"
 * 3D cube effect
 * React support
 * RTL support
-
+* TypeScript
 
 ## How to use
-You can download this git repository or install via ```npm install zuck.js```
+You can download this git repository or install via ```npm install zuck.js``` or ```yarn add zuck.js```
 
 Initialize:
 
 ```js
-let element = document.querySelector("#stories");
-let stories = Zuck(element, options);
+const options = {}; // See `./src/options.ts`.
 
-// See `./src/options.ts` for reference.
+const element = document.querySelector("#stories");
+const stories = Zuck(element, options);
 ```
 
 
-Add/update a story (timeline item):
+Add/update a story from timeline:
 
 ```js
-stories.update({item object});
+const story = {}; // See TimelineItem `./src/types.ts`
+
+stories.add(story);
+stories.update(story);
  ```
 
 Remove a story:
 
 ```js
-stories.remove(storyId); // story id
+stories.remove(storyId);
 ```
 
 Add/remove a story item:
 
 ```js
-stories.addItem(storyId, {item object});
+const item = {}; // See StoryItem `./src/types.ts`
+
+stories.addItem(storyId, item);
 stories.removeItem(storyId, itemId);
 ```
 
 
 ### Stories structure example
-See `StoriesTimeline` on `./types.ts`
-
+```js
+// See `StoriesTimeline` on `./src/types.ts`.
+```
 
 ### Alternate call
-In your HTML:
-
-```HTML
-<div id="stories">
-
-    <!-- story -->
-    <div class="story {{ story.seen ? 'seen' : '' }}" data-id="{{storyId}}" data-last-updated="{{story.lastUpdated}}" data-photo="{{story.photo}}">
-        <a class="item-link" href="{{story.link}}">
-          <span class="item-preview">
-            <img src="{{story.photo}}" />
-          </span>
-          <span class="info" itemProp="author" itemScope="" itemType="http://schema.org/Person">
-            <strong class="name" itemProp="name">{{story.name}}</strong>
-            <span class="time">{{story.lastUpdated}}</span>
-          </span>
-        </a>
-
-        <ul class="items">
-
-            <!-- story item -->
-            <li data-id="{{storyItemId}}" data-time="{{storyItem.time}}" class="{{storyItem.seen ? 'seen' : '' }}">
-                <a href="{{storyItem.src}}"
-
-                 data-type="{{storyItem.type}}"
-                 data-length="{{storyItem.length}}"
-                 data-link="{{storyItem.link}}"
-                 data-linkText="{{storyItem.linkText}}"
-
-                 data-custom-key="{{storyItem.custom-key}}"
-                 data-another-custom-key="{{storyItem.another-custom-key}}">
-                    <img src="{{storyItem.preview}}" />
-                </a>
-            </li>
-            <!--/ story item -->
-
-        </ul>
-    </div>
-    <!--/ story -->
-
-</div>
-```
-
-Then in your JS:
-
 ```js
-let stories = Zuck(element);
+// See ./markup.sample.html
 ```
-
 
 ### Tips
 - You can use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.

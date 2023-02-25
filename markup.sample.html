@@ -1,0 +1,51 @@
+<div id="stories">
+  <!-- story -->
+  <div
+    class="story {{ story.seen ? 'seen' : '' }}"
+    data-id="{{storyId}}"
+    data-last-updated="{{story.lastUpdated}}"
+    data-photo="{{story.photo}}"
+  >
+    <a class="item-link" href="{{story.link}}">
+      <span class="item-preview">
+        <img src="{{story.photo}}" />
+      </span>
+      <span
+        class="info"
+        itemProp="author"
+        itemScope=""
+        itemType="http://schema.org/Person"
+      >
+        <strong class="name" itemProp="name">{{story.name}}</strong>
+        <span class="time">{{story.lastUpdated}}</span>
+      </span>
+    </a>
+
+    <ul class="items">
+      <!-- story item -->
+      <li
+        data-id="{{storyItemId}}"
+        data-time="{{storyItem.time}}"
+        class="{{storyItem.seen ? 'seen' : '' }}"
+      >
+        <a
+          href="{{storyItem.src}}"
+          data-type="{{storyItem.type}}"
+          data-length="{{storyItem.length}}"
+          data-link="{{storyItem.link}}"
+          data-linkText="{{storyItem.linkText}}"
+          data-custom-key="{{storyItem.custom-key}}"
+          data-another-custom-key="{{storyItem.another-custom-key}}"
+        >
+          <img src="{{storyItem.preview}}" />
+        </a>
+      </li>
+      <!--/ story item -->
+    </ul>
+  </div>
+  <!--/ story -->
+</div>
+
+<script>
+  const stories = Zuck(document.querySelector('#stories'));
+</script>
