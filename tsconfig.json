@@ -7,16 +7,7 @@
     "sourceMap": true, // ensure debuggable
     "moduleResolution": "node", // suppresses issue with `default` or `export`
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports" : true,
-    "paths": {
-      "~data/*": ["data/*"],
-      "~texts/*": ["texts/*"],
-      "~components/*": ["components/*"],
-      "~hooks/*": ["hooks/*"],
-      "~contexts/*": ["contexts/*"],
-      "~layouts/*": ["layouts/*"],
-      "~utils/*": ["utils/*"]
-    }
+    "allowSyntheticDefaultImports" : true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]

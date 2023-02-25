@@ -1,21 +1,21 @@
 # zuck.js
 
-[![Zuck.JS demo](https://raw.githubusercontent.com/ramon82/assets/master/zuck.js/preview.gif)](https://on.ramon82.com/2k9e7au)
+[![Zuck.JS demo](https://raw.githubusercontent.com/ramonszo/assets/master/zuck.js/preview.gif)](https://on.ramon.codes/2k9e7au)
 
 ## Add stories EVERYWHERE
 MWHAHAHAHA. Seriously. This script is a copy of Facebook Stories of ~~a copy of Facebook Messenger Day (RIP)~~ of a copy of WhatsApp status of a copy of Instagram stories of a copy of Snapchat stories.
 
 You can read stories from any endpoint (JSON, Firebase, etc.) and the script will do the rest.
 
-Live demo: https://on.ramon82.com/2k9e7au
+Live demo: https://on.ramon.codes/2k9e7au
 
-React sample: https://on.ramon82.com/2lDP53H
+React sample: https://on.ramon.codes/2lDP53H
 
 [![CDNJS](https://img.shields.io/cdnjs/v/zuck.js.svg?style=for-the-badge&logoColor=white&color=AA0000&maxAge=3600)](https://cdnjs.com/libraries/zuck.js) [![NPM](https://img.shields.io/npm/v/zuck.js.svg?style=for-the-badge&logoColor=white&color=AA0000&maxAge=3600)](https://www.npmjs.com/package/zuck.js)
 
 
 ## Features
-* Custom CSS themes: [Snapgram](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramon82/zuck.js/master/index.html?skin=VemDeZAP)
+* Custom CSS themes: [Snapgram](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=VemDeZAP)
 * Gestures, Custom events & custom templates
 * A simple API to manage your "Stories timeline"
 * 3D cube effect
@@ -133,6 +133,6 @@ Please ⭐️ this repository if this project helped you! Feel free to buy me a 
 
 ---
 
-<a href="https://ramon82.com" target="_blank">
-  <img src="https://utils.ramon82.com/hit.svg?referrer=github.com&title=GitHub%20/%20zuck.js&location=https://github.com/ramon82/zuck.js" width="24" height="24" />
+<a href="https://ramon.codes" target="_blank">
+  <img src="https://utils.ramon.codes/hit.svg?referrer=github.com&title=GitHub%20/%20zuck.js&location=https://github.com/ramonszo/zuck.js" width="24" height="24" />
 </a>
