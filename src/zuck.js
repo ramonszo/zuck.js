@@ -298,7 +298,7 @@ module.exports = (window => {
                 </span>
                 <span class="info" itemProp="author" itemScope itemType="http://schema.org/Person">
                   <strong class="name" itemProp="name">${get(itemData, 'name')}</strong>
-                  <span class="time">${get(itemData, 'lastUpdatedAgo')}</span>
+                  <span class="time">${timeAgo(get(itemData, 'lastUpdated'))}</span>
                 </span>
               </a>
               
@@ -314,6 +314,7 @@ module.exports = (window => {
             data-linkText="${get(itemData, 'linkText')}"
             data-time="${get(itemData, 'time')}"
             data-type="${get(itemData, 'type')}"
+            data-loop="${get(itemData, 'loop')}"
             data-length="${get(itemData, 'length')}"
           `;
 
@@ -380,7 +381,7 @@ module.exports = (window => {
                     data-time="${get(item, 'time')}" data-type="${get(item, 'type')}" data-index="${index}" data-item-id="${get(item, 'id')}">
                     ${
                       get(item, 'type') === 'video'
-                      ? `<video class="media" muted webkit-playsinline playsinline preload="auto" src="${get(item, 'src')}" ${get(item, 'type')}></video>
+                      ? `<video class="media" data-length="${item.length}" ${!!item.loop ? 'loop' : ''} muted webkit-playsinline playsinline preload="auto" src="${get(item, 'src')}" ${get(item, 'type')}></video>
                         <b class="tip muted">${option('language', 'unmute')}</b>`
                       : `<img loading="auto" class="media" src="${get(item, 'src')}" ${get(item, 'type')} />
                     `}
@@ -1162,11 +1163,15 @@ module.exports = (window => {
         }
 
         const setDuration = function () {
-          if (video.duration) {
+          let duration = video.duration;
+          if (+video.dataset.length) {
+            duration = +video.dataset.length;
+          }
+          if (duration) {
             setVendorVariable(
               itemPointer.getElementsByTagName('b')[0].style,
               'AnimationDuration',
-              `${video.duration}s`
+              `${duration}s`
             );
           }
         };
@@ -1462,11 +1467,12 @@ module.exports = (window => {
     return timelineItem;
   };
 
-  ZuckJS.buildStoryItem = (id, type, length, src, preview, link, linkText, seen, time) => {
+  ZuckJS.buildStoryItem = (id, type, length, src, loop, preview, link, linkText, seen, time) => {
     return {
       id,
       type,
       length,
+      loop,
       src,
       preview,
       link,
