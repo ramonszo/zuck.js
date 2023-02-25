@@ -509,6 +509,7 @@
   overflow: auto;
   -webkit-overflow-scrolling: touch;
   overflow-scrolling: touch;
+  user-select: none;
 }
 .stories.carousel::-webkit-scrollbar {
   width: 0px;
@@ -529,6 +530,7 @@
 }
 
 .stories.carousel .story > .item-link {
+  cursor: pointer;
   text-align: center;
   display: block;
 }
@@ -641,11 +643,9 @@
   margin-right: auto;
   margin-left: 12px;
 }
-/*!****************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js!./src/zuck.css ***!
-  \****************************************************************/
-/*
-    zuck.js
-    https://github.com/ramon82/zuck.js
-    MIT License
-*/
+
+/*!************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js!./src/styles/index.css ***!
+  \************************************************************************/
+
+

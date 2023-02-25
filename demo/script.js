@@ -1,21 +1,29 @@
-var timestamp = function() {
-  var timeIndex = 0;
-  var shifts = [35, 60, 60 * 3, 60 * 60 * 2, 60 * 60 * 25, 60 * 60 * 24 * 4, 60 * 60 * 24 * 10];
+const timestamp = function () {
+  let timeIndex = 0;
+  const shifts = [
+    35,
+    60,
+    60 * 3,
+    60 * 60 * 2,
+    60 * 60 * 25,
+    60 * 60 * 24 * 4,
+    60 * 60 * 24 * 10
+  ];
 
-  var now = new Date();
-  var shift = shifts[timeIndex++] || 0;
-  var date = new Date(now - shift * 1000);
+  const now = new Date();
+  const shift = shifts[timeIndex++] || 0;
+  const date = new Date(now - shift * 1000);
 
-  return date.getTime() / 1000;
+  return Math.round(date.getTime() / 1000);
 };
 
-var changeSkin = function(skin) {
+const changeSkin = function (skin) {
   location.href = location.href.split('#')[0].split('?')[0] + '?skin=' + skin;
 };
 
-var getCurrentSkin = function() {
-  var header = document.getElementById('header');
-  var skin = location.href.split('skin=')[1];
+const getCurrentSkin = function () {
+  const header = document.getElementById('header');
+  let skin = location.href.split('skin=')[1];
 
   if (!skin) {
     skin = 'Snapgram';
@@ -25,7 +33,7 @@ var getCurrentSkin = function() {
     skin = skin.split('#')[0];
   }
 
-  var skins = {
+  const skins = {
     Snapgram: {
       avatars: true,
       list: false,
@@ -59,10 +67,10 @@ var getCurrentSkin = function() {
     }
   };
 
-  var el = document.querySelectorAll('#skin option');
-  var total = el.length;
-  for (var i = 0; i < total; i++) {
-    var what = skin == el[i].value ? true : false;
+  const el = document.querySelectorAll('#skin option');
+  const total = el.length;
+  for (let i = 0; i < total; i++) {
+    const what = skin == el[i].value;
 
     if (what) {
       el[i].setAttribute('selected', 'selected');
@@ -75,7 +83,7 @@ var getCurrentSkin = function() {
   }
 
   return {
-    name: skin, 
-    params: skins[skin] 
+    name: skin,
+    params: skins[skin]
   };
 };
