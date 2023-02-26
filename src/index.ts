@@ -9,9 +9,15 @@ import {
 import { loadOptions } from './options';
 import { modal as ZuckModal } from './modal';
 
-import { Maybe, Options, StoryItem, TimelineItem, ZuckObject } from './types';
+import {
+  Maybe,
+  StoryItem,
+  TimelineItem,
+  Zuck as ZuckFunction,
+  ZuckObject
+} from './types';
 
-export const Zuck = function (timeline: HTMLElement, options?: Options) {
+export const Zuck: ZuckFunction = function (timeline, options) {
   if (!timeline.id) {
     timeline.setAttribute('id', generateId());
   }
@@ -288,7 +294,7 @@ export const Zuck = function (timeline: HTMLElement, options?: Options) {
     }
 
     if (data['lastUpdated']) {
-      story?.setAttribute('data-last-updated', data['lastUpdated']);
+      story?.setAttribute('data-last-updated', data['lastUpdated']?.toString());
     }
 
     parseStory(story);

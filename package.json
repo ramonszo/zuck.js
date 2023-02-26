@@ -1,11 +1,11 @@
 {
   "name": "zuck.js",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A javascript library that lets you add stories EVERYWHERE.",
   "homepage": "https://ramon.codes/projects/zuck.js",
   "author": "Ramon Souza <me@ramon.codes> (https://ramon.codes)",
   "main": "./dist/zuck.js",
-  "types": "./src/index.ts",
+  "types": "./dist/index.d.ts",
   "keywords": [
     "stories",
     "story",
@@ -35,7 +35,8 @@
     "./skins/snapgram": "./dist/skins/snapgram.css",
     "./skins/snapssenger": "./dist/skins/snapssenger.css",
     "./skins/vemdezap": "./dist/skins/vemdezap.css",
-    "./css": "./src/styles/index.css"
+    "./css": "./src/styles/index.css",
+    "./types": "./dist/types.d.ts"
   },
   "license": "MIT",
   "devDependencies": {
@@ -68,7 +69,7 @@
     "build:dev": "NODE_ENV=development webpack --mode development",
     "build": "npm run build:dev && npm run build:prod",
     "dev": "webpack-dev-server --config=./webpack.config.js --mode production",
-    "tsc": "tsc --noEmit",
+    "tsc": "tsc --declaration true --emitDeclarationOnly true --outDir ./dist",
     "lint": "eslint . --fix"
   }
 }

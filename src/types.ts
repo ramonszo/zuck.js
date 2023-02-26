@@ -39,7 +39,7 @@ export type StoryItem = {
   preview?: Maybe<string>;
   link?: Maybe<string>;
   linkText?: Maybe<string>;
-  time?: Maybe<string>;
+  time?: Maybe<string | Date | number>;
   seen?: Maybe<boolean>;
   [customKey: string]: unknown;
 };
@@ -49,7 +49,7 @@ export type TimelineItem = {
   photo?: Maybe<string>;
   name?: Maybe<string>;
   link?: Maybe<string>;
-  lastUpdated?: Maybe<string>;
+  lastUpdated?: Maybe<string | Date | number>;
   items: StoryItem[];
   currentItem?: Maybe<number>;
   currentPreview?: Maybe<string>;
@@ -167,3 +167,5 @@ export type ZuckObject = {
     storyViewer?: Maybe<HTMLElement>
   ) => void;
 };
+
+export type Zuck = (timeline: HTMLElement, options?: Options) => ZuckObject;

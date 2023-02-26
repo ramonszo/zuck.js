@@ -112,14 +112,15 @@ export const findPos = function (
   return [curleft, curtop];
 };
 export const timeAgo = (
-  time?: Maybe<number | string>,
+  time?: Maybe<number | string | Date>,
   languageObject?: Language
 ) => {
   const language = languageObject?.time || undefined;
 
-  time = safeNum(time) * 1000;
+  const timeNumber =
+    time instanceof Date ? time.getTime() : safeNum(time) * 1000;
 
-  const dateObj = new Date(time);
+  const dateObj = new Date(timeNumber);
   const dateStr = dateObj.getTime();
   let seconds = (new Date().getTime() - dateStr) / 1000;
 

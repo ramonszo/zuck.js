@@ -8,8 +8,9 @@
     "moduleResolution": "node", // suppresses issue with `default` or `export`
     "esModuleInterop": true,
     "allowSyntheticDefaultImports" : true,
-    "noImplicitAny": true
+    "noImplicitAny": true,
+    "outDir": "./dist"
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "dist"]
 }
