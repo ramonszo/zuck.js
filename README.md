@@ -15,7 +15,7 @@ React sample: https://on.ramon.codes/2lDP53H
 
 
 ## Features
-* Custom CSS themes: [Snapgram](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=Snapgram), [FaceSnap](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=FaceSnap), [Snapssenger](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=Snapssenger) and [VemDeZAP](https://rawgit.com/ramonszo/zuck.js/master/index.html?skin=VemDeZAP)
+* Custom CSS themes: [Snapgram](https://on.ramon.codes/cS5F), [FaceSnap](https://on.ramon.codes/oLt4), [Snapssenger](https://on.ramon.codes/G6Dt) and [VemDeZAP](https://on.ramon.codes/kj6R)
 * Gestures, Custom events & Custom templates
 * A simple API to manage your "Stories timeline"
 * 3D cube effect
