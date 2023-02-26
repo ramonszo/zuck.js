@@ -1,5 +1,9 @@
 import { Language, Maybe, ModalContainer, TransitionElement } from './types';
 
+export const hasWindow = () => {
+  return typeof window !== 'undefined';
+};
+
 export const notUndefined = function (what: unknown): boolean {
   return typeof what !== 'undefined';
 };
@@ -21,7 +25,7 @@ export const setVendorVariable = (
   ];
 
   variables?.forEach((val) => {
-    ref[val] = value;
+    ref[val as any] = value;
   });
 };
 
@@ -111,7 +115,7 @@ export const timeAgo = (
   time?: Maybe<number | string>,
   languageObject?: Language
 ) => {
-  const language = languageObject.time;
+  const language = languageObject?.time || undefined;
 
   time = safeNum(time) * 1000;
 

@@ -36,8 +36,9 @@ module.exports = {
     })
   ],
   output: {
-    libraryTarget: 'window',
-    libraryExport: 'default', // export the default as window.MyClass
+    libraryTarget: 'global',
+    libraryExport: 'default',
+    globalObject: 'this',
     path: `${__dirname}/dist`,
     publicPath: '/',
     filename: (chunkData) => {

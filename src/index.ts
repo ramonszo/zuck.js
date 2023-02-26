@@ -1,5 +1,6 @@
 import {
   generateId,
+  hasWindow,
   prepend,
   safeNum,
   setVendorVariable,
@@ -8,9 +9,9 @@ import {
 import { loadOptions } from './options';
 import { modal as ZuckModal } from './modal';
 
-import { Maybe, Options, StoryItem, TimelineItem, Zuck } from './types';
+import { Maybe, Options, StoryItem, TimelineItem, ZuckObject } from './types';
 
-export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
+export const Zuck = function (timeline: HTMLElement, options?: Options) {
   if (!timeline.id) {
     timeline.setAttribute('id', generateId());
   }
@@ -18,12 +19,12 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
   const id = timeline.id;
   const { option } = loadOptions(options);
   const data = option('stories') || {};
-  const internalData: Zuck['internalData'] = {};
+  const internalData: ZuckObject['internalData'] = {};
 
   /* data functions */
   const saveLocalData = function <T>(key: string, data: T) {
     try {
-      if (option('localStorage')) {
+      if (option('localStorage') && hasWindow()) {
         const keyName = `zuck-${id}-${key}`;
 
         window.localStorage[keyName] = JSON.stringify(data);
@@ -32,7 +33,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
   };
 
   const getLocalData = function <T>(key: string): T | undefined {
-    if (option('localStorage')) {
+    if (option('localStorage') && hasWindow()) {
       const keyName = `zuck-${id}-${key}`;
 
       return window.localStorage[keyName]
@@ -356,9 +357,11 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
 
     if (!option('reactive')) {
       item?.parentNode?.removeChild(item as Node);
-      data.forEach((story) => {
+      data.forEach((story: TimelineItem) => {
         if (story.id === storyId) {
-          story.items = story.items.filter((item) => item.id !== itemId);
+          story.items = story.items.filter(
+            (item: StoryItem) => item.id !== itemId
+          );
         }
       });
     }
@@ -468,7 +471,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       });
   };
 
-  const init = (): Zuck => {
+  const init = (): ZuckObject => {
     if (timeline && timeline.querySelector('.story')) {
       timeline.querySelectorAll<HTMLElement>('.story').forEach((story) => {
         parseStory(story);
@@ -476,7 +479,7 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
       });
     }
 
-    if (option('backNative')) {
+    if (option('backNative') && hasWindow()) {
       if (window.location.hash === `#!${id}`) {
         window.location.hash = '';
       }
@@ -549,4 +552,4 @@ export const ZuckJS = function (timeline: HTMLElement, options?: Options) {
   return zuck;
 };
 
-export default ZuckJS;
+export default Zuck;

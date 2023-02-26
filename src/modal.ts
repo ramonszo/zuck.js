@@ -6,10 +6,11 @@ import {
   ModalContainer,
   Templates,
   TimelineItem,
-  Zuck
+  ZuckObject
 } from 'types';
 import {
   findPos,
+  hasWindow,
   onAnimationEnd,
   onTransitionEnd,
   prepend,
@@ -17,7 +18,7 @@ import {
   setVendorVariable
 } from './utils';
 
-export const modal = (zuck: Zuck) => {
+export const modal = (zuck: ZuckObject) => {
   const id = zuck.id;
 
   let modalZuckContainer =
@@ -120,9 +121,6 @@ export const modal = (zuck: Zuck) => {
     const anyDocument = document as DocumentWithFullscreen;
     const anyElem = elem as DocumentElementWithFullscreen;
 
-    const func = 'RequestFullScreen';
-    const elFunc = 'requestFullScreen';
-
     try {
       if (cancel) {
         if (
@@ -138,14 +136,14 @@ export const modal = (zuck: Zuck) => {
           }
         }
       } else {
-        if (anyElem[elFunc]) {
-          anyElem[elFunc]();
-        } else if (anyElem[`ms${func}`]) {
-          anyElem[`ms${func}`]();
-        } else if (anyElem[`moz${func}`]) {
-          anyElem[`moz${func}`]();
-        } else if (anyElem[`webkit${func}`]) {
-          anyElem[`webkit${func}`]();
+        if (anyElem.requestFullscreen) {
+          anyElem.requestFullscreen();
+        } else if (anyElem.msRequestFullscreen) {
+          anyElem.msRequestFullscreen();
+        } else if (anyElem.mozRequestFullScreen) {
+          anyElem.mozRequestFullScreen();
+        } else if (anyElem.webkitRequestFullscreen) {
+          anyElem.webkitRequestFullscreen();
         }
       }
     } catch (e) {
@@ -245,7 +243,7 @@ export const modal = (zuck: Zuck) => {
 
         const storyId = zuck.internalData.currentStory;
         const storyIndex = zuck.findStoryIndex(storyId);
-        const storyWrap = document.querySelector(
+        const storyWrap = document.querySelector<HTMLElement>(
           `#zuck-modal [data-story-id="${storyId}"]`
         ) as HTMLElement;
 
@@ -669,16 +667,19 @@ export const modal = (zuck: Zuck) => {
     }
   };
 
-  const getStoryMorningGlory = function (what: string) {
+  const getStoryMorningGlory = function (what: 'previous' | 'next' | '') {
     // my wife told me to stop singing Wonderwall. I SAID MAYBE.
-
     const currentStory = zuck.internalData.currentStory;
-    const whatElementYouMean = `${what}ElementSibling`;
 
-    if (currentStory) {
-      const foundStory = document.querySelector(
+    if (currentStory && what !== '') {
+      const element = document.querySelector<HTMLElement>(
         `#${id} [data-id="${currentStory}"]`
-      )[whatElementYouMean];
+      );
+
+      const foundStory =
+        what === 'previous'
+          ? element.previousElementSibling
+          : element.nextElementSibling;
 
       if (foundStory) {
         const storyId = foundStory.getAttribute('data-id');
@@ -717,7 +718,7 @@ export const modal = (zuck: Zuck) => {
       zuck.internalData.currentStory = storyId;
       storyData.currentItem = currentItem;
 
-      if (zuck.option('backNative')) {
+      if (zuck.option('backNative') && hasWindow()) {
         window.location.hash = `#!${id}`;
       }
 
@@ -837,7 +838,7 @@ export const modal = (zuck: Zuck) => {
     );
 
     const callback = function () {
-      if (zuck.option('backNative')) {
+      if (zuck.option('backNative') && hasWindow()) {
         window.location.hash = '';
       }
 

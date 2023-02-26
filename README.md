@@ -26,7 +26,31 @@ React sample: https://on.ramon.codes/2lDP53H
 ## How to use
 You can download this git repository or install via ```npm install zuck.js``` or ```yarn add zuck.js```
 
-Initialize:
+#### 1. Import
+
+```js
+import { Zuck } from 'zuck.js';
+
+import 'zuck.js/css';
+import 'zuck.js/skins/snapgram';
+```
+
+or include the script tag and css:
+
+```HTML
+<link rel="stylesheet" href="dist/zuck.css" />
+<link rel="stylesheet" href="dist/skins/snapgram.css" />
+
+<script src="https://unpkg.com/zuck.js/dist/zuck.js"></script>
+
+```
+
+#### 2. Initialize:
+
+```HTML
+<div id="stories"></div>
+```
+
 
 ```js
 const options = {}; // See `./src/options.ts`.
@@ -35,8 +59,9 @@ const element = document.querySelector("#stories");
 const stories = Zuck(element, options);
 ```
 
+## API
 
-Add/update a story from timeline:
+#### Add/update a story from timeline:
 
 ```js
 const story = {}; // See TimelineItem `./src/types.ts`
@@ -45,13 +70,13 @@ stories.add(story);
 stories.update(story);
  ```
 
-Remove a story:
+#### Remove a story:
 
 ```js
 stories.remove(storyId);
 ```
 
-Add/remove a story item:
+#### Add/remove a story item:
 
 ```js
 const item = {}; // See StoryItem `./src/types.ts`
@@ -61,12 +86,12 @@ stories.removeItem(storyId, itemId);
 ```
 
 
-### Stories structure example
+#### Stories structure example
 ```js
 // See `StoriesTimeline` on `./src/types.ts`.
 ```
 
-### Alternate call
+#### Alternate call
 ```js
 // See ./markup.sample.html
 ```

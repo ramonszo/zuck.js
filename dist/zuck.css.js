@@ -44,7 +44,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extr
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
 /******/ 	var __webpack_exports__ = {};
 /******/ 	__webpack_modules__["./src/styles/index.css"](0, __webpack_exports__, __webpack_require__);
-/******/ 	window.Zuck = __webpack_exports__["default"];
+/******/ 	this.Zuck = __webpack_exports__["default"];
 /******/ 	
 /******/ })()
 ;

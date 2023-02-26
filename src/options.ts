@@ -1,7 +1,7 @@
 import { notUndefined, safeNum, timeAgo } from './utils';
-import { Options, StoryItem, TimelineItem, Zuck } from './types';
+import { Options, StoryItem, TimelineItem, ZuckObject } from './types';
 
-export const optionsDefault = (option?: Zuck['option']) => ({
+export const optionsDefault = (option?: ZuckObject['option']): Options => ({
   rtl: false,
   skin: 'snapgram',
   avatars: true,
@@ -211,14 +211,14 @@ export const option = function (
   _name?: string,
   _prop?: string
 ) {
-  const self = (name?: string, prop?: string) => {
+  const self = <T>(name: keyof Options, prop?: string): any => {
     if (prop) {
       if (notUndefined(options?.[name])) {
-        return notUndefined(options?.[name]?.[prop])
-          ? options?.[name]?.[prop]
-          : optionsDefault(self)[name]?.[prop];
+        return notUndefined((options?.[name] as Record<string, T>)?.[prop])
+          ? (options?.[name] as Record<string, T>)?.[prop]
+          : (optionsDefault(self)[name] as Record<string, T>)?.[prop];
       } else {
-        return optionsDefault(self)[name]?.[prop];
+        return (optionsDefault(self)[name] as Record<string, T>)?.[prop];
       }
     } else {
       return notUndefined(options?.[name])

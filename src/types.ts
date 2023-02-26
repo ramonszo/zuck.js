@@ -75,7 +75,7 @@ export type Templates = {
 
 export type Callbacks = {
   onOpen: (storyId: string, callback: () => void) => void;
-  onView: (storyId: string) => void;
+  onView: (storyId: string, callback?: () => void) => void;
   onEnd: (storyId: string, callback: () => void) => void;
   onClose: (storyId: string, callback: () => void) => void;
   onNextItem: (
@@ -130,7 +130,7 @@ export type Options = {
   [customKey: string]: unknown;
 };
 
-export type Zuck = {
+export type ZuckObject = {
   id: string;
   hasModal?: boolean;
   data: TimelineItem[];
