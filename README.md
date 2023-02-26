@@ -38,11 +38,10 @@ import 'zuck.js/skins/snapgram';
 or include the script tag and css:
 
 ```HTML
-<link rel="stylesheet" href="dist/zuck.css" />
-<link rel="stylesheet" href="dist/skins/snapgram.css" />
+<link rel="stylesheet" href="https://unpkg.com/zuck.js/dist/zuck.css" />
+<link rel="stylesheet" href="https://unpkg.com/zuck.js/dist/skins/snapgram.css" />
 
 <script src="https://unpkg.com/zuck.js/dist/zuck.js"></script>
-
 ```
 
 #### 2. Initialize:
@@ -53,7 +52,7 @@ or include the script tag and css:
 
 
 ```js
-const options = {}; // See `./src/options.ts`.
+const options = {}; // See ./src/options.ts
 
 const element = document.querySelector("#stories");
 const stories = Zuck(element, options);
@@ -64,7 +63,7 @@ const stories = Zuck(element, options);
 #### Add/update a story from timeline:
 
 ```js
-const story = {}; // See TimelineItem `./src/types.ts`
+const story = {}; // See TimelineItem on ./src/types.ts
 
 stories.add(story);
 stories.update(story);
@@ -79,7 +78,7 @@ stories.remove(storyId);
 #### Add/remove a story item:
 
 ```js
-const item = {}; // See StoryItem `./src/types.ts`
+const item = {}; // See StoryItem on ./src/types.ts
 
 stories.addItem(storyId, item);
 stories.removeItem(storyId, itemId);
@@ -88,7 +87,7 @@ stories.removeItem(storyId, itemId);
 
 #### Stories structure example
 ```js
-// See `StoriesTimeline` on `./src/types.ts`.
+// See StoriesTimeline on ./src/types.ts
 ```
 
 #### Alternate call
@@ -96,7 +95,7 @@ stories.removeItem(storyId, itemId);
 // See ./markup.sample.html
 ```
 
-### Tips
+#### Tips
 - You can use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
 - If you use Ionic or some js that uses ```location.hash```, you should always disable the "backNative" option which can mess your navigation.
 
