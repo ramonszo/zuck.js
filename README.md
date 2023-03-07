@@ -98,7 +98,7 @@ stories.removeItem(storyId, itemId);
 #### React support
 This library is not made exclusively for React, but you can still use it with refs or by creating components based on the markup sample.
 
-See `react.sample.html` for the a simple implementation or `react-components.sample.html` for a detailed one.
+See `react.sample.html` for the simple implementation or `react-components.sample.html` for the detailed one.
 
 #### Tips
 - You can use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
