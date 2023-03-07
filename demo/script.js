@@ -1,20 +1,8 @@
 const timestamp = function () {
-  let timeIndex = 0;
-  const shifts = [
-    35,
-    60,
-    60 * 3,
-    60 * 60 * 2,
-    60 * 60 * 25,
-    60 * 60 * 24 * 4,
-    60 * 60 * 24 * 10
-  ];
+  let timeIndex = 1678166046264 / 1000;
+  let random = Math.floor(Math.random() * 1000);
 
-  const now = new Date();
-  const shift = shifts[timeIndex++] || 0;
-  const date = new Date(now - shift * 1000);
-
-  return Math.round(date.getTime() / 1000);
+  return Math.round(timeIndex - random);
 };
 
 const changeSkin = function (skin) {

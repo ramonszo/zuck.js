@@ -44,6 +44,7 @@ export type TimelineItem = {
     name?: Maybe<string>;
     link?: Maybe<string>;
     lastUpdated?: Maybe<string | Date | number>;
+    time?: Maybe<string | Date | number>;
     items: StoryItem[];
     currentItem?: Maybe<number>;
     currentPreview?: Maybe<string>;

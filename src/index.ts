@@ -220,7 +220,11 @@ export const Zuck: ZuckFunction = function (timeline, options) {
       storyData.photo = story?.getAttribute('data-photo');
       storyData.name = story?.querySelector<HTMLElement>('.name')?.innerText;
       storyData.link = story?.querySelector('.item-link')?.getAttribute('href');
-      storyData.lastUpdated = story?.getAttribute('data-last-updated');
+      storyData.lastUpdated = safeNum(
+        story?.getAttribute('data-last-updated') ||
+          story?.getAttribute('data-time')
+      );
+
       storyData.seen = seen;
 
       if (!storyData.items) {
@@ -293,8 +297,12 @@ export const Zuck: ZuckFunction = function (timeline, options) {
       story?.setAttribute('data-photo', data['photo']);
     }
 
+    story?.setAttribute('data-time', data['time']?.toString());
+
     if (data['lastUpdated']) {
       story?.setAttribute('data-last-updated', data['lastUpdated']?.toString());
+    } else {
+      story?.setAttribute('data-last-updated', data['time']?.toString());
     }
 
     parseStory(story);

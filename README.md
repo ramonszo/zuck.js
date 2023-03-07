@@ -95,6 +95,11 @@ stories.removeItem(storyId, itemId);
 // See ./markup.sample.html
 ```
 
+#### React support
+This library is not made exclusively for React, but you can still use it with refs or by creating components based on the markup sample.
+
+See `react.sample.html` for the a simple implementation or `react-components.sample.html` for a detailed one.
+
 #### Tips
 - You can use with autoFullScreen option (disabled by default) to emulate an app on mobile devices.
 - If you use Ionic or some js that uses ```location.hash```, you should always disable the "backNative" option which can mess your navigation.
