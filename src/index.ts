@@ -441,6 +441,10 @@ export const Zuck: ZuckFunction = function (timeline, options) {
         data[currentStoryIndex].currentItem =
           data[currentStoryIndex].currentItem + directionNumber;
 
+        const nextVideo = nextItem.querySelector('video');
+        if (nextVideo) {
+          nextVideo.currentTime = 0;
+        }
         playVideoItem(storyViewer, nextItems, event);
       };
 
