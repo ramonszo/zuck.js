@@ -1,10 +1,8 @@
 import {
-  Callbacks,
   DocumentElementWithFullscreen,
   DocumentWithFullscreen,
   Maybe,
   ModalContainer,
-  Templates,
   TimelineItem,
   ZuckObject
 } from 'types';
@@ -14,8 +12,7 @@ import {
   onAnimationEnd,
   onTransitionEnd,
   prepend,
-  safeNum,
-  setVendorVariable
+  safeNum
 } from './utils';
 
 export const modal = (zuck: ZuckObject) => {
@@ -91,12 +88,13 @@ export const modal = (zuck: ZuckObject) => {
 
     if (zuck.option('cubeEffect')) {
       const scaling = to3d === 0 ? 'scale(0.95)' : 'scale(0.930,0.930)';
-
-      setVendorVariable(
-        document.querySelector<HTMLElement>('#zuck-modal-content')?.style,
-        'Transform',
-        scaling
+      const modalContent = document.querySelector<HTMLElement>(
+        '#zuck-modal-content'
       );
+
+      if (modalContent) {
+        modalContent.style.transform = scaling;
+      }
 
       if (to3d < -90 || to3d > 90) {
         return false;
@@ -109,11 +107,11 @@ export const modal = (zuck: ZuckObject) => {
 
     if (element) {
       if (ease) {
-        setVendorVariable(element?.style, 'TransitionTimingFunction', ease);
+        element.style.transitionTimingFunction = ease;
       }
 
-      setVendorVariable(element?.style, 'TransitionDuration', `${duration}ms`);
-      setVendorVariable(element?.style, 'Transform', transform);
+      element.style.transitionDuration = `${duration}ms`;
+      element.style.transform = transform;
     }
   };
 
@@ -261,7 +259,9 @@ export const modal = (zuck: ZuckObject) => {
           );
 
           if (items?.[0]) {
-            items[0].innerHTML = `<b style="${duration.style.cssText}"></b>`;
+            items[0].innerHTML = zuck.template('viewerItemPointerProgress')(
+              duration.style.cssText
+            );
 
             onAnimationEnd(duration, () => {
               zuck.nextItem();
@@ -279,10 +279,7 @@ export const modal = (zuck: ZuckObject) => {
           zuck.playVideoItem(storyViewer, items);
         }
 
-        zuck.option<Callbacks['onView']>(
-          'callbacks',
-          'onView'
-        )(zuck.internalData.currentStory);
+        zuck.callback('onView')(zuck.internalData.currentStory);
       }
     }, transitionTime + 50);
   };
@@ -319,14 +316,8 @@ export const modal = (zuck: ZuckObject) => {
         item.seen = true;
       }
 
-      pointerItems += zuck.option<Templates['viewerItemPointer']>(
-        'template',
-        'viewerItemPointer'
-      )(i, currentItem, item);
-      htmlItems += zuck.option<Templates['viewerItemBody']>(
-        'template',
-        'viewerItemBody'
-      )(i, currentItem, item);
+      pointerItems += zuck.template('viewerItemPointer')(i, currentItem, item);
+      htmlItems += zuck.template('viewerItemBody')(i, currentItem, item);
     });
 
     slides.innerHTML = htmlItems;
@@ -371,10 +362,10 @@ export const modal = (zuck: ZuckObject) => {
     }
 
     const storyViewerWrap = document.createElement('div');
-    storyViewerWrap.innerHTML = zuck.option<Templates['viewerItem']>(
-      'template',
-      'viewerItem'
-    )(storyData, storyItems[currentItem]);
+    storyViewerWrap.innerHTML = zuck.template('viewerItem')(
+      storyData,
+      storyItems[currentItem]
+    );
 
     const storyViewer = storyViewerWrap.firstElementChild as HTMLElement;
 
@@ -416,7 +407,9 @@ export const modal = (zuck: ZuckObject) => {
     }
 
     storyViewer
-      .querySelectorAll<HTMLDivElement>('.slides-pointers [data-index] > b')
+      .querySelectorAll<HTMLDivElement>(
+        '.slides-pointers [data-index] > .progress'
+      )
       .forEach((el) => {
         onAnimationEnd(el, () => {
           zuck.nextItem(undefined);
@@ -787,10 +780,10 @@ export const modal = (zuck: ZuckObject) => {
         tryFullScreen();
       }
 
-      zuck.option<Callbacks['onView']>('callbacks', 'onView')(storyId);
+      zuck.callback('onView')(storyId);
     };
 
-    zuck.option<Callbacks['onOpen']>('callbacks', 'onOpen')(storyId, callback);
+    zuck.callback('onOpen')(storyId, callback);
   };
   const next = () => {
     const callback = function () {
@@ -824,10 +817,7 @@ export const modal = (zuck: ZuckObject) => {
       }
     };
 
-    zuck.option<Callbacks['onEnd']>('callbacks', 'onEnd')(
-      zuck.internalData.currentStory,
-      callback
-    );
+    zuck.callback('onEnd')(zuck.internalData.currentStory, callback);
   };
 
   const close = () => {
@@ -857,10 +847,7 @@ export const modal = (zuck: ZuckObject) => {
       }
     };
 
-    zuck.option<Callbacks['onClose']>('callbacks', 'onClose')(
-      zuck.internalData.currentStory,
-      callback
-    );
+    zuck.callback('onClose')(zuck.internalData.currentStory, callback);
   };
 
   modalZuckContainer.modal = {

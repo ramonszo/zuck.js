@@ -1,5 +1,13 @@
-import { notUndefined, safeNum, timeAgo } from './utils';
-import { Options, StoryItem, TimelineItem, ZuckObject } from './types';
+import {
+  Callbacks,
+  Language,
+  Options,
+  StoryItem,
+  Templates,
+  TimelineItem,
+  ZuckObject
+} from './types';
+import { safeNum, timeAgo } from './utils';
 
 export const optionsDefault = (option?: ZuckObject['option']): Options => ({
   rtl: false, // enable/disable RTL
@@ -37,6 +45,10 @@ export const optionsDefault = (option?: ZuckObject['option']): Options => ({
       callback();
     },
     onNavigateItem: function (storyId, nextStoryId, callback) {
+      // use to update state on your reactive framework
+      callback();
+    },
+    onDataUpdate: function (data, callback) {
       // use to update state on your reactive framework
       callback();
     }
@@ -155,6 +167,10 @@ export const optionsDefault = (option?: ZuckObject['option']): Options => ({
               </div>`;
     },
 
+    viewerItemPointerProgress(style: string) {
+      return `<span class="progress" style="${style}"></span>`;
+    },
+
     viewerItemPointer(index: number, currentIndex: number, item: StoryItem) {
       return `<span
                 class="
@@ -162,9 +178,11 @@ export const optionsDefault = (option?: ZuckObject['option']): Options => ({
                   ${item['seen'] === true ? 'seen' : ''}
                 "
                 data-index="${index}" data-item-id="${item['id']}">
-                  <b style="animation-duration:${
-                    safeNum(item['length']) ? item['length'] : '3'
-                  }s"></b>
+                  ${option('template')['viewerItemPointerProgress'](
+                    `animation-duration:${
+                      safeNum(item['length']) ? item['length'] : '3'
+                    }s`
+                  )}
               </span>`;
     },
 
@@ -186,7 +204,7 @@ export const optionsDefault = (option?: ZuckObject['option']): Options => ({
                       } muted webkit-playsinline playsinline preload="auto" src="${
                         item['src']
                       }" ${item['type']}></video>
-                    <b class="tip muted">${option('language', 'unmute')}</b>`
+                    <b class="tip muted">${option('language')['unmute']}</b>`
                     : `<img loading="auto" class="media" src="${item['src']}" ${item['type']} />
                 `
                 }
@@ -196,7 +214,7 @@ export const optionsDefault = (option?: ZuckObject['option']): Options => ({
                     ? `<a class="tip link" href="${
                         item['link']
                       }" rel="noopener" target="_blank">
-                        ${item['linkText'] || option('language', 'visitLink')}
+                        ${item['linkText'] || option('language')['visitLink']}
                       </a>`
                     : ''
                 }
@@ -222,34 +240,44 @@ export const optionsDefault = (option?: ZuckObject['option']): Options => ({
   }
 });
 
-export const option = function (
+export const option = <T extends keyof Options>(
   options?: Options,
-  _name?: string,
-  _prop?: string
-) {
-  const self = <T>(name: keyof Options, prop?: string): any => {
-    if (prop) {
-      if (notUndefined(options?.[name])) {
-        return notUndefined((options?.[name] as Record<string, T>)?.[prop])
-          ? (options?.[name] as Record<string, T>)?.[prop]
-          : (optionsDefault(self)[name] as Record<string, T>)?.[prop];
-      } else {
-        return (optionsDefault(self)[name] as Record<string, T>)?.[prop];
-      }
-    } else {
-      return notUndefined(options?.[name])
-        ? options?.[name]
-        : optionsDefault(self)[name];
-    }
+  _name?: T
+): Options[T] => {
+  const self = (name: keyof Options) => {
+    return typeof options?.[name] !== 'undefined'
+      ? options?.[name]
+      : optionsDefault(self)[name];
   };
 
-  return self(_name, _prop);
+  return self(_name);
 };
 
-export const loadOptions = function (opts?: Options) {
+export const loadOptions = function (options?: Options) {
   return {
-    option: (name: string, prop?: string) => {
-      return option(opts, name, prop);
+    option: <T extends keyof Options>(name: T): Options[T] => {
+      return option(options, name);
+    },
+    callback: <C extends keyof Callbacks>(name: C): Callbacks[C] => {
+      const customOpts = option(options, 'callbacks');
+
+      return typeof customOpts[name] !== undefined
+        ? customOpts[name]
+        : option(undefined, 'callbacks')[name];
+    },
+    template: <T extends keyof Templates>(name: T): Templates[T] => {
+      const customOpts = option(options, 'template');
+
+      return typeof customOpts[name] !== undefined
+        ? customOpts[name]
+        : option(undefined, 'template')[name];
+    },
+    language: <L extends keyof Language>(name: L): Language[L] => {
+      const customOpts = option(options, 'language');
+
+      return typeof customOpts[name] !== undefined
+        ? customOpts[name]
+        : option(undefined, 'language')[name];
     }
   };
 };

@@ -128,7 +128,7 @@
 #zuck-modal-content .story-viewer.paused.longPress .tip {
   opacity: 0;
 }
-#zuck-modal-content .story-viewer.viewing:not(.paused):not(.stopped) .slides-pointers > * > .active > b {
+#zuck-modal-content .story-viewer.viewing:not(.paused):not(.stopped) .slides-pointers > * > .active > .progress {
   -webkit-animation-play-state: running;
   animation-play-state: running;
 }
@@ -194,7 +194,7 @@
 #zuck-modal-content .story-viewer .slides-pointers > * > .seen {
   background: #fff;
 }
-#zuck-modal-content .story-viewer .slides-pointers > * > * > b {
+#zuck-modal-content .story-viewer .slides-pointers > * > * > .progress {
   background: #fff;
   width: auto;
   max-width: 0;
@@ -206,7 +206,7 @@
   animation-play-state: paused;
   border-radius: 2px;
 }
-#zuck-modal-content .story-viewer .slides-pointers > * > .active > b {
+#zuck-modal-content .story-viewer .slides-pointers > * > .active > .progress {
   -webkit-animation-name: zuckSlideTime;
   animation-name: zuckSlideTime;
   -webkit-animation-timing-function: linear;

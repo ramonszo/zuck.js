@@ -1,16 +1,10 @@
-import {
-  generateId,
-  hasWindow,
-  prepend,
-  safeNum,
-  setVendorVariable,
-  timeAgo
-} from './utils';
+import { generateId, hasWindow, prepend, safeNum, timeAgo } from './utils';
 import { loadOptions } from './options';
 import { modal as ZuckModal } from './modal';
 
 import {
   Maybe,
+  StoriesTimeline,
   StoryItem,
   TimelineItem,
   Zuck as ZuckFunction,
@@ -23,8 +17,14 @@ export const Zuck: ZuckFunction = function (timeline, options) {
   }
 
   const id = timeline.id;
-  const { option } = loadOptions(options);
-  const data = option('stories') || {};
+  const {
+    option,
+    callback: callbackOption,
+    template: templateOption,
+    language: languageOption
+  } = loadOptions(options);
+
+  const data: StoriesTimeline = option('stories') || [];
   const internalData: ZuckObject['internalData'] = {};
 
   /* data functions */
@@ -70,7 +70,7 @@ export const Zuck: ZuckFunction = function (timeline, options) {
     }
 
     if (itemElement.getAttribute('data-type') === 'video') {
-      const video = itemElement.getElementsByTagName('video')[0];
+      const video = itemElement.querySelector<HTMLVideoElement>('video');
       if (!video) {
         internalData.currentVideoElement = undefined;
 
@@ -79,15 +79,15 @@ export const Zuck: ZuckFunction = function (timeline, options) {
 
       const setDuration = function () {
         let duration = video.duration;
+        const itemPointerProgress =
+          itemPointer.querySelector<HTMLElement>('.progress');
+
         if (+video.dataset.length) {
           duration = +video.dataset.length;
         }
-        if (duration) {
-          setVendorVariable(
-            itemPointer.getElementsByTagName('b')[0]?.style,
-            'AnimationDuration',
-            `${duration}s`
-          );
+
+        if (duration && itemPointerProgress) {
+          itemPointerProgress.style.animationDuration = `${duration}s`;
         }
       };
 
@@ -193,7 +193,8 @@ export const Zuck: ZuckFunction = function (timeline, options) {
 
       data[storyIndex].items = items;
 
-      const callback = option('callbacks', 'onDataUpdate');
+      const callback = callbackOption('onDataUpdate');
+
       if (callback) {
         callback(data, () => {});
       }
@@ -211,7 +212,7 @@ export const Zuck: ZuckFunction = function (timeline, options) {
     }
 
     try {
-      let storyData: Partial<StoryItem> = {};
+      let storyData: TimelineItem = {};
       if (storyIndex !== -1) {
         storyData = data[storyIndex];
       }
@@ -250,7 +251,8 @@ export const Zuck: ZuckFunction = function (timeline, options) {
       };
     }
 
-    const callback = option('callbacks', 'onDataUpdate');
+    const callback = callbackOption('onDataUpdate');
+
     if (callback) {
       callback(data, () => {});
     }
@@ -280,7 +282,7 @@ export const Zuck: ZuckFunction = function (timeline, options) {
 
     if (!storyEl) {
       const storyItem = document.createElement('div');
-      storyItem.innerHTML = option('template', 'timelineItem')(data);
+      storyItem.innerHTML = templateOption('timelineItem')(data);
 
       story = storyItem.firstElementChild as HTMLElement;
     } else {
@@ -352,7 +354,7 @@ export const Zuck: ZuckFunction = function (timeline, options) {
         li.setAttribute('data-id', data['id']);
       }
 
-      li.innerHTML = option('template', 'timelineStoryItem')(data);
+      li.innerHTML = templateOption('timelineStoryItem')(data);
 
       if (append) {
         el?.appendChild(li);
@@ -448,10 +450,11 @@ export const Zuck: ZuckFunction = function (timeline, options) {
         playVideoItem(storyViewer, nextItems, event);
       };
 
-      let callback = option('callbacks', 'onNavigateItem');
+      let callback = callbackOption('onNavigateItem');
+
       callback = !callback
-        ? option('callbacks', 'onNextItem')
-        : option('callbacks', 'onNavigateItem');
+        ? callbackOption('onNextItem')
+        : callbackOption('onNavigateItem');
 
       callback(
         currentStory,
@@ -521,7 +524,7 @@ export const Zuck: ZuckFunction = function (timeline, options) {
       if (seenItems) {
         Object.entries(seenItems).forEach(([, key]) => {
           if (key && data[key]) {
-            data[key].seen = seenItems[key];
+            data[key].seen = seenItems[key] ? true : false;
           }
         });
       }
@@ -544,6 +547,9 @@ export const Zuck: ZuckFunction = function (timeline, options) {
     return {
       id,
       option,
+      callback: callbackOption,
+      template: templateOption,
+      language: languageOption,
       navigateItem,
       saveLocalData,
       getLocalData,

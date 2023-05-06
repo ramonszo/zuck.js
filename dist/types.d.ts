@@ -45,7 +45,7 @@ export type TimelineItem = {
     link?: Maybe<string>;
     lastUpdated?: Maybe<string | Date | number>;
     time?: Maybe<string | Date | number>;
-    items: StoryItem[];
+    items?: StoryItem[];
     currentItem?: Maybe<number>;
     currentPreview?: Maybe<string>;
     seen?: Maybe<boolean>;
@@ -56,6 +56,7 @@ export type Templates = {
     timelineStoryItem: (itemData: StoryItem) => string;
     viewerItem: (storyData: TimelineItem, currentItem: StoryItem) => string;
     viewerItemPointer: (index: number, currentIndex: number, item: StoryItem) => string;
+    viewerItemPointerProgress: (style: string) => string;
     viewerItemBody: (index: number, currentIndex: number, item: StoryItem) => string;
 };
 export type Callbacks = {
@@ -63,8 +64,9 @@ export type Callbacks = {
     onView: (storyId: string, callback?: () => void) => void;
     onEnd: (storyId: string, callback: () => void) => void;
     onClose: (storyId: string, callback: () => void) => void;
-    onNextItem: (storyId: string, nextStoryId: number, callback: () => void) => void;
-    onNavigateItem: (storyId: string, nextStoryId: number, callback: () => void) => void;
+    onDataUpdate: (data: StoriesTimeline, callback: () => void) => void;
+    onNextItem: (storyId: string, nextStoryId: string, callback: () => void) => void;
+    onNavigateItem: (storyId: string, nextStoryId: string, callback: () => void) => void;
 };
 export type Language = {
     unmute: string;
@@ -101,13 +103,17 @@ export type Options = {
     callbacks?: Callbacks;
     language?: Language;
     template?: Templates;
+    reactive?: boolean;
     [customKey: string]: unknown;
 };
 export type ZuckObject = {
     id: string;
     hasModal?: boolean;
     data: TimelineItem[];
-    option: <T>(name: keyof Options, prop?: string) => T;
+    option: <T extends keyof Options>(name: T) => Options[T];
+    callback: <C extends keyof Callbacks>(name: C) => Callbacks[C];
+    template: <T extends keyof Templates>(name: T) => Templates[T];
+    language: <L extends keyof Language>(name: L) => Language[L];
     add: (data: TimelineItem, append?: boolean) => void;
     update: (data: TimelineItem, append?: boolean) => void;
     addItem: (storyId: string, data: TimelineItem, append?: boolean) => void;

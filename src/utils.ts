@@ -4,50 +4,12 @@ export const hasWindow = () => {
   return typeof window !== 'undefined';
 };
 
-export const notUndefined = function (what: unknown): boolean {
-  return typeof what !== 'undefined';
-};
-
 export const safeNum = (num?: null | number | string) => {
   return num ? Number(num) : 0;
 };
 
-export const setVendorVariable = (
-  ref?: CSSStyleDeclaration,
-  variable?: string,
-  value?: string
-) => {
-  const variables = [
-    `${variable}`.toLowerCase(),
-    `webkit${variable}`,
-    `MS${variable}`,
-    `o${variable}`
-  ];
-
-  variables?.forEach((val) => {
-    ref[val as any] = value;
-  });
-};
-
-export const addVendorEvents = (
-  el: HTMLElement,
-  func: (e: Event) => void,
-  event: string
-) => {
-  const events = [
-    event.toLowerCase(),
-    `webkit${event}`,
-    `MS${event}`,
-    `o${event}`
-  ];
-
-  events.forEach((val) => {
-    el.addEventListener(val, func, false);
-  });
-};
-
 export const onAnimationEnd = (el: HTMLElement, func: (e: Event) => void) => {
-  addVendorEvents(el, func, 'AnimationEnd');
+  el.addEventListener('animationend', func);
 };
 
 export const onTransitionEnd = (
@@ -56,7 +18,7 @@ export const onTransitionEnd = (
 ) => {
   if (!el.transitionEndEvent) {
     el.transitionEndEvent = true;
-    addVendorEvents(el, func, 'TransitionEnd');
+    el.addEventListener('transitionend', func);
   }
 };
 
