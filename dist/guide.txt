@@ -1,0 +1,14 @@
+const my_stories = new Zuck(`id `, {
+
+
+	ZuckModal_perfix: 'my_stories_',
+         
+});
+
+
+
+
+
+
+
+// 'ZuckModal_perfix' is the custom prefix new variable.

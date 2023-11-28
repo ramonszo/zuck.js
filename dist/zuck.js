@@ -1,88 +1,1152 @@
-/*
- * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
- * This devtool is neither made for production nor for readable output files.
- * It uses "eval()" calls to create a separate source file in the browser devtools.
- * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
- * or disable the default devtool with "devtool: false".
- * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
- */
-/******/ (() => { // webpackBootstrap
-/******/ 	"use strict";
-/******/ 	var __webpack_modules__ = ({
+/* zuck.js - https://github.com/ramon82/zuck.js */
+window['ZuckitaDaGalera'] = window['Zuck'] = function(timeline, options) {
+    'use strict';
 
-/***/ "./src/index.ts":
-/*!**********************!*\
-  !*** ./src/index.ts ***!
-  \**********************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+    var d = document,
+        zuck = this;
 
-eval("\nexports.__esModule = true;\nexports.Zuck = void 0;\nvar utils_1 = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\nvar options_1 = __webpack_require__(/*! ./options */ \"./src/options.ts\");\nvar modal_1 = __webpack_require__(/*! ./modal */ \"./src/modal.ts\");\nvar Zuck = function (timeline, options) {\n    if (!timeline.id) {\n        timeline.setAttribute('id', (0, utils_1.generateId)());\n    }\n    var id = timeline.id;\n    var _a = (0, options_1.loadOptions)(options), option = _a.option, callbackOption = _a.callback, templateOption = _a.template, languageOption = _a.language;\n    var data = option('stories') || [];\n    var internalData = {};\n    /* data functions */\n    var saveLocalData = function (key, data) {\n        try {\n            if (option('localStorage') && (0, utils_1.hasWindow)()) {\n                var keyName = \"zuck-\".concat(id, \"-\").concat(key);\n                window.localStorage[keyName] = JSON.stringify(data);\n            }\n        }\n        catch (e) { }\n    };\n    var getLocalData = function (key) {\n        if (option('localStorage') && (0, utils_1.hasWindow)()) {\n            var keyName = \"zuck-\".concat(id, \"-\").concat(key);\n            return window.localStorage[keyName]\n                ? JSON.parse(window.localStorage[keyName])\n                : undefined;\n        }\n        else {\n            return undefined;\n        }\n    };\n    internalData.seenItems = getLocalData('seenItems') || {};\n    var playVideoItem = function (storyViewer, elements, unmute) {\n        var itemElement = elements === null || elements === void 0 ? void 0 : elements[1];\n        var itemPointer = elements === null || elements === void 0 ? void 0 : elements[0];\n        if (!itemElement || !itemPointer) {\n            return false;\n        }\n        var cur = internalData.currentVideoElement;\n        if (cur) {\n            cur.pause();\n        }\n        if (itemElement.getAttribute('data-type') === 'video') {\n            var video_1 = itemElement.querySelector('video');\n            if (!video_1) {\n                internalData.currentVideoElement = undefined;\n                return false;\n            }\n            var setDuration = function () {\n                var duration = video_1.duration;\n                var itemPointerProgress = itemPointer.querySelector('.progress');\n                if (+video_1.dataset.length) {\n                    duration = +video_1.dataset.length;\n                }\n                if (duration && itemPointerProgress) {\n                    itemPointerProgress.style.animationDuration = \"\".concat(duration, \"s\");\n                }\n            };\n            setDuration();\n            video_1.addEventListener('loadedmetadata', setDuration);\n            internalData.currentVideoElement = video_1;\n            video_1.play();\n            try {\n                unmuteVideoItem(video_1, storyViewer);\n            }\n            catch (e) {\n                console.warn('Could not unmute video', unmute);\n            }\n        }\n        else {\n            internalData.currentVideoElement = undefined;\n        }\n    };\n    var findStoryIndex = function (id) {\n        return data.findIndex(function (item) { return item.id === id; });\n    };\n    var pauseVideoItem = function () {\n        var video = internalData.currentVideoElement;\n        if (video) {\n            try {\n                video.pause();\n            }\n            catch (e) { }\n        }\n    };\n    var unmuteVideoItem = function (video, storyViewer) {\n        video.muted = false;\n        video.volume = 1.0;\n        video.removeAttribute('muted');\n        video.play();\n        if (video.paused) {\n            video.muted = true;\n            video.play();\n        }\n        if (storyViewer) {\n            storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.remove('paused');\n        }\n    };\n    var parseItems = function (story, forceUpdate) {\n        var storyId = (story === null || story === void 0 ? void 0 : story.getAttribute('data-id')) || '';\n        var storyIndex = findStoryIndex(storyId);\n        var storyItems = document.querySelectorAll(\"#\".concat(id, \" [data-id=\\\"\").concat(storyId, \"\\\"] .items > li\"));\n        var items = [];\n        if (!option('reactive') || forceUpdate) {\n            storyItems.forEach(function (_a) {\n                var firstElementChild = _a.firstElementChild;\n                var a = firstElementChild;\n                var img = a === null || a === void 0 ? void 0 : a.firstElementChild;\n                var li = a === null || a === void 0 ? void 0 : a.parentElement;\n                var item = {\n                    id: (a === null || a === void 0 ? void 0 : a.getAttribute('data-id')) || (li === null || li === void 0 ? void 0 : li.getAttribute('data-id')),\n                    src: a === null || a === void 0 ? void 0 : a.getAttribute('href'),\n                    length: (0, utils_1.safeNum)(a === null || a === void 0 ? void 0 : a.getAttribute('data-length')),\n                    type: a === null || a === void 0 ? void 0 : a.getAttribute('data-type'),\n                    time: (a === null || a === void 0 ? void 0 : a.getAttribute('data-time')) || (li === null || li === void 0 ? void 0 : li.getAttribute('data-time')),\n                    link: (a === null || a === void 0 ? void 0 : a.getAttribute('data-link')) || '',\n                    linkText: a === null || a === void 0 ? void 0 : a.getAttribute('data-linkText'),\n                    preview: img === null || img === void 0 ? void 0 : img.getAttribute('src'),\n                    seen: li === null || li === void 0 ? void 0 : li.classList.contains('seen')\n                };\n                var all = a === null || a === void 0 ? void 0 : a.attributes;\n                var reserved = [\n                    'data-id',\n                    'href',\n                    'data-length',\n                    'data-type',\n                    'data-time',\n                    'data-link',\n                    'data-linkText'\n                ];\n                if (all) {\n                    for (var z = 0; z < all.length; z++) {\n                        if (reserved.indexOf(all[z].nodeName) === -1) {\n                            item[all[z].nodeName.replace('data-', '')] = all === null || all === void 0 ? void 0 : all[z].nodeValue;\n                        }\n                    }\n                }\n                // destruct the remaining attributes as options\n                items.push(item);\n            });\n            data[storyIndex].items = items;\n            var callback = callbackOption('onDataUpdate');\n            if (callback) {\n                callback(data, function () { });\n            }\n        }\n    };\n    var parseStory = function (story) {\n        var _a, _b;\n        var storyId = (story === null || story === void 0 ? void 0 : story.getAttribute('data-id')) || '';\n        var storyIndex = findStoryIndex(storyId);\n        var seen = false;\n        if (internalData.seenItems[storyId]) {\n            seen = true;\n        }\n        try {\n            var storyData = {};\n            if (storyIndex !== -1) {\n                storyData = data[storyIndex];\n            }\n            storyData.id = storyId;\n            storyData.photo = story === null || story === void 0 ? void 0 : story.getAttribute('data-photo');\n            storyData.name = (_a = story === null || story === void 0 ? void 0 : story.querySelector('.name')) === null || _a === void 0 ? void 0 : _a.innerText;\n            storyData.link = (_b = story === null || story === void 0 ? void 0 : story.querySelector('.item-link')) === null || _b === void 0 ? void 0 : _b.getAttribute('href');\n            storyData.lastUpdated = (0, utils_1.safeNum)((story === null || story === void 0 ? void 0 : story.getAttribute('data-last-updated')) ||\n                (story === null || story === void 0 ? void 0 : story.getAttribute('data-time')));\n            storyData.seen = seen;\n            if (!storyData.items) {\n                storyData.items = [];\n            }\n            if (storyIndex === -1) {\n                data.push(storyData);\n            }\n            else {\n                data[storyIndex] = storyData;\n            }\n        }\n        catch (e) {\n            data[storyIndex] = {\n                items: []\n            };\n        }\n        if (story) {\n            story.onclick = function (e) {\n                e.preventDefault();\n                modal.show(storyId);\n            };\n        }\n        var callback = callbackOption('onDataUpdate');\n        if (callback) {\n            callback(data, function () { });\n        }\n    };\n    var add = function (data, append) {\n        var _a, _b, _c, _d;\n        var storyId = data['id'] || '';\n        var storyEl = document.querySelector(\"#\".concat(id, \" [data-id=\\\"\").concat(storyId, \"\\\"]\"));\n        var items = data['items'];\n        var story = null;\n        var preview = undefined;\n        if (items === null || items === void 0 ? void 0 : items[0]) {\n            preview = ((_a = items === null || items === void 0 ? void 0 : items[0]) === null || _a === void 0 ? void 0 : _a.preview) || '';\n        }\n        if (internalData.seenItems[storyId] === true) {\n            data.seen = true;\n        }\n        if (data) {\n            data.currentPreview = preview;\n        }\n        if (!storyEl) {\n            var storyItem = document.createElement('div');\n            storyItem.innerHTML = templateOption('timelineItem')(data);\n            story = storyItem.firstElementChild;\n        }\n        else {\n            story = storyEl;\n        }\n        if (data.seen === false) {\n            internalData.seenItems[storyId] = false;\n            saveLocalData('seenItems', internalData.seenItems);\n        }\n        story === null || story === void 0 ? void 0 : story.setAttribute('data-id', storyId);\n        if (data['photo']) {\n            story === null || story === void 0 ? void 0 : story.setAttribute('data-photo', data['photo']);\n        }\n        story === null || story === void 0 ? void 0 : story.setAttribute('data-time', (_b = data['time']) === null || _b === void 0 ? void 0 : _b.toString());\n        if (data['lastUpdated']) {\n            story === null || story === void 0 ? void 0 : story.setAttribute('data-last-updated', (_c = data['lastUpdated']) === null || _c === void 0 ? void 0 : _c.toString());\n        }\n        else {\n            story === null || story === void 0 ? void 0 : story.setAttribute('data-last-updated', (_d = data['time']) === null || _d === void 0 ? void 0 : _d.toString());\n        }\n        parseStory(story);\n        if (!storyEl && !option('reactive')) {\n            if (append) {\n                timeline.appendChild(story);\n            }\n            else {\n                (0, utils_1.prepend)(timeline, story);\n            }\n        }\n        items === null || items === void 0 ? void 0 : items.forEach(function (item) {\n            addItem(storyId, item, append);\n        });\n        if (!append) {\n            updateStorySeenPosition();\n        }\n    };\n    var update = add;\n    var next = function () {\n        modal.next();\n    };\n    var remove = function (storyId) {\n        var _a;\n        var story = document.querySelector(\"#\".concat(id, \" > [data-id=\\\"\").concat(storyId, \"\\\"]\"));\n        (_a = story === null || story === void 0 ? void 0 : story.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(story);\n    };\n    var addItem = function (storyId, data, append) {\n        var story = document.querySelector(\"#\".concat(id, \" > [data-id=\\\"\").concat(storyId, \"\\\"]\"));\n        if (!option('reactive')) {\n            var li = document.createElement('li');\n            var el = story === null || story === void 0 ? void 0 : story.querySelectorAll('.items')[0];\n            if (data['id']) {\n                li.className = data['seen'] ? 'seen' : '';\n                li.setAttribute('data-id', data['id']);\n            }\n            li.innerHTML = templateOption('timelineStoryItem')(data);\n            if (append) {\n                el === null || el === void 0 ? void 0 : el.appendChild(li);\n            }\n            else {\n                (0, utils_1.prepend)(el, li);\n            }\n        }\n        parseItems(story);\n    };\n    var removeItem = function (storyId, itemId) {\n        var _a;\n        var item = document.querySelector(\"#\".concat(id, \" > [data-id=\\\"\").concat(storyId, \"\\\"] [data-id=\\\"\").concat(itemId, \"\\\"]\"));\n        if (!option('reactive')) {\n            (_a = item === null || item === void 0 ? void 0 : item.parentNode) === null || _a === void 0 ? void 0 : _a.removeChild(item);\n            data.forEach(function (story) {\n                if (story.id === storyId) {\n                    story.items = story.items.filter(function (item) { return item.id !== itemId; });\n                }\n            });\n        }\n    };\n    var nextItem = function (direction, event) {\n        var currentStory = internalData.currentStory;\n        var currentStoryIndex = findStoryIndex(internalData.currentStory);\n        var currentItem = data[currentStoryIndex].currentItem;\n        var storyViewer = document.querySelector(\"#zuck-modal .story-viewer[data-story-id=\\\"\".concat(currentStory, \"\\\"]\"));\n        var directionNumber = direction === 'previous' ? -1 : 1;\n        if (!storyViewer) {\n            return false;\n        }\n        var currentItemElements = storyViewer.querySelectorAll(\"[data-index=\\\"\".concat(currentItem, \"\\\"]\"));\n        var currentPointer = currentItemElements[0];\n        var currentItemElement = currentItemElements[1];\n        var navigateItem = currentItem + directionNumber;\n        var nextItems = storyViewer.querySelectorAll(\"[data-index=\\\"\".concat(navigateItem, \"\\\"]\"));\n        var nextPointer = nextItems[0];\n        var nextItem = nextItems[1];\n        if (storyViewer && nextPointer && nextItem) {\n            var navigateItemCallback = function () {\n                if (direction === 'previous') {\n                    currentPointer === null || currentPointer === void 0 ? void 0 : currentPointer.classList.remove('seen');\n                    currentItemElement === null || currentItemElement === void 0 ? void 0 : currentItemElement.classList.remove('seen');\n                }\n                else {\n                    currentPointer === null || currentPointer === void 0 ? void 0 : currentPointer.classList.add('seen');\n                    currentItemElement === null || currentItemElement === void 0 ? void 0 : currentItemElement.classList.add('seen');\n                }\n                currentPointer === null || currentPointer === void 0 ? void 0 : currentPointer.classList.remove('active');\n                currentItemElement === null || currentItemElement === void 0 ? void 0 : currentItemElement.classList.remove('active');\n                nextPointer === null || nextPointer === void 0 ? void 0 : nextPointer.classList.remove('seen');\n                nextPointer === null || nextPointer === void 0 ? void 0 : nextPointer.classList.add('active');\n                nextItem === null || nextItem === void 0 ? void 0 : nextItem.classList.remove('seen');\n                nextItem === null || nextItem === void 0 ? void 0 : nextItem.classList.add('active');\n                storyViewer\n                    .querySelectorAll('.time')\n                    .forEach(function (el) {\n                    el.innerText = (0, utils_1.timeAgo)(Number(nextItem.getAttribute('data-time')), option('language'));\n                });\n                data[currentStoryIndex].currentItem =\n                    data[currentStoryIndex].currentItem + directionNumber;\n                var nextVideo = nextItem.querySelector('video');\n                if (nextVideo) {\n                    nextVideo.currentTime = 0;\n                }\n                playVideoItem(storyViewer, nextItems, event);\n            };\n            var callback = callbackOption('onNavigateItem');\n            callback = !callback\n                ? callbackOption('onNextItem')\n                : callbackOption('onNavigateItem');\n            callback(currentStory, nextItem.getAttribute('data-story-id'), navigateItemCallback);\n        }\n        else if (storyViewer) {\n            if (direction !== 'previous') {\n                modal.next();\n            }\n        }\n        return true;\n    };\n    var navigateItem = nextItem;\n    var updateStorySeenPosition = function () {\n        document\n            .querySelectorAll(\"#\".concat(id, \" .story.seen\"))\n            .forEach(function (el) {\n            var storyId = el === null || el === void 0 ? void 0 : el.getAttribute('data-id');\n            var storyIndex = findStoryIndex(storyId);\n            if (storyId) {\n                var newData = data[storyIndex];\n                var timeline_1 = el === null || el === void 0 ? void 0 : el.parentNode;\n                if (!option('reactive') && timeline_1) {\n                    timeline_1.removeChild(el);\n                }\n                update(newData, true);\n            }\n        });\n    };\n    var init = function () {\n        if (timeline && timeline.querySelector('.story')) {\n            timeline.querySelectorAll('.story').forEach(function (story) {\n                parseStory(story);\n                parseItems(story);\n            });\n        }\n        if (option('backNative') && (0, utils_1.hasWindow)()) {\n            if (window.location.hash === \"#!\".concat(id)) {\n                window.location.hash = '';\n            }\n            window.addEventListener('popstate', function () {\n                if (window.location.hash !== \"#!\".concat(id)) {\n                    window.location.hash = '';\n                }\n            }, false);\n        }\n        if (!option('reactive')) {\n            var seenItems_1 = getLocalData('seenItems');\n            if (seenItems_1) {\n                Object.entries(seenItems_1).forEach(function (_a) {\n                    var key = _a[1];\n                    if (key && data[key]) {\n                        data[key].seen = seenItems_1[key] ? true : false;\n                    }\n                });\n            }\n        }\n        option('stories').forEach(function (item) {\n            add(item, true);\n        });\n        updateStorySeenPosition();\n        var avatars = option('avatars') ? 'user-icon' : 'story-preview';\n        var list = option('list') ? 'list' : 'carousel';\n        var rtl = option('rtl') ? 'rtl' : '';\n        timeline.className += \" stories \".concat(avatars, \" \").concat(list, \" \").concat(\"\".concat(option('skin')).toLowerCase(), \" \").concat(rtl);\n        return {\n            id: id,\n            option: option,\n            callback: callbackOption,\n            template: templateOption,\n            language: languageOption,\n            navigateItem: navigateItem,\n            saveLocalData: saveLocalData,\n            getLocalData: getLocalData,\n            data: data,\n            internalData: internalData,\n            add: add,\n            update: update,\n            next: next,\n            remove: remove,\n            addItem: addItem,\n            removeItem: removeItem,\n            nextItem: nextItem,\n            findStoryIndex: findStoryIndex,\n            updateStorySeenPosition: updateStorySeenPosition,\n            playVideoItem: playVideoItem,\n            pauseVideoItem: pauseVideoItem,\n            unmuteVideoItem: unmuteVideoItem\n        };\n    };\n    var zuck = init();\n    var modal = (0, modal_1.modal)(zuck);\n    return zuck;\n};\nexports.Zuck = Zuck;\nexports[\"default\"] = exports.Zuck;\n\n\n//# sourceURL=webpack://Zuck/./src/index.ts?");
+    if (typeof timeline == 'string') {
+        timeline = d.getElementById(timeline);
+    }
 
-/***/ }),
 
-/***/ "./src/modal.ts":
-/*!**********************!*\
-  !*** ./src/modal.ts ***!
-  \**********************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+    /* core functions */
+    var q = function(query) {
+            return d.querySelectorAll(query)[0];
+        },
+        g = function(array, what) {
+            if (array) {
+                return array[what] || '';
+            } else {
+                return '';
+            }
+        },
+        each = function(arr, func) {
+            if (arr) {
+                var total = arr.length;
 
-eval("\nexports.__esModule = true;\nexports.modal = void 0;\nvar utils_1 = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\nvar modal = function (zuck) {\n    var id = zuck.id;\n    var modalZuckContainer = document.querySelector('#zuck-modal');\n    if (!modalZuckContainer && !zuck.hasModal) {\n        zuck.hasModal = true;\n        modalZuckContainer = document.createElement('div');\n        modalZuckContainer.id = 'zuck-modal';\n        if (zuck.option('cubeEffect')) {\n            modalZuckContainer.className = 'with-cube';\n        }\n        modalZuckContainer.innerHTML = '<div id=\"zuck-modal-content\"></div>';\n        modalZuckContainer.style.display = 'none';\n        modalZuckContainer.setAttribute('tabIndex', '1');\n        modalZuckContainer.onkeyup = function (_a) {\n            var keyCode = _a.keyCode;\n            var code = keyCode;\n            if (code === 27) {\n                modalZuckContainer.modal.close();\n            }\n            else if (code === 13 || code === 32) {\n                modalZuckContainer.modal.next();\n            }\n        };\n        if (zuck.option('openEffect')) {\n            modalZuckContainer === null || modalZuckContainer === void 0 ? void 0 : modalZuckContainer.classList.add('with-effects');\n        }\n        if (zuck.option('rtl')) {\n            modalZuckContainer === null || modalZuckContainer === void 0 ? void 0 : modalZuckContainer.classList.add('rtl');\n        }\n        (0, utils_1.onTransitionEnd)(modalZuckContainer, function () {\n            var modalContent = document.querySelector('#zuck-modal-content');\n            if (modalZuckContainer === null || modalZuckContainer === void 0 ? void 0 : modalZuckContainer.classList.contains('closed')) {\n                if (modalContent) {\n                    modalContent.innerHTML = '';\n                }\n                modalZuckContainer.style.display = 'none';\n                modalZuckContainer.classList.remove('closed');\n                modalZuckContainer.classList.remove('animated');\n            }\n        });\n        document.body.appendChild(modalZuckContainer);\n    }\n    var translate = function (element, to, duration, ease) {\n        var _a;\n        if (to === undefined || (to && isNaN(to))) {\n            return;\n        }\n        var direction = to > 0 ? 1 : -1;\n        var modalWidth = ((_a = document.querySelector('#zuck-modal')) === null || _a === void 0 ? void 0 : _a.offsetWidth) || 1;\n        var to3d = (Math.abs(to) / modalWidth) * 90 * direction;\n        if (zuck.option('cubeEffect')) {\n            var scaling = to3d === 0 ? 'scale(0.95)' : 'scale(0.930,0.930)';\n            var modalContent = document.querySelector('#zuck-modal-content');\n            if (modalContent) {\n                modalContent.style.transform = scaling;\n            }\n            if (to3d < -90 || to3d > 90) {\n                return false;\n            }\n        }\n        var transform = !zuck.option('cubeEffect')\n            ? \"translate3d(\".concat(to, \"px, 0, 0)\")\n            : \"rotateY(\".concat(to3d, \"deg)\");\n        if (element) {\n            if (ease) {\n                element.style.transitionTimingFunction = ease;\n            }\n            element.style.transitionDuration = \"\".concat(duration, \"ms\");\n            element.style.transform = transform;\n        }\n    };\n    var fullScreen = function (elem, cancel) {\n        var anyDocument = document;\n        var anyElem = elem;\n        try {\n            if (cancel) {\n                if (anyDocument.fullscreenElement ||\n                    anyDocument.webkitFullscreenElement ||\n                    anyDocument.mozFullScreenElement ||\n                    anyDocument.msFullscreenElement) {\n                    if (anyDocument.exitFullscreen) {\n                        anyDocument.exitFullscreen()[\"catch\"](function () { });\n                    }\n                    else if (anyDocument.mozCancelFullScreen) {\n                        anyDocument.mozCancelFullScreen()[\"catch\"](function () { });\n                    }\n                }\n            }\n            else {\n                if (anyElem.requestFullscreen) {\n                    anyElem.requestFullscreen();\n                }\n                else if (anyElem.msRequestFullscreen) {\n                    anyElem.msRequestFullscreen();\n                }\n                else if (anyElem.mozRequestFullScreen) {\n                    anyElem.mozRequestFullScreen();\n                }\n                else if (anyElem.webkitRequestFullscreen) {\n                    anyElem.webkitRequestFullscreen();\n                }\n            }\n        }\n        catch (e) {\n            console.warn(\"[Zuck.js] Can't access fullscreen\");\n        }\n    };\n    var moveStoryItem = function (direction) {\n        var modalContainer = document.querySelector('#zuck-modal');\n        var modalSlider = document.querySelector(\"#zuck-modal-slider-\".concat(id));\n        var target = '';\n        var useless = '';\n        var transform = 0;\n        var slideItems = {\n            previous: document.querySelector('#zuck-modal .story-viewer.previous'),\n            next: document.querySelector('#zuck-modal .story-viewer.next'),\n            viewing: document.querySelector('#zuck-modal .story-viewer.viewing')\n        };\n        if ((!slideItems.previous && !direction) ||\n            (!slideItems.next && direction)) {\n            if (!zuck.option('rtl')) {\n                return false;\n            }\n        }\n        if (!direction) {\n            target = 'previous';\n            useless = 'next';\n        }\n        else {\n            target = 'next';\n            useless = 'previous';\n        }\n        var transitionTime = 600;\n        if (zuck.option('cubeEffect')) {\n            if (target === 'previous') {\n                transform = (0, utils_1.safeNum)(modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.slideWidth);\n            }\n            else if (target === 'next') {\n                transform = (0, utils_1.safeNum)(modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.slideWidth) * -1;\n            }\n        }\n        else {\n            transform = (0, utils_1.findPos)(slideItems[target])[0] * -1;\n        }\n        translate(modalSlider, transform, transitionTime, null);\n        setTimeout(function () {\n            var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;\n            // set page data when transition complete\n            if (zuck.option('rtl')) {\n                var tmp = target;\n                target = useless;\n                useless = tmp;\n            }\n            if (target !== '' && slideItems[target] && useless !== '') {\n                var currentStory = (_a = slideItems[target]) === null || _a === void 0 ? void 0 : _a.getAttribute('data-story-id');\n                zuck.internalData.currentStory = currentStory;\n                var oldStory = document.querySelector(\"#zuck-modal .story-viewer.\".concat(useless));\n                if (oldStory) {\n                    (_b = oldStory === null || oldStory === void 0 ? void 0 : oldStory.parentNode) === null || _b === void 0 ? void 0 : _b.removeChild(oldStory);\n                }\n                if (slideItems.viewing) {\n                    (_c = slideItems.viewing) === null || _c === void 0 ? void 0 : _c.classList.add('stopped');\n                    (_d = slideItems.viewing) === null || _d === void 0 ? void 0 : _d.classList.add(useless);\n                    (_e = slideItems.viewing) === null || _e === void 0 ? void 0 : _e.classList.remove('viewing');\n                }\n                if (slideItems[target]) {\n                    (_f = slideItems[target]) === null || _f === void 0 ? void 0 : _f.classList.remove('stopped');\n                    (_g = slideItems[target]) === null || _g === void 0 ? void 0 : _g.classList.remove(target);\n                    (_h = slideItems[target]) === null || _h === void 0 ? void 0 : _h.classList.add('viewing');\n                }\n                var newTimelineItem = getStoryMorningGlory(target);\n                if (newTimelineItem) {\n                    createStoryViewer(newTimelineItem, target);\n                }\n                var storyId = zuck.internalData.currentStory;\n                var storyIndex = zuck.findStoryIndex(storyId);\n                var storyWrap = document.querySelector(\"#zuck-modal [data-story-id=\\\"\".concat(storyId, \"\\\"]\"));\n                var items = undefined;\n                if (storyWrap) {\n                    items = storyWrap.querySelectorAll('[data-index].active');\n                    var duration = (_j = items === null || items === void 0 ? void 0 : items[0]) === null || _j === void 0 ? void 0 : _j.firstElementChild;\n                    zuck.data[storyIndex].currentItem = (0, utils_1.safeNum)((_k = items === null || items === void 0 ? void 0 : items[0]) === null || _k === void 0 ? void 0 : _k.getAttribute('data-index'));\n                    if (items === null || items === void 0 ? void 0 : items[0]) {\n                        items[0].innerHTML = zuck.template('viewerItemPointerProgress')(duration.style.cssText);\n                        (0, utils_1.onAnimationEnd)(duration, function () {\n                            zuck.nextItem();\n                        });\n                    }\n                }\n                translate(modalSlider, 0, 0, null);\n                if (items) {\n                    var storyViewer = document.querySelector(\"#zuck-modal .story-viewer[data-story-id=\\\"\".concat(currentStory, \"\\\"]\"));\n                    zuck.playVideoItem(storyViewer, items);\n                }\n                zuck.callback('onView')(zuck.internalData.currentStory);\n            }\n        }, transitionTime + 50);\n    };\n    var createStoryViewer = function (storyData, className, forcePlay) {\n        var modalSlider = document.querySelector(\"#zuck-modal-slider-\".concat(id));\n        var storyItems = storyData['items'];\n        storyData.time = storyItems && (storyItems === null || storyItems === void 0 ? void 0 : storyItems[0]['time']);\n        var htmlItems = '';\n        var pointerItems = '';\n        var storyId = storyData['id'];\n        var slides = document.createElement('div');\n        var currentItem = storyData['currentItem'] || 0;\n        var exists = document.querySelector(\"#zuck-modal .story-viewer[data-story-id=\\\"\".concat(storyId, \"\\\"]\"));\n        if (exists) {\n            return false;\n        }\n        slides.className = 'slides';\n        storyItems.forEach(function (item, i) {\n            if (currentItem > i) {\n                storyData.items[i].seen = true;\n                item.seen = true;\n            }\n            pointerItems += zuck.template('viewerItemPointer')(i, currentItem, item);\n            htmlItems += zuck.template('viewerItemBody')(i, currentItem, item);\n        });\n        slides.innerHTML = htmlItems;\n        var video = slides.querySelector('video');\n        var addMuted = function (video) {\n            if (video.muted) {\n                storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.add('muted');\n            }\n            else {\n                storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.remove('muted');\n            }\n        };\n        if (video) {\n            video.onwaiting = function () {\n                if (video.paused) {\n                    storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.add('paused');\n                    storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.add('loading');\n                }\n            };\n            video.onplay = function () {\n                addMuted(video);\n                storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.remove('stopped');\n                storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.remove('paused');\n                storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.remove('loading');\n            };\n            video.onload =\n                video.onplaying =\n                    video.oncanplay =\n                        function () {\n                            addMuted(video);\n                            storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.remove('loading');\n                        };\n            video.onvolumechange = function () {\n                addMuted(video);\n            };\n        }\n        var storyViewerWrap = document.createElement('div');\n        storyViewerWrap.innerHTML = zuck.template('viewerItem')(storyData, storyItems[currentItem]);\n        var storyViewer = storyViewerWrap.firstElementChild;\n        var storyViewerPointerWrap = storyViewer.querySelector('.slides-pointers .wrap');\n        storyViewer.className = \"story-viewer muted \".concat(className, \" \").concat(!forcePlay ? 'stopped' : '', \" \").concat(zuck.option('backButton') ? 'with-back-button' : '');\n        if (storyId) {\n            storyViewer.setAttribute('data-story-id', storyId);\n        }\n        if (storyViewerPointerWrap) {\n            storyViewerPointerWrap.innerHTML = pointerItems;\n        }\n        storyViewer\n            .querySelectorAll('.close, .back')\n            .forEach(function (el) {\n            el.onclick = function (e) {\n                e.preventDefault();\n                modalZuckContainer.modal.close();\n            };\n        });\n        storyViewer.appendChild(slides);\n        if (className === 'viewing') {\n            zuck.playVideoItem(storyViewer, storyViewer.querySelectorAll(\"[data-index=\\\"\".concat(currentItem, \"\\\"].active\")), undefined);\n        }\n        storyViewer\n            .querySelectorAll('.slides-pointers [data-index] > .progress')\n            .forEach(function (el) {\n            (0, utils_1.onAnimationEnd)(el, function () {\n                zuck.nextItem(undefined);\n            });\n        });\n        if (!modalSlider) {\n            return;\n        }\n        if (className === 'previous') {\n            (0, utils_1.prepend)(modalSlider, storyViewer);\n        }\n        else {\n            modalSlider.appendChild(storyViewer);\n        }\n    };\n    var createStoryTouchEvents = function (modalSlider) {\n        var modalContainer = document.querySelector('#zuck-modal');\n        var enableMouseEvents = true;\n        var position = null;\n        var touchOffset = null;\n        var isScrolling = null;\n        var delta = null;\n        var timer = undefined;\n        var nextTimer = undefined;\n        var touchStart = function (event) {\n            var storyViewer = document.querySelector('#zuck-modal .viewing');\n            var storyViewerWrap = document.querySelector('#zuck-modal .story-viewer');\n            if (event.target.nodeName === 'A') {\n                return;\n            }\n            var touches = event.touches\n                ? event.touches[0]\n                : event;\n            var pos = (0, utils_1.findPos)(document.querySelector('#zuck-modal .story-viewer.viewing'));\n            if (modalContainer) {\n                modalContainer.slideWidth = storyViewerWrap === null || storyViewerWrap === void 0 ? void 0 : storyViewerWrap.offsetWidth;\n                modalContainer.slideHeight = storyViewerWrap === null || storyViewerWrap === void 0 ? void 0 : storyViewerWrap.offsetHeight;\n            }\n            position = {\n                x: pos[0],\n                y: pos[1]\n            };\n            var clientX = touches.clientX;\n            var clientY = touches.clientY;\n            touchOffset = {\n                x: clientX,\n                y: clientY,\n                time: Date.now(),\n                valid: true\n            };\n            if (clientY < 80 || clientY > (0, utils_1.safeNum)(modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.slideHeight) - 80) {\n                touchOffset.valid = false;\n            }\n            else {\n                event.preventDefault();\n                isScrolling = undefined;\n                delta = {};\n                if (enableMouseEvents) {\n                    modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.addEventListener('mousemove', touchMove);\n                    modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.addEventListener('mouseup', touchEnd);\n                    modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.addEventListener('mouseleave', touchEnd);\n                }\n                modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.addEventListener('touchmove', touchMove);\n                modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.addEventListener('touchend', touchEnd);\n                if (storyViewer) {\n                    storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.add('paused');\n                }\n                zuck.pauseVideoItem();\n                timer = setTimeout(function () {\n                    if (storyViewer) {\n                        storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.add('longPress');\n                    }\n                }, 600);\n                nextTimer = setTimeout(function () {\n                    clearInterval(nextTimer);\n                    nextTimer = undefined;\n                }, 250);\n            }\n        };\n        var touchMove = function (event) {\n            var touches = event.touches\n                ? event.touches[0]\n                : event;\n            var clientX = touches.clientX;\n            var clientY = touches.clientY;\n            if (touchOffset && touchOffset.valid) {\n                delta = {\n                    x: clientX - touchOffset.x,\n                    y: clientY - touchOffset.y\n                };\n                if (typeof isScrolling === 'undefined') {\n                    isScrolling = !!(isScrolling || Math.abs(delta.x) < Math.abs(delta.y));\n                }\n                if (!isScrolling && touchOffset) {\n                    event.preventDefault();\n                    translate(modalSlider, (0, utils_1.safeNum)(position === null || position === void 0 ? void 0 : position.x) + (0, utils_1.safeNum)(delta === null || delta === void 0 ? void 0 : delta.x), 0, null);\n                }\n            }\n        };\n        var touchEnd = function (event) {\n            var storyViewer = document.querySelector('#zuck-modal .viewing');\n            var lastTouchOffset = touchOffset;\n            var duration = touchOffset ? Date.now() - touchOffset.time : undefined;\n            var isValid = (Number(duration) < 300 && Math.abs((0, utils_1.safeNum)(delta === null || delta === void 0 ? void 0 : delta.x)) > 25) ||\n                Math.abs((0, utils_1.safeNum)(delta === null || delta === void 0 ? void 0 : delta.x)) > (0, utils_1.safeNum)(modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.slideWidth) / 3;\n            var direction = (0, utils_1.safeNum)(delta === null || delta === void 0 ? void 0 : delta.x) < 0;\n            var index = direction\n                ? document.querySelector('#zuck-modal .story-viewer.next')\n                : document.querySelector('#zuck-modal .story-viewer.previous');\n            var isOutOfBounds = (direction && !index) || (!direction && !index);\n            if (touchOffset && !touchOffset.valid) {\n            }\n            else {\n                if (delta) {\n                    if (!isScrolling) {\n                        if (isValid && !isOutOfBounds) {\n                            moveStoryItem(direction);\n                        }\n                        else {\n                            translate(modalSlider, (0, utils_1.safeNum)(position === null || position === void 0 ? void 0 : position.x), 300);\n                        }\n                    }\n                    touchOffset = undefined;\n                    if (enableMouseEvents) {\n                        modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.removeEventListener('mousemove', touchMove);\n                        modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.removeEventListener('mouseup', touchEnd);\n                        modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.removeEventListener('mouseleave', touchEnd);\n                    }\n                    modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.removeEventListener('touchmove', touchMove);\n                    modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.removeEventListener('touchend', touchEnd);\n                }\n                var video = zuck.internalData.currentVideoElement;\n                if (timer) {\n                    clearInterval(timer);\n                }\n                if (storyViewer) {\n                    zuck.playVideoItem(storyViewer, storyViewer.querySelectorAll('.active'), undefined);\n                    storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.remove('longPress');\n                    storyViewer === null || storyViewer === void 0 ? void 0 : storyViewer.classList.remove('paused');\n                }\n                if (nextTimer) {\n                    clearInterval(nextTimer);\n                    nextTimer = undefined;\n                    var navigateItem = function () {\n                        if (!direction) {\n                            if ((0, utils_1.safeNum)(lastTouchOffset === null || lastTouchOffset === void 0 ? void 0 : lastTouchOffset.x) > document.body.offsetWidth / 3 ||\n                                !zuck.option('previousTap')) {\n                                if (zuck.option('rtl')) {\n                                    zuck.navigateItem('previous', event);\n                                }\n                                else {\n                                    zuck.navigateItem('next', event);\n                                }\n                            }\n                            else {\n                                if (zuck.option('rtl')) {\n                                    zuck.navigateItem('next', event);\n                                }\n                                else {\n                                    zuck.navigateItem('previous', event);\n                                }\n                            }\n                        }\n                    };\n                    var storyViewerViewing = document.querySelector('#zuck-modal .viewing');\n                    if (storyViewerViewing && video) {\n                        if (storyViewerViewing === null || storyViewerViewing === void 0 ? void 0 : storyViewerViewing.classList.contains('muted')) {\n                            zuck.unmuteVideoItem(video, storyViewerViewing);\n                        }\n                        else {\n                            navigateItem();\n                        }\n                    }\n                    else {\n                        navigateItem();\n                        return false;\n                    }\n                }\n            }\n        };\n        modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.addEventListener('touchstart', touchStart);\n        if (enableMouseEvents) {\n            modalSlider === null || modalSlider === void 0 ? void 0 : modalSlider.addEventListener('mousedown', touchStart);\n        }\n    };\n    var getStoryMorningGlory = function (what) {\n        // my wife told me to stop singing Wonderwall. I SAID MAYBE.\n        var currentStory = zuck.internalData.currentStory;\n        if (currentStory && what !== '') {\n            var element = document.querySelector(\"#\".concat(id, \" [data-id=\\\"\").concat(currentStory, \"\\\"]\"));\n            var foundStory = what === 'previous'\n                ? element.previousElementSibling\n                : element.nextElementSibling;\n            if (foundStory) {\n                var storyId = foundStory.getAttribute('data-id');\n                var storyIndex = zuck.findStoryIndex(storyId);\n                var data = zuck.data[storyIndex] || false;\n                return data;\n            }\n        }\n        return false;\n    };\n    var show = function (storyId) {\n        var modalContainer = document.querySelector('#zuck-modal');\n        var callback = function () {\n            var modalContent = document.querySelector('#zuck-modal-content');\n            modalContent.innerHTML = \"<div id=\\\"zuck-modal-slider-\".concat(id, \"\\\" class=\\\"slider\\\"></div>\");\n            if (!modalContent || !storyId) {\n                return;\n            }\n            var storyIndex = zuck.findStoryIndex(storyId);\n            var storyData = zuck.data[storyIndex];\n            var currentItem = storyData.currentItem || 0;\n            var modalSlider = document.querySelector(\"#zuck-modal-slider-\".concat(id));\n            createStoryTouchEvents(modalSlider);\n            zuck.internalData.currentStory = storyId;\n            storyData.currentItem = currentItem;\n            if (zuck.option('backNative') && (0, utils_1.hasWindow)()) {\n                window.location.hash = \"#!\".concat(id);\n            }\n            var previousItemData = getStoryMorningGlory('previous');\n            if (previousItemData) {\n                createStoryViewer(previousItemData, 'previous');\n            }\n            createStoryViewer(storyData, 'viewing', true);\n            var nextItemData = getStoryMorningGlory('next');\n            if (nextItemData) {\n                createStoryViewer(nextItemData, 'next');\n            }\n            if (zuck.option('autoFullScreen')) {\n                modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.classList.add('fullscreen');\n            }\n            var tryFullScreen = function () {\n                if ((modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.classList.contains('fullscreen')) &&\n                    zuck.option('autoFullScreen') &&\n                    document.body.offsetWidth <= 1024) {\n                    fullScreen(modalContainer);\n                }\n                modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.focus();\n            };\n            var storyViewerWrap = document.querySelector('#zuck-modal .story-viewer');\n            if (zuck.option('openEffect') && modalContainer) {\n                var storyEl = document.querySelector(\"#\".concat(id, \" [data-id=\\\"\").concat(storyId, \"\\\"] .item-preview\"));\n                var pos = (0, utils_1.findPos)(storyEl);\n                modalContainer.style.marginLeft = \"\".concat(pos[0] + (0, utils_1.safeNum)(storyEl === null || storyEl === void 0 ? void 0 : storyEl.offsetWidth) / 2, \"px\");\n                modalContainer.style.marginTop = \"\".concat(pos[1] + (0, utils_1.safeNum)(storyEl === null || storyEl === void 0 ? void 0 : storyEl.offsetHeight) / 2, \"px\");\n                modalContainer.style.display = 'block';\n                modalContainer.slideWidth = (storyViewerWrap === null || storyViewerWrap === void 0 ? void 0 : storyViewerWrap.offsetWidth) || 0;\n                setTimeout(function () {\n                    modalContainer === null || modalContainer === void 0 ? void 0 : modalContainer.classList.add('animated');\n                }, 10);\n                setTimeout(function () {\n                    tryFullScreen();\n                }, 300); // because effects\n            }\n            else {\n                if (modalContainer) {\n                    modalContainer.style.display = 'block';\n                    modalContainer.slideWidth = (storyViewerWrap === null || storyViewerWrap === void 0 ? void 0 : storyViewerWrap.offsetWidth) || 0;\n                }\n                tryFullScreen();\n            }\n            zuck.callback('onView')(storyId);\n        };\n        zuck.callback('onOpen')(storyId, callback);\n    };\n    var next = function () {\n        var callback = function () {\n            var lastStory = zuck.internalData.currentStory;\n            var lastStoryIndex = zuck.findStoryIndex(lastStory);\n            var lastStoryTimelineElement = document.querySelector(\"#\".concat(id, \" [data-id=\\\"\").concat(lastStory, \"\\\"]\"));\n            if (lastStoryTimelineElement) {\n                lastStoryTimelineElement === null || lastStoryTimelineElement === void 0 ? void 0 : lastStoryTimelineElement.classList.add('seen');\n                zuck.data[lastStoryIndex].seen = true;\n                zuck.internalData.seenItems[lastStory] = true;\n                zuck.saveLocalData('seenItems', zuck.internalData.seenItems);\n                zuck.updateStorySeenPosition();\n            }\n            var stories = document.querySelector('#zuck-modal .story-viewer.next');\n            if (!stories) {\n                modalZuckContainer.modal.close();\n            }\n            else {\n                if (zuck.option('rtl')) {\n                    moveStoryItem(false);\n                }\n                else {\n                    moveStoryItem(true);\n                }\n            }\n        };\n        zuck.callback('onEnd')(zuck.internalData.currentStory, callback);\n    };\n    var close = function () {\n        var modalContainer = document.querySelector('#zuck-modal');\n        var modalContent = document.querySelector('#zuck-modal-content');\n        var callback = function () {\n            if (zuck.option('backNative') && (0, utils_1.hasWindow)()) {\n                window.location.hash = '';\n            }\n            fullScreen(modalContainer, true);\n            if (modalContainer) {\n                if (zuck.option('openEffect')) {\n                    modalContainer.classList.add('closed');\n                }\n                else {\n                    if (modalContent) {\n                        modalContent.innerHTML = '';\n                    }\n                    modalContainer.style.display = 'none';\n                }\n            }\n        };\n        zuck.callback('onClose')(zuck.internalData.currentStory, callback);\n    };\n    modalZuckContainer.modal = {\n        show: show,\n        next: next,\n        close: close\n    };\n    return modalZuckContainer.modal;\n};\nexports.modal = modal;\n\n\n//# sourceURL=webpack://Zuck/./src/modal.ts?");
+                for (var i = 0; i < total; i++) {
+                    func(i, arr[i]);
+                }
+            }
+        },
+        setVendorVariable = function(ref, variable, value) {
+            var variables = [variable.toLowerCase(), 'webkit' + variable, 'MS' + variable, 'o' + variable];
 
-/***/ }),
+            each(variables, function(i, val) {
+                ref[val] = value;
+            });
+        },
+        addVendorEvents = function(el, func, event) {
+            var events = [event.toLowerCase(), 'webkit' + event, 'MS' + event, 'o' + event];
+            var element = el;
 
-/***/ "./src/options.ts":
-/*!************************!*\
-  !*** ./src/options.ts ***!
-  \************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+            each(events, function(i, val) {
+                el.addEventListener(val, func, false);
+            });
+        },
+        onAnimationEnd = function(el, func) {
+            addVendorEvents(el, func, 'AnimationEnd');
+        },
+        onTransitionEnd = function(el, func) {
+            if (!el.transitionEndEvent) {
+                el.transitionEndEvent = true;
 
-eval("\nexports.__esModule = true;\nexports.loadOptions = exports.option = exports.optionsDefault = void 0;\nvar utils_1 = __webpack_require__(/*! ./utils */ \"./src/utils.ts\");\nvar optionsDefault = function (option) { return ({\n    rtl: false,\n    skin: 'snapgram',\n    avatars: true,\n    stories: [],\n    backButton: true,\n    backNative: false,\n    paginationArrows: false,\n    previousTap: true,\n    autoFullScreen: false,\n    openEffect: true,\n    cubeEffect: false,\n    list: false,\n    localStorage: true,\n    callbacks: {\n        onOpen: function (storyId, callback) {\n            // on open story viewer\n            callback();\n        },\n        onView: function (storyId, callback) {\n            // on view story\n            callback === null || callback === void 0 ? void 0 : callback();\n        },\n        onEnd: function (storyId, callback) {\n            // on end story\n            callback();\n        },\n        onClose: function (storyId, callback) {\n            // on close story viewer\n            callback();\n        },\n        onNextItem: function (storyId, nextStoryId, callback) {\n            // on navigate item of story\n            callback();\n        },\n        onNavigateItem: function (storyId, nextStoryId, callback) {\n            // use to update state on your reactive framework\n            callback();\n        },\n        onDataUpdate: function (data, callback) {\n            // use to update state on your reactive framework\n            callback();\n        }\n    },\n    template: {\n        timelineItem: function (itemData) {\n            return \"\\n        <div class=\\\"story \".concat(itemData['seen'] === true ? 'seen' : '', \"\\\">\\n          <a class=\\\"item-link\\\" \").concat(itemData['link'] ? \"href=\\\"\".concat(itemData['link'] || '', \"\\\"\") : '', \">\\n            <span class=\\\"item-preview\\\">\\n              <img lazy=\\\"eager\\\" src=\\\"\").concat(option('avatars') || !itemData['currentPreview']\n                ? itemData['photo']\n                : itemData['currentPreview'], \"\\\" />\\n            </span>\\n            <span class=\\\"info\\\" itemProp=\\\"author\\\" itemScope itemType=\\\"http://schema.org/Person\\\">\\n              <strong class=\\\"name\\\" itemProp=\\\"name\\\">\").concat(itemData['name'], \"</strong>\\n              <span class=\\\"time\\\">\").concat((0, utils_1.timeAgo)(itemData['lastUpdated'] || itemData['time'], option('language')) || '', \"</span>\\n            </span>\\n          </a>\\n\\n          <ul class=\\\"items\\\"></ul>\\n        </div>\");\n        },\n        timelineStoryItem: function (itemData) {\n            var reserved = [\n                'id',\n                'seen',\n                'src',\n                'link',\n                'linkText',\n                'loop',\n                'time',\n                'type',\n                'length',\n                'preview'\n            ];\n            var attributes = \"\";\n            for (var dataKey in itemData) {\n                if (reserved.indexOf(dataKey) === -1) {\n                    if (itemData[dataKey] !== undefined && itemData[dataKey] !== false) {\n                        attributes += \" data-\".concat(dataKey, \"=\\\"\").concat(itemData[dataKey], \"\\\"\");\n                    }\n                }\n            }\n            reserved.forEach(function (dataKey) {\n                if (itemData[dataKey] !== undefined && itemData[dataKey] !== false) {\n                    attributes += \" data-\".concat(dataKey, \"=\\\"\").concat(itemData[dataKey], \"\\\"\");\n                }\n            });\n            return \"<a href=\\\"\".concat(itemData['src'], \"\\\" \").concat(attributes, \">\\n                <img loading=\\\"auto\\\" src=\\\"\").concat(itemData['preview'], \"\\\" />\\n              </a>\");\n        },\n        viewerItem: function (storyData, currentStoryItem) {\n            return \"<div class=\\\"story-viewer\\\">\\n                <div class=\\\"head\\\">\\n                  <div class=\\\"left\\\">\\n                    \".concat(option('backButton') ? '<a class=\"back\">&lsaquo;</a>' : '', \"\\n\\n                    <span class=\\\"item-preview\\\">\\n                      <img lazy=\\\"eager\\\" class=\\\"profilePhoto\\\" src=\\\"\").concat(storyData['photo'], \"\\\" />\\n                    </span>\\n\\n                    <div class=\\\"info\\\">\\n                      <strong class=\\\"name\\\">\").concat(storyData['name'], \"</strong>\\n                      <span class=\\\"time\\\">\").concat((0, utils_1.timeAgo)(storyData['time'], option('language')) || '', \"</span>\\n                    </div>\\n                  </div>\\n\\n                  <div class=\\\"right\\\">\\n                    <span class=\\\"time\\\">\\n                      \").concat((0, utils_1.timeAgo)(currentStoryItem['time'], option('language')) ||\n                '', \"\\n                    </span>\\n                    <span class=\\\"loading\\\"></span>\\n                    <a class=\\\"close\\\" tabIndex=\\\"2\\\">&times;</a>\\n                  </div>\\n                </div>\\n\\n                <div class=\\\"slides-pointers\\\">\\n                  <div class=\\\"wrap\\\"></div>\\n                </div>\\n\\n                \").concat(option('paginationArrows')\n                ? \"\\n                    <div class=\\\"slides-pagination\\\">\\n                      <span class=\\\"previous\\\">&lsaquo;</span>\\n                      <span class=\\\"next\\\">&rsaquo;</span>\\n                    </div>\"\n                : '', \"\\n              </div>\");\n        },\n        viewerItemPointerProgress: function (style) {\n            return \"<span class=\\\"progress\\\" style=\\\"\".concat(style, \"\\\"></span>\");\n        },\n        viewerItemPointer: function (index, currentIndex, item) {\n            return \"<span\\n                class=\\\"\\n                  \".concat(currentIndex === index ? 'active' : '', \"\\n                  \").concat(item['seen'] === true ? 'seen' : '', \"\\n                \\\"\\n                data-index=\\\"\").concat(index, \"\\\" data-item-id=\\\"\").concat(item['id'], \"\\\">\\n                  \").concat(option('template')['viewerItemPointerProgress'](\"animation-duration:\".concat((0, utils_1.safeNum)(item['length']) ? item['length'] : '3', \"s\")), \"\\n              </span>\");\n        },\n        viewerItemBody: function (index, currentIndex, item) {\n            return \"<div\\n                class=\\\"\\n                  item\\n                  \".concat(item['seen'] === true ? 'seen' : '', \"\\n                  \").concat(currentIndex === index ? 'active' : '', \"\\n                \\\"\\n                data-time=\\\"\").concat(item['time'], \"\\\"\\n                data-type=\\\"\").concat(item['type'], \"\\\"\\n                data-index=\\\"\").concat(index, \"\\\"\\n                data-item-id=\\\"\").concat(item['id'], \"\\\">\\n                \").concat(item['type'] === 'video'\n                ? \"<video class=\\\"media\\\" data-length=\\\"\".concat(item.length, \"\\\" \").concat(item.loop ? 'loop' : '', \" muted webkit-playsinline playsinline preload=\\\"auto\\\" src=\\\"\").concat(item['src'], \"\\\" \").concat(item['type'], \"></video>\\n                    <b class=\\\"tip muted\\\">\").concat(option('language')['unmute'], \"</b>\")\n                : \"<img loading=\\\"auto\\\" class=\\\"media\\\" src=\\\"\".concat(item['src'], \"\\\" \").concat(item['type'], \" />\\n                \"), \"\\n\\n                \").concat(item['link']\n                ? \"<a class=\\\"tip link\\\" href=\\\"\".concat(item['link'], \"\\\" rel=\\\"noopener\\\" target=\\\"_blank\\\">\\n                        \").concat(item['linkText'] || option('language')['visitLink'], \"\\n                      </a>\")\n                : '', \"\\n              </div>\");\n        }\n    },\n    language: {\n        unmute: 'Touch to unmute',\n        keyboardTip: 'Press space to see next',\n        visitLink: 'Visit link',\n        time: {\n            ago: 'ago',\n            hour: 'hour ago',\n            hours: 'hours ago',\n            minute: 'minute ago',\n            minutes: 'minutes ago',\n            fromnow: 'from now',\n            seconds: 'seconds ago',\n            yesterday: 'yesterday',\n            tomorrow: 'tomorrow',\n            days: 'days ago'\n        }\n    }\n}); };\nexports.optionsDefault = optionsDefault;\nvar option = function (options, _name) {\n    var self = function (name) {\n        return typeof (options === null || options === void 0 ? void 0 : options[name]) !== 'undefined'\n            ? options === null || options === void 0 ? void 0 : options[name]\n            : (0, exports.optionsDefault)(self)[name];\n    };\n    return self(_name);\n};\nexports.option = option;\nvar loadOptions = function (options) {\n    return {\n        option: function (name) {\n            return (0, exports.option)(options, name);\n        },\n        callback: function (name) {\n            var customOpts = (0, exports.option)(options, 'callbacks');\n            return typeof customOpts[name] !== undefined\n                ? customOpts[name]\n                : (0, exports.option)(undefined, 'callbacks')[name];\n        },\n        template: function (name) {\n            var customOpts = (0, exports.option)(options, 'template');\n            return typeof customOpts[name] !== undefined\n                ? customOpts[name]\n                : (0, exports.option)(undefined, 'template')[name];\n        },\n        language: function (name) {\n            var customOpts = (0, exports.option)(options, 'language');\n            return typeof customOpts[name] !== undefined\n                ? customOpts[name]\n                : (0, exports.option)(undefined, 'language')[name];\n        }\n    };\n};\nexports.loadOptions = loadOptions;\n\n\n//# sourceURL=webpack://Zuck/./src/options.ts?");
+                addVendorEvents(el, func, 'TransitionEnd');
+            }
+        },
+        prepend = function(parent, child) {
+            if (parent.firstChild) {
+                parent.insertBefore(child, parent.firstChild);
+            } else {
+                parent.appendChild(child);
+            }
+        },
+        getElIndex = function(el) {
+            for (var i = 1; el = el.previousElementSibling; i++) {
+                return i;
+            }
 
-/***/ }),
+            return 0;
+        },
+        fullScreen = function(elem, cancel) {
+            var func = 'RequestFullScreen';
+            var elFunc = 'requestFullScreen'; //crappy vendor prefixes.
 
-/***/ "./src/utils.ts":
-/*!**********************!*\
-  !*** ./src/utils.ts ***!
-  \**********************/
-/***/ ((__unused_webpack_module, exports) => {
+            if (cancel) {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.mozCancelFullScreen) {
+                    document.mozCancelFullScreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                }
+            } else {
+                try {
+                    if (elem[elFunc]) {
+                        elem[elFunc]();
+                    } else if (elem['ms' + func]) {
+                        elem['ms' + func]();
+                    } else if (elem['moz' + func]) {
+                        elem['moz' + func]();
+                    } else if (elem['webkit' + func]) {
+                        elem['webkit' + func]();
+                    }
+                } catch (e) {
 
-eval("\nexports.__esModule = true;\nexports.timeAgo = exports.findPos = exports.generateId = exports.prepend = exports.onTransitionEnd = exports.onAnimationEnd = exports.safeNum = exports.hasWindow = void 0;\nvar hasWindow = function () {\n    return typeof window !== 'undefined';\n};\nexports.hasWindow = hasWindow;\nvar safeNum = function (num) {\n    return num ? Number(num) : 0;\n};\nexports.safeNum = safeNum;\nvar onAnimationEnd = function (el, func) {\n    el.addEventListener('animationend', func);\n};\nexports.onAnimationEnd = onAnimationEnd;\nvar onTransitionEnd = function (el, func) {\n    if (!el.transitionEndEvent) {\n        el.transitionEndEvent = true;\n        el.addEventListener('transitionend', func);\n    }\n};\nexports.onTransitionEnd = onTransitionEnd;\nvar prepend = function (parent, child) {\n    if (!child || !parent) {\n        return;\n    }\n    if (parent === null || parent === void 0 ? void 0 : parent.firstChild) {\n        parent.insertBefore(child, parent === null || parent === void 0 ? void 0 : parent.firstChild);\n    }\n    else {\n        parent.appendChild(child);\n    }\n};\nexports.prepend = prepend;\nvar generateId = function () {\n    return 'stories-' + Math.random().toString(36).substr(2, 9);\n};\nexports.generateId = generateId;\nvar findPos = function (obj, offsetY, offsetX, stop) {\n    var curleft = 0;\n    var curtop = 0;\n    if (obj) {\n        if (obj.offsetParent) {\n            do {\n                curleft += obj.offsetLeft;\n                curtop += obj.offsetTop;\n                if (obj === stop) {\n                    break;\n                }\n            } while ((obj = obj.offsetParent));\n        }\n        if (offsetY) {\n            curtop = curtop - offsetY;\n        }\n        if (offsetX) {\n            curleft = curleft - offsetX;\n        }\n    }\n    return [curleft, curtop];\n};\nexports.findPos = findPos;\nvar timeAgo = function (time, languageObject) {\n    var language = (languageObject === null || languageObject === void 0 ? void 0 : languageObject.time) || undefined;\n    var timeNumber = time instanceof Date ? time.getTime() : (0, exports.safeNum)(time) * 1000;\n    var dateObj = new Date(timeNumber);\n    var dateStr = dateObj.getTime();\n    var seconds = (new Date().getTime() - dateStr) / 1000;\n    var formats = [\n        [60, \" \".concat((language === null || language === void 0 ? void 0 : language.seconds) || ''), 1],\n        [120, \"1 \".concat((language === null || language === void 0 ? void 0 : language.minute) || ''), ''],\n        [3600, \" \".concat((language === null || language === void 0 ? void 0 : language.minutes) || ''), 60],\n        [7200, \"1 \".concat((language === null || language === void 0 ? void 0 : language.hour) || ''), ''],\n        [86400, \" \".concat((language === null || language === void 0 ? void 0 : language.hours) || ''), 3600],\n        [172800, \" \".concat((language === null || language === void 0 ? void 0 : language.yesterday) || ''), ''],\n        [604800, \" \".concat((language === null || language === void 0 ? void 0 : language.days) || ''), 86400]\n    ];\n    var currentFormat = 1;\n    if (seconds < 0) {\n        seconds = Math.abs(seconds);\n        currentFormat = 2;\n    }\n    var result = false;\n    formats.forEach(function (format) {\n        var formatKey = format[0];\n        if (seconds < formatKey && !result) {\n            if (typeof format[2] === 'string') {\n                result = format[currentFormat];\n            }\n            else if (format !== null) {\n                result = Math.floor(seconds / format[2]) + format[1];\n            }\n        }\n    });\n    if (!result) {\n        var day = dateObj.getDate();\n        var month = dateObj.getMonth();\n        var year = dateObj.getFullYear();\n        return \"\".concat(day, \"/\").concat(month + 1, \"/\").concat(year);\n    }\n    else {\n        return result;\n    }\n};\nexports.timeAgo = timeAgo;\n\n\n//# sourceURL=webpack://Zuck/./src/utils.ts?");
+                }
+            }
+        },
+        translate = function(element, to, duration, ease) {
+            var direction = (to>0)?1:-1;
+            var to3d = (Math.abs(to) / q("#"+option("ZuckModal_perfix")+'zuck-modal').offsetWidth * 90) * direction;
 
-/***/ })
+            if(option('cubeEffect')){
+                var scaling = (to3d==0)?'scale(0.95)':'scale(0.930,0.930)';
 
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
-/******/ 		if (cachedModule !== undefined) {
-/******/ 			return cachedModule.exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.ts");
-/******/ 	this.Zuck = __webpack_exports__["default"];
-/******/ 	
-/******/ })()
-;
+                setVendorVariable(q("#"+option("ZuckModal_perfix")+'zuck-modal-content').style, 'Transform', scaling);
+
+                if(to3d < -90 || to3d > 90){
+                    return false;
+                }
+            }
+
+            var transform = (!option('cubeEffect'))?'translate3d(' + to + 'px, 0, 0)':'rotateY('+(to3d)+'deg)';
+
+            if (element) {
+                setVendorVariable(element.style, 'TransitionTimingFunction', ease);
+                setVendorVariable(element.style, 'TransitionDuration', duration + 'ms');
+                setVendorVariable(element.style, 'Transform', transform);
+            }
+        },
+        findPos = function(obj, offsetY, offsetX, stop) {
+            var curleft = 0,
+                curtop = 0;
+
+            if (obj) {
+                if (obj.offsetParent) {
+                    do {
+                        curleft += obj.offsetLeft;
+                        curtop += obj.offsetTop;
+
+                        if (obj == stop) {
+                            break;
+                        }
+                    } while (obj = obj.offsetParent);
+                }
+
+                if (offsetY) {
+                    curtop = curtop - offsetY;
+                }
+
+                if (offsetX) {
+                    curleft = curleft - offsetX;
+                }
+            }
+
+            return [curleft, curtop];
+        },
+        timeAgo = function(date_str) {
+            date_str = Number(date_str) * 1000;
+
+            var lang = option('language', 'time');
+            var time_formats = [
+                [60, lang['seconds'], 1], // 60
+                [120, '1' + lang['minute'], ''], // 60*2
+                [3600, lang['minutes'], 60], // 60*60, 60
+                [7200, '1' + lang['hour'], ''], // 60*60*2
+                [86400, lang['hours'], 3600], // 60*60*24, 60*60
+                [172800, lang['yesterday'], ''], // 60*60*24*2
+                [604800, lang['days'], 86400]
+            ];
+
+            var time = ('' + date_str).replace(/-/g, "/").replace(/[TZ]/g, " ").replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+            if (time.substr(time.length - 4, 1) == ".") {
+                time = time.substr(0, time.length - 4);
+            }
+
+            if (isNaN(new Date(time).getDate())) {
+                time = date_str;
+            }
+
+            var seconds = (new Date - new Date(time)) / 1000;
+            var token = lang['ago'],
+                list_choice = 1;
+            if (seconds < 0) {
+                seconds = Math.abs(seconds);
+                token = lang['ago'];
+                list_choice = 2;
+            }
+
+            var i = 0,
+                format;
+            while (format = time_formats[i++]) {
+                if (seconds < format[0]) {
+                    if (typeof format[2] == 'string') {
+                        return format[list_choice];
+                    } else {
+                        return Math.floor(seconds / format[2]) + ' ' + format[1] + ' ' + token;
+                    }
+                }
+            }
+
+            return time;
+        };
+
+
+    /* options */
+    var id = timeline.id,
+        optionsDefault = {
+            'skin': 'snapgram',
+            'avatars': true,
+            'stories': [],
+            'backButton': true,
+            'backNative': false,
+            'autoFullScreen': false,
+            'openEffect': true,
+            'cubeEffect': false,
+            'list': false,
+            'localStorage': true,
+            'callbacks': {
+                'onOpen': function(storyId, callback) {
+
+                    callback();
+                },
+
+                'onView': function(storyId) {
+
+                },
+
+                'onEnd': function(storyId, callback) {
+
+                    callback();
+                },
+
+                'onClose': function(storyId, callback) {
+                    callback();
+                },
+
+                'onNextItem': function(storyId, nextStoryId, callback) {
+                    callback();
+                },
+            },
+            'language': {
+                'unmute': 'Touch to unmute',
+                'keyboardTip': 'Press space to see next',
+                'visitLink': 'Visit link',
+                'time': {
+                    'ago': 'ago',
+                    'hour': 'hour',
+                    'hours': 'hours',
+                    'minute': 'minute',
+                    'minutes': 'minutes',
+                    'fromnow': 'from now',
+                    'seconds': 'seconds',
+                    'yesterday': 'yesterday',
+                    'tomorrow': 'tomorrow',
+                    'days': 'days'
+                }
+            }
+        },
+        option = function(name, prop) {
+            var type = function(what) {
+                return (typeof what !== 'undefined');
+            };
+
+            if (prop) {
+                if (type(options[name])) {
+                    return (type(options[name][prop])) ? options[name][prop] : optionsDefault[name][prop];
+                } else {
+                    return optionsDefault[name][prop];
+                }
+            } else {
+                return (type(options[name])) ? options[name] : optionsDefault[name];
+            }
+        };
+
+
+    /* modal */
+    var zuckModal = function() {
+        var opened = false;
+        var modalContainer = g("#"+option("ZuckModal_perfix")+'zuck-modal');
+
+        if (!modalContainer) {
+            modalContainer = d.createElement('div');
+            modalContainer.id = option("ZuckModal_perfix")+"zuck-modal";
+            modalContainer.classList.add('zuck-modal');
+
+            if(option('cubeEffect')){
+                // modalContainer.className = 'with-cube';
+                modalContainer.classList.add('with-cube');
+                
+            }
+
+            modalContainer.innerHTML = '<div class="zuck-modal-content" id="'+option("ZuckModal_perfix")+"zuck-modal"+'-content"></div>';
+            modalContainer.style.display = 'none';
+
+            modalContainer.setAttribute('tabIndex', '1');
+            modalContainer.onkeyup = function(e) {
+                var code = e.keyCode;
+
+                if (code == 27) {
+                    modal.close();
+                } else if (code == 13 || code == 32) {
+                    modal.next();
+                }
+            };
+
+            if (option('openEffect')) {
+                modalContainer.classList.add('with-effects');
+            };
+
+            onTransitionEnd(modalContainer, function() {
+                if (modalContainer.classList.contains('closed')) {
+                    modalContent.innerHTML = '';
+                    modalContainer.style.display = 'none';
+                    modalContainer.classList.remove('closed');
+                    modalContainer.classList.remove('animated');
+                }
+            });
+
+            d.body.appendChild(modalContainer);
+        }
+
+        var modalContent = q("#"+option("ZuckModal_perfix")+'zuck-modal-content');
+        var moveStoryItem = function(direction) {
+            var target = '';
+            var useless = '';
+            var transform = '0';
+            var modalSlider = q("#"+option("ZuckModal_perfix")+'zuck-modal-slider-' + id);
+
+            var slideItems = {
+                'previous': q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer.previous'),
+                'next': q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer.next'),
+                'viewing': q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer.viewing')
+            };
+
+            if ((!slideItems['previous'] && !direction) || (!slideItems['next'] && direction)) {
+                return false;
+            }
+
+            if (!direction) {
+                target = 'previous';
+                useless = 'next';
+            } else {
+                target = 'next';
+                useless = 'previous';
+            }
+
+
+            var transitionTime = 600;
+            if(option('cubeEffect')){
+                if(target=='previous'){
+                    transform = modalContainer.slideWidth;
+                } else if(target=='next'){
+                    transform = modalContainer.slideWidth * -1;
+                }
+
+            } else {
+                transform = findPos(slideItems[target]);
+                transform = transform[0] * -1;
+            }
+
+            translate(modalSlider, transform, transitionTime, null);
+
+            setTimeout(function() {
+                if (target != '' && slideItems[target] && useless != '') {
+                    var currentStory = slideItems[target].getAttribute('data-story-id');
+                    zuck.internalData['currentStory'] = currentStory;
+
+                    var oldStory = q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer.' + useless);
+                    if (oldStory) {
+                        oldStory.parentNode.removeChild(oldStory);
+                    }
+
+                    if (slideItems['viewing']) {
+                        slideItems['viewing'].classList.add('stopped');
+                        slideItems['viewing'].classList.add(useless);
+                        slideItems['viewing'].classList.remove('viewing');
+                    }
+
+                    if (slideItems[target]) {
+                        slideItems[target].classList.remove('stopped');
+                        slideItems[target].classList.remove(target);
+                        slideItems[target].classList.add('viewing');
+                    }
+
+                    var newStoryData = getStoryMorningGlory(target);
+                    if (newStoryData) {
+                        createStoryViewer(newStoryData, target);
+                    }
+
+                    var storyId = zuck.internalData['currentStory'];
+                    var items = q("#"+option("ZuckModal_perfix")+'zuck-modal [data-story-id="' + storyId + '"]');
+
+                    if(items){
+                        items = items.querySelectorAll('[data-index].active');
+                        var duration = items[0].firstElementChild;
+
+                        zuck.data[storyId]['currentItem'] = parseInt(items[0].getAttribute('data-index'), 10);
+
+                        items[0].innerHTML = '<b style="' + duration.style.cssText + '"></b>';
+                        onAnimationEnd(items[0].firstElementChild, function() {
+                            zuck.nextItem(false);
+                        });
+                    }
+
+                    translate(modalSlider, '0', 0, null);
+
+                    if(items){
+                        playVideoItem([items[0], items[1]], true);
+                    }
+
+                    option('callbacks', 'onView')(zuck.internalData['currentStory']);
+                }
+            }, transitionTime + 50);
+        };
+
+        var createStoryViewer = function(storyData, className, forcePlay) {
+                var modalSlider = q("#"+option("ZuckModal_perfix")+'zuck-modal-slider-' + id);
+
+                var htmlItems = '',
+                    pointerItems = '',
+                    storyId = g(storyData, 'id'),
+                    slides = d.createElement('div'),
+                    currentItem = g(storyData, 'currentItem') || 0,
+                    exists = q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer[data-story-id="' + storyId + '"]'),
+                    currentItemTime = '';
+
+                if (exists) {
+                    return false;
+                }
+
+                slides.className = 'slides';
+                each(g(storyData, 'items'), function(i, item) {
+                    if (currentItem > i) {
+                        storyData['items'][i]['seen'] = true;
+                        item['seen'] = true;
+                    }
+
+                    var length = g(item, 'length');
+                    var linkText = g(item, 'linkText');
+                    var seenClass = ((g(item, 'seen') === true) ? 'seen' : '');
+                    var commonAttrs = 'data-index="' + i + '" data-item-id="' + g(item, 'id') + '"';
+
+                    if (currentItem === i) {
+                        currentItemTime = timeAgo(g(item, 'time'));
+                    }
+
+                    pointerItems += '<span ' + commonAttrs + ' class="' + ((currentItem === i) ? 'active' : '') + ' ' + seenClass + '"><b style="animation-duration:' + ((length === '') ? '3' : length) + 's"></b></span>';
+                    htmlItems += '<div data-time="' + g(item, 'time') + '" data-type="' + g(item, 'type') + '"' + commonAttrs + ' class="item ' + seenClass +
+                        ' ' + ((currentItem === i) ? 'active' : '') + '">' +
+                        ((g(item, 'type') === 'video') ? '<video class="media" muted webkit-playsinline playsinline preload="auto" src="' + g(item, 'src') + '" ' + g(item, 'type') + '></video><b class="tip muted">' + option('language', 'unmute') + '</b>' : '<img class="media" src="' + g(item, 'src') + '" ' + g(item, 'type') + '>') +
+                        ((g(item, 'link')) ? '<a class="tip link" href="' + g(item, 'link') + '" rel="noopener" target="_blank">' + ((linkText == '') ? option('language', 'visitLink') : linkText) + '</a>' : '') +
+                        '</div>';
+                });
+                slides.innerHTML = htmlItems;
+
+                var video = slides.querySelector('video');
+                var addMuted = function(video) {
+                    if (video.muted) {
+                        storyViewer.classList.add('muted');
+                    } else {
+                        storyViewer.classList.remove('muted');
+                    }
+                };
+
+                if (video) {
+                    video.onwaiting = function(e) {
+                        if (video.paused) {
+                            storyViewer.classList.add('paused');
+                            storyViewer.classList.add('loading');
+                        }
+                    };
+
+                    video.onplay = function() {
+                        addMuted(video);
+
+                        storyViewer.classList.remove('stopped');
+                        storyViewer.classList.remove('paused');
+                        storyViewer.classList.remove('loading');
+                    };
+
+                    video.onready = video.onload = video.onplaying = video.oncanplay = function() {
+                        addMuted(video);
+
+                        storyViewer.classList.remove('loading');
+                    };
+
+                    video.onvolumechange = function() {
+                        addMuted(video);
+                    };
+                }
+
+                var storyViewer = d.createElement('div');
+                storyViewer.className = 'story-viewer muted ' + className + ' ' + ((!forcePlay) ? 'stopped' : '') + ' ' + ((option('backButton')) ? 'with-back-button' : '');
+                storyViewer.setAttribute('data-story-id', storyId);
+
+                var html = '<div class="head">' +
+                    '<div class="left">' +
+                    ((option('backButton')) ? '<a class="back">&lsaquo;</a>' : '') +
+                    '<u class="img" style="background-image:url(' + g(storyData, 'photo') + ');"></u>' +
+                    '<div>' +
+                    '<strong>' + g(storyData, 'name') + '</strong>' +
+                    '<span class="time">' + currentItemTime + '</span>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="right">' +
+                    '<span class="time">' + currentItemTime + '</span>' +
+                    '<span class="loading"></span>' +
+                    '<a class="close" tabIndex="2">&times;</a>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="slides-pointers"><div>' + pointerItems + '</div></div>';
+                storyViewer.innerHTML = html;
+
+                each(storyViewer.querySelectorAll('.close, .back'), function(i, el) {
+                    el.onclick = function(e) {
+                        e.preventDefault();
+                        modal.close();
+                    };
+                });
+
+
+                storyViewer.appendChild(slides);
+
+                if (className == 'viewing') {
+                    playVideoItem(storyViewer.querySelectorAll('[data-index="' + currentItem + '"].active'), false);
+                }
+
+                each(storyViewer.querySelectorAll('.slides-pointers [data-index] > b'), function(i, el) {
+                    onAnimationEnd(el, function() {
+                        zuck.nextItem(false);
+                    });
+                });
+
+                if (className == 'previous') {
+                    prepend(modalSlider, storyViewer);
+                } else {
+                    modalSlider.appendChild(storyViewer);
+                }
+            },
+            createStoryTouchEvents = function(modalSliderElement) {
+                var enableMouseEvents = true;
+
+                var modalSlider = modalSliderElement;
+                var position = {};
+                var touchOffset, isScrolling, delta, timer, nextTimer;
+
+                var touchStart = function(event) {
+                    var storyViewer = q("#"+option("ZuckModal_perfix")+'zuck-modal .viewing');
+
+                    if (event.target.nodeName == 'A') {
+                        return true;
+                    } else {
+                        event.preventDefault();
+                    }
+
+                    var touches = event.touches ? event.touches[0] : event;
+                    var pos = findPos(q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer.viewing'));
+
+                    modalContainer.slideWidth = q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer').offsetWidth;
+                    position = {
+                        x: pos[0],
+                        y: pos[1]
+                    };
+
+                    var pageX = touches.pageX;
+                    var pageY = touches.pageY;
+
+                    touchOffset = {
+                        x: pageX,
+                        y: pageY,
+                        time: Date.now()
+                    };
+
+                    isScrolling = undefined;
+                    delta = {};
+
+                    if (enableMouseEvents) {
+                        modalSlider.addEventListener('mousemove', touchMove);
+                        modalSlider.addEventListener('mouseup', touchEnd);
+                        modalSlider.addEventListener('mouseleave', touchEnd);
+                    }
+                    modalSlider.addEventListener('touchmove', touchMove);
+                    modalSlider.addEventListener('touchend', touchEnd);
+
+                    if(storyViewer){
+                        storyViewer.classList.add('paused');
+                    }
+                    pauseVideoItem();
+
+                    timer = setTimeout(function() {
+                        storyViewer.classList.add('longPress');
+                    }, 600);
+
+                    nextTimer = setTimeout(function() {
+                        clearInterval(nextTimer);
+                        nextTimer = false;
+                    }, 250);
+                };
+
+                var touchMove = function(event) {
+                    var touches = event.touches ? event.touches[0] : event;
+                    var pageX = touches.pageX;
+                    var pageY = touches.pageY;
+
+                    if (touchOffset) {
+                        delta = {
+                            x: pageX - touchOffset.x,
+                            y: pageY - touchOffset.y
+                        };
+
+                        if (typeof isScrolling === 'undefined') {
+                            isScrolling = !!(isScrolling || Math.abs(delta.x) < Math.abs(delta.y));
+                        }
+
+                        if (!isScrolling && touchOffset) {
+                            event.preventDefault();
+                            translate(modalSlider, (position.x + delta.x), 0, null);
+                        }
+                    }
+                };
+
+                var touchEnd = function(event) {
+                    var storyViewer = q("#"+option("ZuckModal_perfix")+'zuck-modal .viewing');
+
+                    if (delta) {
+                        var slidesLength = d.querySelectorAll("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer').length;
+                        var duration = touchOffset ? Date.now() - touchOffset.time : undefined;
+                        var isValid = Number(duration) < 300 && Math.abs(delta.x) > 25 || Math.abs(delta.x) > modalContainer.slideWidth / 3;
+                        var direction = delta.x < 0;
+
+                        var index = (direction) ? q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer.next') : q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer.previous');
+                        var isOutOfBounds = (direction && !index) || (!direction && !index);
+
+                        if (!isScrolling) {
+                            if (isValid && !isOutOfBounds) {
+                                moveStoryItem(direction, true);
+                            } else {
+                                translate(modalSlider, position.x, 300);
+                            }
+                        }
+
+                        touchOffset = undefined;
+
+                        if (enableMouseEvents) {
+                            modalSlider.removeEventListener('mousemove', touchMove);
+                            modalSlider.removeEventListener('mouseup', touchEnd);
+                            modalSlider.removeEventListener('mouseleave', touchEnd);
+                        }
+                        modalSlider.removeEventListener('touchmove', touchMove);
+                        modalSlider.removeEventListener('touchend', touchEnd);
+                    }
+
+                    var video = zuck.internalData['currentVideoElement'];
+                    if (timer) {
+                        clearInterval(timer);
+                    }
+
+                    if(storyViewer){
+                        storyViewer.classList.remove('longPress');
+                        storyViewer.classList.remove('paused');
+                    }
+
+                    if (nextTimer) {
+                        clearInterval(nextTimer);
+                        nextTimer = false;
+
+                        var storyViewer = q("#"+option("ZuckModal_perfix")+'zuck-modal .viewing');
+                        if (storyViewer && video) {
+                            if(storyViewer.classList.contains('muted')){
+                                unmuteVideoItem(video, storyViewer);
+                            } else {
+                                zuck.nextItem(event);
+                            }
+                        } else {
+                            zuck.nextItem(event);
+
+                            return false;
+                        }
+                    }
+                };
+
+                modalSlider.addEventListener('touchstart', touchStart);
+
+                if (enableMouseEvents) {
+                    modalSlider.addEventListener('mousedown', touchStart);
+                }
+            };
+
+        return {
+            'show': function(storyId, page) {
+                var callback = function() {
+                    modalContent.innerHTML = '<div id="'+option("ZuckModal_perfix")+"zuck-modal"+'-slider-' + id + '" class="slider"></div>';
+
+                    var storyData = zuck.data[storyId];
+                    var currentItem = storyData['currentItem'] || 0;
+                    var modalSlider = q("#"+option("ZuckModal_perfix")+'zuck-modal-slider-' + id);
+
+                    createStoryTouchEvents(modalSlider);
+
+                    zuck.internalData['currentStory'] = storyId;
+                    storyData['currentItem'] = currentItem;
+
+                    if (option('backNative')) {
+                        location.hash = '#!' + id;
+                    }
+
+                    var previousItemData = getStoryMorningGlory('previous');
+                    if (previousItemData) {
+                        createStoryViewer(previousItemData, 'previous');
+                    }
+
+                    createStoryViewer(storyData, 'viewing', true);
+
+                    var nextItemData = getStoryMorningGlory('next');
+                    if (nextItemData) {
+                        createStoryViewer(nextItemData, 'next');
+                    }
+
+                    if (option('autoFullScreen')) {
+                        modalContainer.classList.add('fullscreen');
+                    }
+
+                    var tryFullScreen = function() {
+                        if (modalContainer.classList.contains('fullscreen') && option('autoFullScreen') && window.screen.width <= 1024) {
+                            fullScreen(modalContainer);
+                        }
+
+                        modalContainer.focus();
+                    };
+
+                    if (option('openEffect')) {
+                        var storyEl = q('#' + id + ' [data-id="' + storyId + '"] .img');
+                        var pos = findPos(storyEl);
+
+                        modalContainer.style.marginLeft = (pos[0] + (storyEl.offsetWidth / 2)) + 'px';
+                        modalContainer.style.marginTop = pos[1] + (storyEl.offsetHeight / 2) + 'px';
+
+                        modalContainer.style.display = 'block';
+
+                        modalContainer.slideWidth = q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer').offsetWidth;
+
+                        setTimeout(function() {
+                            modalContainer.classList.add('animated');
+                        }, 10);
+
+                        setTimeout(function() {
+                            tryFullScreen();
+                        }, 300); //because effects
+                    } else {
+                        modalContainer.style.display = 'block';
+                        modalContainer.slideWidth = q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer').offsetWidth;
+                        
+                        tryFullScreen();
+                    }
+
+                    option('callbacks', 'onView')(storyId);
+                };
+
+                option('callbacks', 'onOpen')(storyId, callback);
+            },
+
+            'next': function(unmute) {
+                var callback = function() {
+                    var lastStory = zuck.internalData['currentStory'];
+                    var lastStoryTimelineElement = q('#' + id + ' [data-id="' + lastStory + '"]');
+
+                    if (lastStoryTimelineElement) {
+                        lastStoryTimelineElement.classList.add('seen');
+
+                        zuck.data[lastStory]['seen'] = true;
+                        zuck.internalData['seenItems'][lastStory] = true;
+
+                        saveLocalData('seenItems', zuck.internalData['seenItems']);
+                        updateStoryseenPosition();
+                    }
+
+                    var stories = q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer.next');
+                    if (!stories) {
+                        modal.close();
+                    } else {
+                        moveStoryItem(true);
+                    }
+                };
+
+                option('callbacks', 'onEnd')(zuck.internalData['currentStory'], callback);
+            },
+
+            'close': function() {
+                var callback = function() {
+                    if (option('backNative')) {
+                        location.hash = '';
+                    }
+
+                    fullScreen(modalContainer, true);
+
+                    if (option('openEffect')) {
+                        modalContainer.classList.add('closed');
+                    } else {
+                        modalContent.innerHTML = '';
+                        modalContainer.style.display = 'none';
+                    }
+                };
+
+                option('callbacks', 'onClose')(zuck.internalData['currentStory'], callback);
+            }
+        };
+    };
+    var modal = new zuckModal();
+
+
+    /* parse functions */
+    var parseItems = function(story) {
+            var storyId = story.getAttribute('data-id');
+            var storyItems = d.querySelectorAll('#' + id + ' [data-id="' + storyId + '"] .items > li');
+            var items = [];
+
+            each(storyItems, function(i, el) {
+                var a = el.firstElementChild;
+                var img = a.firstElementChild;
+
+                items.push({
+                    'src': a.getAttribute('href'),
+                    'length': a.getAttribute('data-length'),
+                    'type': a.getAttribute('data-type'),
+                    'time': a.getAttribute('data-time'),
+                    'link': a.getAttribute('data-link'),
+                    'preview': img.getAttribute('src')
+                });
+            });
+
+            zuck.data[storyId].items = items;
+        },
+        parseStory = function(story) {
+            var storyId = story.getAttribute('data-id');
+            var seen = false;
+
+            if (zuck.internalData['seenItems'][storyId]) {
+                seen = true;
+            }
+
+            if (seen) {
+                story.classList.add('seen');
+            } else {
+                story.classList.remove('seen');
+            }
+
+            try {
+                zuck.data[storyId] = {
+                    'id': storyId, //story id
+                    'photo': story.getAttribute('data-photo'), //story photo (or user photo)
+                    'name': story.firstElementChild.lastElementChild.firstChild.innerText,
+                    'link': story.firstElementChild.getAttribute('href'),
+                    'lastUpdated': story.getAttribute('data-last-updated'),
+                    'seen': seen,
+                    'items': []
+                };
+            } catch (e) {
+                zuck.data[storyId] = {
+                    'items': []
+                };
+            }
+
+            story.onclick = function(e) {
+                e.preventDefault();
+
+                modal.show(storyId);
+            };
+        },
+        getStoryMorningGlory = function(what) { //my wife told me to stop singing Wonderwall. I SAID MAYBE.
+            var currentStory = zuck.internalData['currentStory'];
+            var whatEl = what + 'ElementSibling';
+
+            if (currentStory) {
+                var foundStory = q('#' + id + ' [data-id="' + currentStory + '"]')[whatEl];
+
+                if (foundStory) {
+                    var storyId = foundStory.getAttribute('data-id');
+                    var data = zuck.data[storyId] || false;
+
+                    return data; //(g(zuck.data[storyId], 'seen')==true)?false:data;
+                }
+            }
+
+            return false;
+        },
+        updateStoryseenPosition = function() {
+            each(d.querySelectorAll('#' + id + ' .story.seen'), function(i, el) {
+                var newData = zuck.data[el.getAttribute('data-id')];
+                var timeline = el.parentNode;
+
+                timeline.removeChild(el);
+                zuck.add(newData, true);
+            });
+        },
+        playVideoItem = function(elements, unmute) {
+            var itemElement = elements[1],
+                itemPointer = elements[0];
+            var storyViewer = itemPointer.parentNode.parentNode.parentNode;
+
+            if (!itemElement || !itemPointer) {
+                return false;
+            }
+
+            var cur = zuck.internalData['currentVideoElement'];
+            if (cur) {
+                cur.pause();
+            }
+
+            if (itemElement.getAttribute('data-type') == 'video') {
+                var video = itemElement.getElementsByTagName('video')[0];
+                if (!video) {
+                    zuck.internalData['currentVideoElement'] = false;
+
+                    return false;
+                }
+
+                var setDuration = function() {
+                    if (video.duration) {
+                        setVendorVariable(itemPointer.getElementsByTagName('b')[0].style, 'AnimationDuration', video.duration + 's');
+                    }
+                };
+
+                setDuration();
+                video.addEventListener('loadedmetadata', setDuration);
+                zuck.internalData['currentVideoElement'] = video;
+
+                video.currentTime = 0;
+                video.play();
+
+                if (unmute.target) {
+                    unmuteVideoItem(video, storyViewer);
+                }
+            } else {
+                zuck.internalData['currentVideoElement'] = false;
+            }
+        },
+        pauseVideoItem = function() {
+            var video = zuck.internalData['currentVideoElement'];
+            if (video) {
+                try {
+                    video.pause();
+                } catch (e) {
+
+                }
+            }
+        },
+        unmuteVideoItem = function(video, storyViewer) {
+            video.muted = false;
+            video.volume = 1.0;
+            video.removeAttribute('muted');
+            video.play();
+
+            if (video.paused) {
+                video.muted = true;
+                video.play();
+            }
+
+            if (storyViewer) {
+                storyViewer.classList.remove('paused');
+            }
+        };
+
+    /* data functions */
+    var saveLocalData = function(key, data) {
+            try {
+                if (option('localStorage')) {
+                    var keyName = 'zuck-' + id + '-' + key;
+
+                    window.localStorage[keyName] = JSON.stringify(data);
+                }
+            } catch (e) {
+
+            }
+        },
+        getLocalData = function(key) {
+            if (option('localStorage')) {
+                var keyName = 'zuck-' + id + '-' + key;
+
+                return (window.localStorage[keyName]) ? JSON.parse(window.localStorage[keyName]) : false;
+            } else {
+                return false;
+            }
+        };
+
+
+    /* api */
+    zuck.data = {};
+    zuck.internalData = {};
+    zuck.internalData['seenItems'] = getLocalData('seenItems') || {};
+
+    zuck.add = zuck.update = function(data, append) {
+        var storyId = g(data, 'id');
+        var storyEl = q('#' + id + ' [data-id="' + storyId + '"]');
+        var html = '';
+        var items = g(data, 'items');
+        var story = false;
+
+        zuck.data[storyId] = {};
+
+        if (!storyEl) {
+            story = d.createElement('div');
+            story.className = 'story';
+        } else {
+            story = storyEl;
+        }
+
+        if (data['seen'] === false) {
+            zuck.internalData['seenItems'][storyId] = false;
+            saveLocalData('seenItems', zuck.internalData['seenItems']);
+        }
+
+        story.setAttribute('data-id', storyId);
+        story.setAttribute('data-photo', g(data, 'photo'));
+        story.setAttribute('data-last-updated', g(data, 'lastUpdated'));
+
+        var preview = false;
+        if (items[0]) {
+            preview = items[0]['preview'] || '';
+        }
+
+        html = '<a href="' + g(data, 'link') + '">' +
+            '<span class="img"><u style="background-image:url(' + ((option('avatars') || !preview || preview == '') ? g(data, 'photo') : preview) + ')"></u></span>' +
+            '<span class="info"><strong>' + g(data, 'name') + '</strong><span class="time">' + timeAgo(g(data, 'lastUpdated')) + '</span></span>' +
+            '</a>' +
+            '<ul class="items"></ul>';
+        story.innerHTML = html;
+        parseStory(story);
+
+        if (!storyEl) {
+            if (append) {
+                timeline.appendChild(story);
+            } else {
+                prepend(timeline, story);
+            }
+        }
+
+        each(items, function(i, item) {
+            zuck.addItem(storyId, item, append);
+        });
+
+        if (!append) {
+            updateStoryseenPosition();
+        }
+    };
+    zuck.next = function() {
+        modal.next();
+    };
+    zuck.addItem = function(storyId, data, append) {
+        var story = q('#' + id + ' > [data-id="' + storyId + '"]');
+        var li = d.createElement('li');
+
+        li.className = g(data, 'seen') ? 'seen' : '';
+        li.setAttribute('data-id', g(data, 'id'));
+
+        li.innerHTML = '<a href="' + g(data, 'src') + '" data-link="' + g(data, 'link') + '" data-time="' + g(data, 'time') + '" data-type="' + g(data, 'type') + '" data-length="' + g(data, 'length') + '">' +
+            '<img src="' + g(data, 'preview') + '">' +
+            '</a>';
+
+        var el = story.querySelectorAll('.items')[0];
+        if (append) {
+            el.appendChild(li);
+        } else {
+            prepend(el, li);
+        }
+
+        parseItems(story);
+    };
+    zuck.removeItem = function(storyId, itemId) {
+        var item = q('#' + id + ' > [data-id="' + storyId + '"] [data-id="' + itemId + '"]');
+
+        timeline.parentNode.removeChild(item);
+    };
+    zuck.nextItem = function(event) {
+        var currentStory = zuck.internalData['currentStory'];
+        var currentItem = zuck.data[currentStory]['currentItem'];
+        var storyViewer = q("#"+option("ZuckModal_perfix")+'zuck-modal .story-viewer[data-story-id="' + currentStory + '"]');
+
+        if (!storyViewer || storyViewer.touchMove == 1) {
+            return false;
+        }
+
+        var currentItemElements = storyViewer.querySelectorAll('[data-index="' + currentItem + '"]');
+        var currentPointer = currentItemElements[0];
+        var currentItemElement = currentItemElements[1];
+
+        var nextItem = currentItem + 1;
+        var nextItemElements = storyViewer.querySelectorAll('[data-index="' + nextItem + '"]');
+        var nextPointer = nextItemElements[0];
+        var nextItemElement = nextItemElements[1];
+
+        if (storyViewer && nextPointer && nextItemElement) {
+            var nextItemCallback = function() {
+                currentPointer.classList.remove('active');
+                currentPointer.classList.add('seen');
+                currentItemElement.classList.remove('active');
+                currentItemElement.classList.add('seen');
+
+                nextPointer.classList.remove('seen');
+                nextPointer.classList.add('active');
+
+                //nextItemElement.classList.remove('stopped');
+
+                nextItemElement.classList.remove('seen');
+                nextItemElement.classList.add('active');
+
+                each(storyViewer.querySelectorAll('.time'), function(i, el) {
+                    el.innerText = timeAgo(nextItemElement.getAttribute('data-time'));
+                });
+
+                zuck.data[currentStory]['currentItem']++;
+
+                playVideoItem(nextItemElements, event);
+            };
+
+            option('callbacks', 'onNextItem')(currentStory, nextItemElement.getAttribute('data-story-id'), nextItemCallback);
+        } else if (storyViewer) {
+            modal.next(event);
+        }
+    };
+
+
+    /* of course, init! */
+    var init = function() {
+
+        //console.log('Zuck It!', id);
+
+        if (location.hash == '#!' + id) {
+            location.hash = '';
+        }
+
+        if (q('#' + id + ' .story')) {
+            each(timeline.querySelectorAll('.story'), function(i, story) {
+                parseStory(story, true);
+            });
+        }
+
+        if (option('backNative')) {
+            window.addEventListener('popstate', function(e) {
+                if (location.hash != '#!' + id) {
+                    location.hash = '';
+                }
+            }, false);
+        }
+
+        each(option('stories'), function(i, item) {
+            zuck.add(item, true);
+        });
+
+        updateStoryseenPosition();
+
+        var avatars = (option('avatars')) ? 'user-icon' : 'story-preview';
+        var list = (option('list')) ? 'list' : 'carousel';
+
+        timeline.className = 'stories ' + avatars + ' ' + list + ' ' + (option('skin') + '').toLowerCase();
+
+        return zuck;
+    };
+
+    return init();
+};
