@@ -642,6 +642,7 @@ export const modal = (zuck: ZuckObject) => {
           if (storyViewerViewing && video) {
             if (storyViewerViewing?.classList.contains('muted')) {
               zuck.unmuteVideoItem(video, storyViewerViewing);
+              navigateItem();
             } else {
               navigateItem();
             }
