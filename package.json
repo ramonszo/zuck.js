@@ -30,7 +30,7 @@
     "url": "https://github.com/ramonszo/zuck.js/issues"
   },
   "exports": {
-    ".": "./dist/zuck.js",
+    ".": "./src/index.ts",
     "./skins/facesnap": "./dist/skins/facesnap.css",
     "./skins/snapgram": "./dist/skins/snapgram.css",
     "./skins/snapssenger": "./dist/skins/snapssenger.css",
