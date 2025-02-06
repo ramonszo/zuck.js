@@ -263,7 +263,9 @@ export const modal = (zuck: ZuckObject) => {
               duration.style.cssText
             );
 
-            onAnimationEnd(duration, () => {
+            const newDuration = items?.[0]?.firstElementChild as HTMLElement;
+
+            onAnimationEnd(newDuration, () => {
               zuck.nextItem();
             });
           }
