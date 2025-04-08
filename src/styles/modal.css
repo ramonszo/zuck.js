@@ -329,6 +329,7 @@
   -webkit-transform: translateX(-50%);
   transform: translateX(-50%);
   margin: auto;
+  object-fit: contain;
 }
 #zuck-modal-content .story-viewer .slides .item.active,
 #zuck-modal-content .story-viewer .slides .item.active .tip.link {
