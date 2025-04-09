@@ -261,21 +261,21 @@ export const loadOptions = function (options?: Options) {
     callback: <C extends keyof Callbacks>(name: C): Callbacks[C] => {
       const customOpts = option(options, 'callbacks');
 
-      return typeof customOpts[name] !== undefined
+      return typeof customOpts[name] !== 'undefined'
         ? customOpts[name]
         : option(undefined, 'callbacks')[name];
     },
     template: <T extends keyof Templates>(name: T): Templates[T] => {
       const customOpts = option(options, 'template');
 
-      return typeof customOpts[name] !== undefined
+      return typeof customOpts[name] !== 'undefined'
         ? customOpts[name]
         : option(undefined, 'template')[name];
     },
     language: <L extends keyof Language>(name: L): Language[L] => {
       const customOpts = option(options, 'language');
 
-      return typeof customOpts[name] !== undefined
+      return typeof customOpts[name] !== 'undefined'
         ? customOpts[name]
         : option(undefined, 'language')[name];
     }
