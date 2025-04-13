@@ -57,15 +57,20 @@ export const optionsDefault = (option?: ZuckObject['option']): Options => ({
     timelineItem(itemData: TimelineItem) {
       return `
         <div class="story ${itemData['seen'] === true ? 'seen' : ''}">
-          <a class="item-link" ${
-            itemData['link'] ? `href="${itemData['link'] || ''}"` : ''
-          }>
+          <a
+            aria-label="View ${itemData['name']} Story"
+            class="item-link" 
+            ${itemData['link'] ? `href="${itemData['link'] || ''}"` : ''}
+          >
             <span class="item-preview">
-              <img lazy="eager" src="${
-                option('avatars') || !itemData['currentPreview']
+              <img 
+                lazy="eager" 
+                alt="${itemData['name']}"
+                src="${option('avatars') || !itemData['currentPreview']
                   ? itemData['photo']
                   : itemData['currentPreview']
-              }" />
+                }" 
+              />
             </span>
             <span class="info" itemProp="author" itemScope itemType="http://schema.org/Person">
               <strong class="name" itemProp="name">${itemData['name']}</strong>
